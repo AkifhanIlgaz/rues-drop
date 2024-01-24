@@ -1,6 +1,6 @@
 import { generateError } from '@/utils/errors';
 import { Input } from '@nextui-org/react';
-import { Label } from '../requiredLabel';
+import { Label } from '../label';
 
 export default function TextInput({ register, errors, label, required }) {
   return (
