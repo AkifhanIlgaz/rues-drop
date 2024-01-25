@@ -1,9 +1,10 @@
 'use client';
+import PasswordInput from '@/components/inputs/passwordInput';
 import TextInput from '@/components/inputs/textInput';
 import { label } from '@/config/labels';
+import { link } from '@/config/links';
 import { text } from '@/config/text';
-import { Button } from '@nextui-org/react';
-import { useRouter } from 'next/navigation';
+import { Button, Link } from '@nextui-org/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -15,19 +16,13 @@ export default function Page() {
   } = useForm();
 
   const [pending, setPending] = useState(false);
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
-  const togglePasswordVisibility = () =>
-    setIsPasswordVisible(!isPasswordVisible);
-
-  const router = useRouter();
 
   const onSubmit = (data) => {
     console.log(data);
   };
 
   return (
-    <main className="flex items-center justify-center  h-full">
+    <main className="flex items-center justify-center h-full">
       <div className="flex flex-col items-center justify-center h-screen w-1/4 gap-2">
         <div className="flex flex-col items-center mb-3">
           <h1 className="text-3xl font-bold text-black ">{text.welcome}</h1>
@@ -43,6 +38,23 @@ export default function Page() {
               register={register}
               required={true}
             />
+
+            <PasswordInput
+              errors={errors}
+              register={register}
+              label={label.password}
+              required={true}
+            />
+
+            <div className="flex justify-between">
+              <Link size="sm" href={link.signUp}>
+                {text.noAccount}
+              </Link>
+              <Link size="sm" href={link.forgotPassword}>
+                {text.forgotPassword}
+              </Link>
+            </div>
+
             <Button
               type="submit"
               className="mt-4 w-full"

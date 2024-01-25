@@ -4,7 +4,7 @@ import { Label } from '../label';
 
 export default function TextInput({ register, errors, label, required }) {
   return (
-    <div>
+    <div className="flex flex-col gap-1">
       <Label label={label.title} isRequired={required}></Label>
       <Input
         color="primary"
