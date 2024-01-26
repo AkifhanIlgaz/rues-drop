@@ -2,8 +2,9 @@
 import PasswordInput from '@/components/inputs/passwordInput';
 import TextInput from '@/components/inputs/textInput';
 import { label } from '@/config/labels';
+import { link } from '@/config/links';
 import { text } from '@/config/text';
-import { Button } from '@nextui-org/react';
+import { Button, Link } from '@nextui-org/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -44,13 +45,19 @@ export default function Page() {
               label={label.password}
               required={true}
             />
-
             <PasswordInput
               errors={errors}
               register={register}
               label={label.passwordConfirm}
               required={true}
             />
+
+            <div className="flex justify-between">
+              <Link size="sm" href={link.signIn}>
+                {text.alreadyHaveAccount}
+              </Link>
+            </div>
+
             <Button
               type="submit"
               className="mt-4 w-full"
