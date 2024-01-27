@@ -1,4 +1,5 @@
 'use client';
+import { GoogleLogo } from '@/components/icons';
 import PasswordInput from '@/components/inputs/passwordInput';
 import TextInput from '@/components/inputs/textInput';
 import { label } from '@/config/labels';
@@ -27,7 +28,7 @@ export default function Page() {
         <div className="flex flex-col items-center mb-3">
           <h1 className="text-3xl font-bold text-black ">{text.welcome}</h1>
         </div>
-        <div className="flex flex-col w-full gap-2">
+        <div className="flex flex-col w-full gap-3">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-2"
@@ -52,20 +53,25 @@ export default function Page() {
               required={true}
             />
 
-            <div className="flex justify-between">
-              <Link size="sm" href={link.signIn}>
-                {text.alreadyHaveAccount}
-              </Link>
-            </div>
-
             <Button
               type="submit"
               className="mt-4 w-full"
               color="primary"
               isLoading={pending}
             >
-              {text.signIn}
+              {text.signUp}
             </Button>
+
+            <div className="flex items-center justify-center text-small gap-2 mt-2">
+              <span className="text-default-400">
+                {text.alreadyHaveAccount}
+              </span>
+              <Link size="sm" href={link.signIn}>
+                {text.signIn}
+              </Link>
+            </div>
+
+            <GoogleLogo />
           </form>
         </div>
       </div>
