@@ -1,4 +1,5 @@
 'use client';
+import SignInWithGoogleButton from '@/components/buttons/signInWithGoogle';
 import PasswordInput from '@/components/inputs/passwordInput';
 import TextInput from '@/components/inputs/textInput';
 import { label } from '@/config/labels';
@@ -27,7 +28,7 @@ export default function Page() {
         <div className="flex flex-col items-center mb-3">
           <h1 className="text-3xl font-bold text-black ">{text.welcome}</h1>
         </div>
-        <div className="flex flex-col w-full gap-2">
+        <div className="flex flex-col w-full ">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-2"
@@ -57,12 +58,14 @@ export default function Page() {
 
             <Button
               type="submit"
-              className="mt-4 w-full"
+              className="my-2 w-full"
               color="primary"
               isLoading={pending}
             >
               {text.signIn}
             </Button>
+
+            <SignInWithGoogleButton />
           </form>
         </div>
       </div>

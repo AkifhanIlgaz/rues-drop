@@ -1,5 +1,5 @@
 'use client';
-import { GoogleLogo } from '@/components/icons';
+import SignInWithGoogleButton from '@/components/buttons/signInWithGoogle';
 import PasswordInput from '@/components/inputs/passwordInput';
 import TextInput from '@/components/inputs/textInput';
 import { label } from '@/config/labels';
@@ -62,7 +62,7 @@ export default function Page() {
               {text.signUp}
             </Button>
 
-            <div className="flex items-center justify-center text-small gap-2 mt-2">
+            <div className="flex items-center justify-center text-small gap-2 my-2">
               <span className="text-default-400">
                 {text.alreadyHaveAccount}
               </span>
@@ -71,7 +71,7 @@ export default function Page() {
               </Link>
             </div>
 
-            <GoogleLogo />
+            <SignInWithGoogleButton />
           </form>
         </div>
       </div>
