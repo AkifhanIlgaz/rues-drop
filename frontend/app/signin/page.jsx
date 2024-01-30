@@ -2,6 +2,7 @@
 import SignInWithGoogleButton from '@/components/buttons/signInWithGoogle';
 import PasswordInput from '@/components/inputs/passwordInput';
 import TextInput from '@/components/inputs/textInput';
+import OrSeparator from '@/components/orSeparator';
 import { label } from '@/config/labels';
 import { link } from '@/config/links';
 import { text } from '@/config/text';
@@ -58,12 +59,14 @@ export default function Page() {
 
             <Button
               type="submit"
-              className="my-2 w-full"
+              className="mt-2 w-full"
               color="primary"
               isLoading={pending}
             >
               {text.signIn}
             </Button>
+
+            <OrSeparator />
 
             <SignInWithGoogleButton />
           </form>

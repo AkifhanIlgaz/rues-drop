@@ -2,6 +2,7 @@
 import SignInWithGoogleButton from '@/components/buttons/signInWithGoogle';
 import PasswordInput from '@/components/inputs/passwordInput';
 import TextInput from '@/components/inputs/textInput';
+import OrSeparator from '@/components/orSeparator';
 import { label } from '@/config/labels';
 import { link } from '@/config/links';
 import { text } from '@/config/text';
@@ -62,7 +63,7 @@ export default function Page() {
               {text.signUp}
             </Button>
 
-            <div className="flex items-center justify-center text-small gap-2 my-2">
+            <div className="flex items-center justify-center text-small gap-2 mt-2">
               <span className="text-default-400">
                 {text.alreadyHaveAccount}
               </span>
@@ -70,6 +71,8 @@ export default function Page() {
                 {text.signIn}
               </Link>
             </div>
+
+            <OrSeparator />
 
             <SignInWithGoogleButton />
           </form>
