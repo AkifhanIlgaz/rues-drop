@@ -4,8 +4,9 @@ export const generateError = (label, error) => {
   switch (label) {
     case 'oldPassword':
     case 'password':
-    case 'passwordConfirm':
       return passwordError(error);
+    case 'passwordConfirm':
+      return errorMessage.confirmPassword;
     case 'email':
       return emailError(error);
     case 'username':

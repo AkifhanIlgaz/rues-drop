@@ -6,6 +6,7 @@ export const errorMessage = {
   requiredEmail: 'Email is required',
   requiredRole: 'Role is required',
   requiredDepartment: 'Department is required',
+  confirmPassword: 'Please confirm your password',
   shortPassword: 'Password must be 6 characters long',
   notMatchPassword: "Password doesn't match",
   invalidEmail: 'Email is invalid',

@@ -6,6 +6,7 @@ import OrSeparator from '@/components/orSeparator';
 import { label } from '@/config/labels';
 import { link } from '@/config/links';
 import { text } from '@/config/text';
+import { validateEmail } from '@/utils/email';
 import { Button, Link } from '@nextui-org/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -14,13 +15,33 @@ export default function Page() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm();
 
   const [pending, setPending] = useState(false);
 
   const onSubmit = (data) => {
-    console.log(data);
+    if (setErrors(data)) {
+      return;
+    }
+  };
+
+  const setErrors = (data) => {
+    let errorCount = 0;
+
+    if (data.password !== data.passwordConfirm) {
+      setError('password', { type: 'validate' });
+      setError('passwordConfirm', { type: 'validate' });
+      errorCount++;
+    }
+
+    if (!validateEmail(data.email)) {
+      setError('email', { type: 'validate' });
+      errorCount++;
+    }
+
+    return errorCount > 0;
   };
 
   return (
