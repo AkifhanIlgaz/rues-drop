@@ -1,4 +1,4 @@
-import { generateError } from '@/utils/errors';
+import { generateError } from '@/lib/errors';
 import { Input } from '@nextui-org/react';
 import { useState } from 'react';
 import PasswordVisibilityToggleButton from '../buttons/passwordVisibilityToggleButton';

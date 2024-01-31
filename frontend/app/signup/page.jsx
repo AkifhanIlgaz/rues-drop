@@ -6,12 +6,25 @@ import OrSeparator from '@/components/orSeparator';
 import { label } from '@/config/labels';
 import { link } from '@/config/links';
 import { text } from '@/config/text';
-import { validateEmail } from '@/utils/email';
+import { validateEmail } from '@/lib/email';
+import Firebase from '@/lib/firebase';
 import { Button, Link } from '@nextui-org/react';
 import { useState } from 'react';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 
+const firebase = new Firebase();
+
 export default function Page() {
+  const [createUserWithEmailAndPassword, user, loading, error] =
+    useCreateUserWithEmailAndPassword(firebase.auth);
+
+  console.log(`
+    User => ${user}
+    Loading => ${loading}
+    Error => ${error}
+  `);
+
   const {
     register,
     handleSubmit,
@@ -21,10 +34,17 @@ export default function Page() {
 
   const [pending, setPending] = useState(false);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (setErrors(data)) {
       return;
     }
+
+    const credentials = await createUserWithEmailAndPassword(
+      data.email,
+      data.password
+    );
+
+    console.log(credentials);
   };
 
   const setErrors = (data) => {
