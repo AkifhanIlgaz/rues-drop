@@ -1,6 +1,7 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import { firebaseConfig } from '../config/firebase';
+
 firebase.initializeApp(firebaseConfig);
 
 class Firebase {
@@ -38,6 +39,10 @@ class Firebase {
     } catch (error) {
       throw error;
     }
+  }
+
+  async signOut() {
+    await this.auth.signOut();
   }
 }
 

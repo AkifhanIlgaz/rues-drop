@@ -6,7 +6,7 @@ import OrSeparator from '@/components/orSeparator';
 import { label } from '@/config/labels';
 import { link } from '@/config/links';
 import { text } from '@/config/text';
-import { validateEmail } from '@/utils/email';
+import { validateEmail } from '@/lib/email';
 import { Button, Link } from '@nextui-org/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
