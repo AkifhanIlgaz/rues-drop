@@ -1,41 +1,31 @@
+import { fontMerriweather } from '@/config/fonts';
+import { siteConfig } from '@/config/site';
 import {
   Button,
   Link,
   Navbar,
-  NavbarBrand,
   NavbarContent,
   NavbarItem,
 } from '@nextui-org/react';
+import { link } from '../config/links';
+import { text } from '../config/text';
 export default function MyNavbar() {
   return (
-    <Navbar>
-      <NavbarBrand>
-        <p className="font-bold text-inherit">ACME</p>
-      </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Features
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#" aria-current="page">
-            Customers
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Integrations
-          </Link>
-        </NavbarItem>
+    <Navbar maxWidth="full" isBordered>
+      <NavbarContent justify="start">
+        <p className={`${fontMerriweather.className} text-2xl`}>
+          {siteConfig.name}
+        </p>
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link href="#">Login</Link>
+        <NavbarItem>
+          <Link href={link.signIn} className="text-sm">
+            {text.signIn}
+          </Link>
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
+          <Button as={Link} color="primary" href={link.signUp} variant="shadow">
+            {text.signUp}
           </Button>
         </NavbarItem>
       </NavbarContent>
