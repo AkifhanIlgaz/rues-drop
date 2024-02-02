@@ -7,13 +7,11 @@ import { label } from '@/config/labels';
 import { link } from '@/config/links';
 import { text } from '@/config/text';
 import { validateEmail } from '@/lib/email';
-import Firebase from '@/lib/firebase';
+import firebase from '@/lib/firebase';
 import { Button, Link } from '@nextui-org/react';
 import { useState } from 'react';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
-
-const firebase = new Firebase();
 
 export default function Page() {
   const [createUserWithEmailAndPassword, user, loading, error] =

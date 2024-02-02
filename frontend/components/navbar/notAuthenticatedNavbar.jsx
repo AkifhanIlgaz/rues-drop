@@ -1,5 +1,7 @@
 import { fontMerriweather } from '@/config/fonts';
+import { link } from '@/config/links';
 import { siteConfig } from '@/config/site';
+import { text } from '@/config/text';
 import {
   Button,
   Link,
@@ -7,13 +9,11 @@ import {
   NavbarContent,
   NavbarItem,
 } from '@nextui-org/react';
-import { link } from '../config/links';
-import { text } from '../config/text';
-export default function MyNavbar() {
+export default function NotAuthenticatedNavbar() {
   return (
     <Navbar maxWidth="full" isBordered>
       <NavbarContent justify="start">
-        <p className={`${fontMerriweather.className} text-2xl`}>
+        <p className={`${fontMerriweather.className} text-xl`}>
           {siteConfig.name}
         </p>
       </NavbarContent>

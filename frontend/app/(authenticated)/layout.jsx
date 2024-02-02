@@ -1,9 +1,9 @@
-import MyNavbar from '@/components/navbar';
+import AuthenticatedNavbar from '@/components/navbar/authenticatedNavbar';
 
 export default function Layout({ children }) {
   return (
     <div>
-      <MyNavbar></MyNavbar>
+      <AuthenticatedNavbar />
       {children}
     </div>
   );

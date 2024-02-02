@@ -1,9 +1,7 @@
 'use client';
 
-import Firebase from '@/lib/firebase';
+import firebase from '@/lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-
-const firebase = new Firebase();
 
 export default function Home() {
   const [user, loading, error] = useAuthState(firebase.auth);
