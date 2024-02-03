@@ -8,7 +8,11 @@ import (
 
 type Config struct {
 	GoogleApplicationCredentials string `mapstructure:"GOOGLE_APPLICATION_CREDENTIALS"`
-	Port                         string `mapstructure:"PORT"`
+
+	MongoUri    string `mapstructure:"MONGODB_LOCAL_URI"`
+	MongoDbName string `mapstructure:"MONGO_DATABASE_NAME"`
+
+	Port string `mapstructure:"PORT"`
 }
 
 func LoadConfig(path string) (*Config, error) {
