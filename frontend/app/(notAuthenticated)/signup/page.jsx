@@ -9,13 +9,14 @@ import { text } from '@/config/text'
 import { validateEmail } from '@/lib/email'
 import firebase from '@/lib/firebase'
 import { Button, Link } from '@nextui-org/react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth'
 import { useForm } from 'react-hook-form'
 
-
 export default function Page() {
 	const [createUserWithEmailAndPassword, user, loading, error] = useCreateUserWithEmailAndPassword(firebase.auth)
+	const router = useRouter()
 
 	console.log(`
     User => ${user}
@@ -37,9 +38,16 @@ export default function Page() {
 			return
 		}
 
-		const credentials = await createUserWithEmailAndPassword(data.email, data.password)
-
-		console.log(credentials)
+		setPending(true)
+		try {
+			await createUserWithEmailAndPassword(data.email, data.password)
+			router.push(link.home)
+		} catch (error) {
+			console.log(error)
+			// TODO: Handle error
+		} finally {
+			setPending(false)
+		}
 	}
 
 	const setErrors = data => {
