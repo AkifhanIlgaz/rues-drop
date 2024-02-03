@@ -6,6 +6,7 @@ import (
 
 	"github.com/AkifhanIlgaz/word-memory/cfg"
 	"github.com/AkifhanIlgaz/word-memory/connect"
+	"github.com/AkifhanIlgaz/word-memory/services"
 )
 
 func main() {
@@ -27,5 +28,10 @@ func main() {
 	}
 
 	defer mongoClient.Disconnect(ctx)
+
+	authService, err := services.NewAuthService(ctx, firebaseApp)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 }
