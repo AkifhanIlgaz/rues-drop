@@ -7,5 +7,5 @@ export const text = {
 	noAccount: "Don't have an account ?",
 	signInWithGoogle: 'Sign in with Google',
 	alreadyHaveAccount: 'Already have an account ?',
-	addUser: 'Add User'
+	profile: 'Profile'
 }

@@ -1,10 +1,10 @@
-import AuthenticatedNavbar from '@/components/navbar/authenticatedNavbar';
+import AuthenticatedNavbar from '@/components/navbar/authenticatedNavbar'
 
 export default function Layout({ children }) {
-  return (
-    <div>
-      <AuthenticatedNavbar />
-      {children}
-    </div>
-  );
+	return (
+		<div>
+			<AuthenticatedNavbar />
+			{children}
+		</div>
+	)
 }

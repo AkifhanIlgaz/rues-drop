@@ -1,9 +1,14 @@
 'use client'
 
 import { fontMerriweather } from '@/config/fonts'
+import { link } from '@/config/links'
 import { siteConfig } from '@/config/site'
+import { text } from '@/config/text'
+import firebase from '@/lib/firebase'
 import UserCircleIcon from '@heroicons/react/24/outline/UserCircleIcon'
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Navbar, NavbarContent } from '@nextui-org/react'
+import Link from 'next/link'
+
 
 export default function AuthenticatedNavbar() {
 	return (
@@ -20,7 +25,12 @@ export default function AuthenticatedNavbar() {
 					</DropdownTrigger>
 
 					<DropdownMenu>
-						<DropdownItem key="profile">Profile</DropdownItem>
+						<DropdownItem key="profile" as={Link} href={link.profile}>
+							{text.profile}
+						</DropdownItem>
+						<DropdownItem key="signout" className="text-danger" color="danger" onClick={() => firebase.auth.signOut()}>
+							{text.signOut}
+						</DropdownItem>
 					</DropdownMenu>
 				</Dropdown>
 			</NavbarContent>
