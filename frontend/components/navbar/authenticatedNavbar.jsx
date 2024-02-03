@@ -9,7 +9,6 @@ import UserCircleIcon from '@heroicons/react/24/outline/UserCircleIcon'
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Navbar, NavbarContent } from '@nextui-org/react'
 import Link from 'next/link'
 
-
 export default function AuthenticatedNavbar() {
 	return (
 		<Navbar maxWidth="full" isBordered>
@@ -25,7 +24,7 @@ export default function AuthenticatedNavbar() {
 					</DropdownTrigger>
 
 					<DropdownMenu>
-						<DropdownItem key="profile" as={Link} href={link.profile}>
+						<DropdownItem key="profile" as={Link} href={link.profile} color="primary" className="text-primary">
 							{text.profile}
 						</DropdownItem>
 						<DropdownItem key="signout" className="text-danger" color="danger" onClick={() => firebase.auth.signOut()}>
