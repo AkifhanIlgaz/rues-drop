@@ -8,8 +8,21 @@ import firebase from '@/lib/firebase'
 import UserCircleIcon from '@heroicons/react/24/outline/UserCircleIcon'
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Navbar, NavbarContent } from '@nextui-org/react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function AuthenticatedNavbar() {
+	const router = useRouter()
+
+	const signOut = async () => {
+		try {
+			await firebase.auth.signOut()
+			router.push(link.root)
+		} catch (error) {
+			// Todo: Handle error
+			console.log(error)
+		}
+	}
+
 	return (
 		<Navbar maxWidth="full" isBordered>
 			<NavbarContent justify="start">
@@ -27,7 +40,7 @@ export default function AuthenticatedNavbar() {
 						<DropdownItem key="profile" as={Link} href={link.profile} color="primary" className="text-primary">
 							{text.profile}
 						</DropdownItem>
-						<DropdownItem key="signout" className="text-danger" color="danger" onClick={() => firebase.auth.signOut()}>
+						<DropdownItem key="signout" className="text-danger" color="danger" onClick={signOut}>
 							{text.signOut}
 						</DropdownItem>
 					</DropdownMenu>

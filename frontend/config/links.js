@@ -1,4 +1,5 @@
 export const link = {
+	root: '/',
 	signUp: '/signup',
 	signIn: '/signin',
 	forgotPassword: '/forgot-password',
