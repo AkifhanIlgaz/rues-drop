@@ -1,5 +1,6 @@
 'use client'
 
+import Logo from '@/components/logo'
 import { fontMerriweather } from '@/config/fonts'
 import { link } from '@/config/links'
 import { siteConfig } from '@/config/site'
@@ -26,6 +27,7 @@ export default function AuthenticatedNavbar() {
 	return (
 		<Navbar maxWidth="full" isBordered>
 			<NavbarContent justify="start">
+				<Logo />
 				<p className={`${fontMerriweather.className} text-2xl`}>{siteConfig.name}</p>
 			</NavbarContent>
 			<NavbarContent justify="end">

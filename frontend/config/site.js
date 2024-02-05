@@ -1,3 +1,3 @@
 export const siteConfig = {
-  name: 'Word Memory',
-};
+	name: 'Ruesdrop'
+}
