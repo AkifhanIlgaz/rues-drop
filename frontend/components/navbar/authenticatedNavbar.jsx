@@ -1,17 +1,14 @@
 'use client'
 
 import Logo from '@/components/logo'
-import { fontMerriweather } from '@/config/fonts'
 import { link } from '@/config/links'
 import { siteConfig } from '@/config/site'
-import { text } from '@/config/text'
 import firebase from '@/lib/firebase'
-import UserCircleIcon from '@heroicons/react/24/outline/UserCircleIcon'
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Navbar, NavbarContent } from '@nextui-org/react'
-import Link from 'next/link'
+import { Bars4Icon } from '@heroicons/react/24/outline'
+import { Button } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 
-export default function AuthenticatedNavbar() {
+export default function AuthenticatedNavbar({ toggleSidebar }) {
 	const router = useRouter()
 
 	const signOut = async () => {
@@ -25,29 +22,17 @@ export default function AuthenticatedNavbar() {
 	}
 
 	return (
-		<Navbar maxWidth="full" isBordered>
-			<NavbarContent justify="start">
-				<Logo />
-				<p className={`${fontMerriweather.className} text-2xl`}>{siteConfig.name}</p>
-			</NavbarContent>
-			<NavbarContent justify="end">
-				<Dropdown>
-					<DropdownTrigger>
-						<Button isIconOnly className="bg-transparent text-sky-900">
-							<UserCircleIcon />
-						</Button>
-					</DropdownTrigger>
+		<div className="flex items-center justify-between bg-transparent px-6 py-3">
+			{/* Logo and menu */}
+			<div className="flex justify-center items-center text-3xl gap-3">
+				<Button isIconOnly className="bg-transparent" onClick={toggleSidebar}>
+					<Bars4Icon width={28} height={28}></Bars4Icon>
+				</Button>
 
-					<DropdownMenu>
-						<DropdownItem key="profile" as={Link} href={link.profile} color="primary" className="text-primary">
-							{text.profile}
-						</DropdownItem>
-						<DropdownItem key="signout" className="text-danger" color="danger" onClick={signOut}>
-							{text.signOut}
-						</DropdownItem>
-					</DropdownMenu>
-				</Dropdown>
-			</NavbarContent>
-		</Navbar>
+				<Logo />
+				<p>{siteConfig.name}</p>
+			</div>
+			<div className="flex justify-center items-center "></div>
+		</div>
 	)
 }
