@@ -36,18 +36,22 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	_ = authService
 
 	server := gin.Default()
 	setCors(server)
 
 	router := server.Group("/api")
 	router.GET("/health-checker", func(ctx *gin.Context) {
-		// Read from auth header
-		uid, err :=
+		// Todo: Read from auth header
 
-			ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "API is healthy"})
+		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "API is healthy"})
 	})
 
+	err = server.Run(":" + config.Port)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func setCors(server *gin.Engine) {
