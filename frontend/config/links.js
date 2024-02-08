@@ -3,7 +3,8 @@ export const link = {
 	signUp: '/signup',
 	signIn: '/signin',
 	forgotPassword: '/forgot-password',
-	home: '/home'
+	home: '/home',
+	profile: '/profile'
 }
 
 export const sidebarLinks = [
