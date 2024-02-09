@@ -10,6 +10,6 @@ export const link = {
 export const sidebarLinks = [
 	{ name: 'Home', href: '/home' },
 	{ name: 'Profile', href: '/profile' },
-	{ name: 'Project', href: '/project' },
+	{ name: 'Projects', href: '/projects' },
 	{ name: 'Todo', href: '/todo' }
 ]
