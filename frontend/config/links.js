@@ -1,3 +1,5 @@
+import { BriefcaseIcon, HomeIcon, InboxIcon, UserIcon } from '@heroicons/react/24/outline'
+
 export const link = {
 	root: '/',
 	signUp: '/signup',
@@ -8,8 +10,8 @@ export const link = {
 }
 
 export const sidebarLinks = [
-	{ name: 'Home', href: '/home' },
-	{ name: 'Profile', href: '/profile' },
-	{ name: 'Projects', href: '/projects' },
-	{ name: 'Todo', href: '/todo' }
+	{ name: 'Home', href: '/home', icon: HomeIcon },
+	{ name: 'Profile', href: '/profile', icon: UserIcon },
+	{ name: 'Projects', href: '/projects', icon: BriefcaseIcon },
+	{ name: 'Todo', href: '/todo', icon: InboxIcon }
 ]
