@@ -1,5 +1,6 @@
 'use client'
 
+import Loading from '@/components/loading'
 import AuthenticatedNavbar from '@/components/navbar/authenticatedNavbar'
 import Sidebar from '@/components/sidebar/sidebar'
 import { link } from '@/config/links'
@@ -19,7 +20,7 @@ export default function Layout({ children }) {
 	}
 
 	if (loading) {
-		return <p>loading</p>
+		return <Loading />
 	}
 
 	if (error || !user) {
