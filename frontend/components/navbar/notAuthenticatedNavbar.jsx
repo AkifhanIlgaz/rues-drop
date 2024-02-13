@@ -6,7 +6,7 @@ import { Button, Link, Navbar, NavbarContent, NavbarItem } from '@nextui-org/rea
 import Logo from '../logo'
 export default function NotAuthenticatedNavbar() {
 	return (
-		<Navbar maxWidth="full" isBordered>
+		<Navbar maxWidth="full" className="bg-transparent py-3">
 			<NavbarContent justify="start">
 				<Logo />
 				<p className={`${fontMerriweather.className} text-xl`}>{siteConfig.name}</p>
