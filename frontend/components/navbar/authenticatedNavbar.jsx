@@ -21,7 +21,7 @@ export default function AuthenticatedNavbar({ toggleSidebar }) {
 	}
 
 	return (
-		<div className="flex items-center justify-between bg-transparent px-6 py-3">
+		<div className="flex items-center justify-between  px-6 py-3">
 			{/* Logo and menu */}
 			<div className="flex justify-center items-center text-3xl gap-3">
 				<Button isIconOnly className="bg-transparent" onClick={toggleSidebar}>

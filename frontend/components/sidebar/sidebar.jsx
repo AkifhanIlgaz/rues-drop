@@ -18,7 +18,7 @@ export default function Sidebar() {
 	return (
 		<div className="flex h-full w-1/12 flex-col px-3 py-2  ">
 			<NavLinks />
-			<Button onClick={signOut} className={clsx('flex h-[48px] grow text-danger items-center justify-center gap-2 rounded-md bg-transparent p-3 text-sm font-medium hover:bg-danger hover:text-white md:flex-none md:justify-start md:p-2 md:px-3')}>
+			<Button onClick={signOut} className={clsx('flex h-[48px] grow text-danger items-center justify-center gap-2 rounded-md bg-transparent p-3 text-sm font-medium hover:bg-danger-500 hover:text-white md:flex-none md:justify-start md:p-2 md:px-3')}>
 				Sign Out
 			</Button>
 		</div>

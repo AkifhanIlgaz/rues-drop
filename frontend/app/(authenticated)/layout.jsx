@@ -27,7 +27,7 @@ export default function Layout({ children }) {
 	}
 
 	return (
-		<div className="flex flex-col w-auto h-screen bg-white ">
+		<div className="flex flex-col w-auto h-screen  ">
 			<AuthenticatedNavbar toggleSidebar={toggleSidebar} />
 			<div className="flex h-full">
 				{isSidebarOpen && <Sidebar />}
