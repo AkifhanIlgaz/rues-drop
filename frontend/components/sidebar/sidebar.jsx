@@ -1,37 +1,20 @@
-import { link } from '@/config/links'
+import SignOutButton from '@/components/buttons/signOut'
 import firebase from '@/lib/firebase'
-import { PowerIcon } from '@heroicons/react/24/outline'
-import { Button } from '@nextui-org/react'
-import clsx from 'clsx'
+import { useSignOut } from 'react-firebase-hooks/auth'
+import Loading from '../loading'
 import NavLinks from './nav-links'
 
 export default function Sidebar() {
-	const signOut = async () => {
-		try {
-			await firebase.auth.signOut()
-			router.push(link.root)
-		} catch (error) {
-			// Todo: Handle error
-			console.log(error)
-		}
+	const [signOut, loading] = useSignOut(firebase.auth)
+
+	if (loading) {
+		return <Loading />
 	}
 
 	return (
 		<div className="flex h-full w-1/12 flex-col px-3 py-2  ">
 			<NavLinks />
-			<Button
-				onClick={signOut}
-				startContent={<PowerIcon className="w-6" />}
-				className={clsx(
-					// Base style
-					'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-transparent p-3 text-sm font-medium md:flex-none md:justify-start md:p-2 md:px-3',
-					// Light
-					'text-danger hover:text-danger-foreground hover:bg-danger'
-					// Dark
-				)}
-			>
-				Sign Out
-			</Button>
+			<SignOutButton signOut={signOut} />
 		</div>
 	)
 }
