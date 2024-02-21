@@ -2,9 +2,7 @@
 'use client'
 
 import BreadCrumbs from '@/components/breadcrumbs'
-import { breadcrumbs, link } from '@/config/links'
-import { Button } from '@nextui-org/button'
-import { Link } from '@nextui-org/link'
+import { breadcrumbs } from '@/config/links'
 
 export default function Home() {
 	const items = [breadcrumbs.home]
@@ -12,10 +10,6 @@ export default function Home() {
 	return (
 		<div className="w-full h-full ">
 			<BreadCrumbs items={items}></BreadCrumbs>
-
-			<Button as={Link} href={link.addProject}>
-				Add project
-			</Button>
 		</div>
 	)
 }

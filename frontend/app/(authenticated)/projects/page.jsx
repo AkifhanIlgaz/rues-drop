@@ -13,7 +13,7 @@ export default function ProjectPage() {
 
 	return (
 		<div className="w-full h-full">
-			<div className="flex items-center justify-between">
+			<div className="flex h-5 items-center justify-between">
 				<BreadCrumbs items={items}></BreadCrumbs>
 
 				<Button as={Link} href={link.addProject} className="mr-6" color={theme == 'light' ? 'primary' : 'danger'}>

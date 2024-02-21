@@ -23,7 +23,7 @@ export default function NavLinks() {
 					// Dark
 					'dark:text-white dark:hover:bg-white dark:hover:text-danger',
 					// Selected
-					{ ' text-blue-600 pointer-events-none dark:text-yellow-400': pathName === link.href }
+					{ ' text-blue-600 pointer-events-none dark:text-yellow-400': pathName === link.href || pathName.includes(link.href) }
 				)}
 			>
 				{LinkIcon && <LinkIcon className="sm:w-2 md:w-6" />}
