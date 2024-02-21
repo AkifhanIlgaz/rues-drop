@@ -10,10 +10,7 @@ export const metadata = {
 		template: `%s - ${siteConfig.name}`
 	},
 	description: siteConfig.description,
-	themeColor: [
-		{ media: '(prefers-color-scheme: light)', color: 'white' },
-		{ media: '(prefers-color-scheme: dark)', color: 'black' }
-	],
+
 	icons: {
 		icon: '/favicon.ico',
 		shortcut: '/favicon-16x16.png',
@@ -25,8 +22,8 @@ export default function RootLayout({ children }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head />
-			<body className={clsx('min-h-screen bg-gradient-to-b from-rose-100 to-teal-100 font-sans antialiased', fontSans.variable)}>
-				<Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>{children}</Providers>
+			<body className={clsx('min-h-screen bg-white dark:bg-black font-sans antialiased', fontSans.variable)}>
+				<Providers>{children}</Providers>
 			</body>
 		</html>
 	)

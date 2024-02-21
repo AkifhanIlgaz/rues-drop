@@ -1,6 +1,7 @@
 'use client'
 
 import Logo from '@/components/logo'
+import { ThemeSwitcher } from '@/components/themeSwitcher'
 import { link } from '@/config/links'
 import firebase from '@/lib/firebase'
 import { Bars4Icon } from '@heroicons/react/24/outline'
@@ -29,6 +30,9 @@ export default function AuthenticatedNavbar({ toggleSidebar }) {
 				</Button>
 				<Logo />
 			</div>
+
+			<ThemeSwitcher />
+			
 		</div>
 	)
 }

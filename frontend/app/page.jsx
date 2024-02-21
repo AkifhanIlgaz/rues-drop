@@ -18,5 +18,5 @@ export default function Home() {
 		redirect(link.home, RedirectType.replace)
 	}
 
-	return  <NotAuthenticatedNavbar />
+	return <NotAuthenticatedNavbar />
 }
