@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation'
 export default function NavLinks() {
 	const pathName = usePathname()
 
-	return sidebarLinks.map(link => {
+	return Object.values(sidebarLinks).map(link => {
 		const LinkIcon = link.icon
 
 		return (
@@ -23,10 +23,10 @@ export default function NavLinks() {
 					// Dark
 					'dark:text-white dark:hover:bg-white dark:hover:text-danger',
 					// Selected
-					{ ' text-blue-600 hover:bg-transparent hover:text-blue-600  dark:hover:bg-transparent dark:text-danger': pathName === link.href }
+					{ ' text-blue-600 pointer-events-none dark:text-yellow-400': pathName === link.href }
 				)}
 			>
-				<LinkIcon className="w-6" />
+				{LinkIcon && <LinkIcon className="sm:w-2 md:w-6" />}
 				<p className="hidden md:block">{link.name}</p>
 			</Link>
 		)
