@@ -30,6 +30,8 @@ export default function AddProject() {
 	} = useForm()
 
 	const onSubmit = async data => {
+		console.log(data)
+
 		try {
 			const idToken = await user.getIdToken(true)
 

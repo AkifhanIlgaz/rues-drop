@@ -34,6 +34,7 @@ export default function Page() {
 		setPending(true)
 		try {
 			await createUserWithEmailAndPassword(data.email, data.password)
+
 			router.push(link.home)
 		} catch (error) {
 			console.log(error)
