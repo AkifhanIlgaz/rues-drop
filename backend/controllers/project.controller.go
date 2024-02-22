@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"firebase.google.com/go/auth"
+	"github.com/AkifhanIlgaz/word-memory/models"
 	"github.com/AkifhanIlgaz/word-memory/services"
 	"github.com/gin-gonic/gin"
 )
@@ -20,16 +21,16 @@ func NewProjectController(projectService *services.ProjectService) *ProjectContr
 }
 
 func (controller *ProjectController) Add(ctx *gin.Context) {
-	user, err := getUserFromContext(ctx)
-	if err != nil {
-		ctx.AbortWithError(http.StatusUnauthorized, err)
+	var project models.Project
+	if err := ctx.ShouldBindJSON(&project); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
-	// TODO: Add new project
-
-	_ = user
-
+	if err := controller.projectService.Create(&project); err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
 }
 
 func getUserFromContext(ctx *gin.Context) (*auth.UserRecord, error) {
@@ -44,5 +45,4 @@ func getUserFromContext(ctx *gin.Context) (*auth.UserRecord, error) {
 	}
 
 	return user, nil
-
 }
