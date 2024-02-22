@@ -1,6 +1,8 @@
 import { errorMessage } from '@/config/errors'
 
 export const generateError = (label, error) => {
+	console.log(error)
+
 	switch (label) {
 		case 'password':
 			return passwordError(error)

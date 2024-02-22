@@ -7,22 +7,15 @@ import { label } from '@/config/labels'
 import { link } from '@/config/links'
 import { text } from '@/config/text'
 import { validateEmail } from '@/lib/email'
-import firebase from '@/lib/firebase'
+import firebaseClient from '@/lib/firebase'
 import { Button, Link } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth'
 import { useForm } from 'react-hook-form'
-
 export default function Page() {
-	const [createUserWithEmailAndPassword, user, loading, error] = useCreateUserWithEmailAndPassword(firebase.auth)
+	const [createUserWithEmailAndPassword, user, loading, error] = useCreateUserWithEmailAndPassword(firebaseClient.auth)
 	const router = useRouter()
-
-	console.log(`
-    User => ${user}
-    Loading => ${loading}
-    Error => ${error}
-  `)
 
 	const {
 		register,

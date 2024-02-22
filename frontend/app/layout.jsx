@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head />
-			<body className={clsx('min-h-screen bg-white dark:bg-black font-sans antialiased', fontSans.variable)}>
+			<body className={clsx('min-h-screen bg-white dark:bg-slate-900 font-sans antialiased', fontSans.variable)}>
 				<Providers>{children}</Providers>
 			</body>
 		</html>

@@ -1,13 +1,13 @@
-import fb from 'firebase/compat/app'
+import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
 import { firebaseConfig } from '../config/firebase'
 
-fb.initializeApp(firebaseConfig)
+firebase.initializeApp(firebaseConfig)
 
 class Firebase {
 	constructor() {
-		this.auth = fb.auth()
-		this.googleProvider = new fb.auth.GoogleAuthProvider()
+		this.auth = firebase.auth()
+		this.googleProvider = new firebase.auth.GoogleAuthProvider()
 	}
 
 	async signInWithGoogle() {
@@ -42,6 +42,6 @@ class Firebase {
 	}
 }
 
-const firebase = new Firebase()
+const firebaseClient = new Firebase()
 
-export default firebase
+export default firebaseClient

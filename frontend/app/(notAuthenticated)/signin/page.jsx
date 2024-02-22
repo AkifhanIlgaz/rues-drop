@@ -7,7 +7,7 @@ import { label } from '@/config/labels'
 import { link } from '@/config/links'
 import { text } from '@/config/text'
 import { validateEmail } from '@/lib/email'
-import firebase from '@/lib/firebase'
+import firebaseClient from '@/lib/firebase'
 import { Button, Link } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form'
 export default function Page() {
 	const router = useRouter()
 
-	const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(firebase.auth)
+	const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(firebaseClient.auth)
 
 	const {
 		register,

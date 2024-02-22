@@ -10,6 +10,5 @@ export const label = {
 	website: { title: 'Website', key: 'website' },
 	discord: { title: 'Discord', key: 'discord' },
 	twitter: { title: 'Twitter', key: 'twitter' },
-	ruesLink: { title: 'Rues Link', key: 'rues' },
-	todos: { title: 'To-do', key: 'todos' }
+	ruesLink: { title: 'Rues Link', key: 'rues' }
 }
