@@ -38,3 +38,25 @@ func (service *AuthService) GetUserByIdToken(idToken string) (*auth.UserRecord, 
 
 	return user, nil
 }
+
+func (service *AuthService) CreateAdmin(username, password string) error {
+	newUser := &auth.UserToCreate{}
+	newUser.Email(username + "@gmail.com").Password(password)
+
+	user, err := service.client.CreateUser(service.ctx, newUser)
+	if err != nil {
+		return fmt.Errorf("create admin: %w", err)
+	}
+
+	updateUser := &auth.UserToUpdate{}
+	updateUser.CustomClaims(map[string]interface{}{
+		"role": "admin",
+	})
+
+	_, err = service.client.UpdateUser(service.ctx, user.UID, updateUser)
+	if err != nil {
+		return fmt.Errorf("create admin: %w", err)
+	}
+
+	return nil
+}

@@ -38,19 +38,22 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	projectService := services.NewProjectService(ctx, db)
 
 	projectController := controllers.NewProjectController(projectService)
+	userController := controllers.NewUserController(authService)
 	userMiddleware := controllers.NewUserMiddleware(authService)
 
 	projectRouteController := routes.NewProjectRouteController(projectController, userMiddleware)
+	userRouteController := routes.NewUserRouteController(userController, userMiddleware)
 
 	server := gin.Default()
 	setCors(server)
 
 	router := server.Group("/api")
+
 	projectRouteController.Setup(router)
+	userRouteController.Setup(router)
 
 	err = server.Run(":" + config.Port)
 	if err != nil {
