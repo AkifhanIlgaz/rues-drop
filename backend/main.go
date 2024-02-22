@@ -38,14 +38,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// TODO: Use authService
-	_ = authService
 
 	projectService := services.NewProjectService(ctx, db)
 
 	projectController := controllers.NewProjectController(projectService)
+	userMiddleware := controllers.NewUserMiddleware(authService)
 
-	projectRouteController := routes.NewProjectRouteController(projectController)
+	projectRouteController := routes.NewProjectRouteController(projectController, userMiddleware)
 
 	server := gin.Default()
 	setCors(server)

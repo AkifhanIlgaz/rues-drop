@@ -25,11 +25,16 @@ func NewAuthService(ctx context.Context, app *firebase.App) (*AuthService, error
 	}, nil
 }
 
-func (service *AuthService) GetUidByIdToken(idToken string) (string, error) {
+func (service *AuthService) GetUserByIdToken(idToken string) (*auth.UserRecord, error) {
 	token, err := service.client.VerifyIDToken(service.ctx, idToken)
 	if err != nil {
-		return "", fmt.Errorf("get uid by idToken: %w", err)
+		return nil, fmt.Errorf("get uid by idToken: %w", err)
 	}
 
-	return token.UID, nil
+	user, err := service.client.GetUser(service.ctx, token.UID)
+	if err != nil {
+		return nil, fmt.Errorf("get uid by idToken: %w", err)
+	}
+
+	return user, nil
 }
