@@ -11,7 +11,6 @@ import { Button } from '@nextui-org/button'
 import { useTheme } from 'next-themes'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useForm } from 'react-hook-form'
-
 import axios from 'axios'
 
 export default function AddProject() {
