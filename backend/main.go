@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"log"
-	"net/http"
 
 	"github.com/AkifhanIlgaz/word-memory/cfg"
 	"github.com/AkifhanIlgaz/word-memory/connect"
+	"github.com/AkifhanIlgaz/word-memory/controllers"
+	"github.com/AkifhanIlgaz/word-memory/routes"
 	"github.com/AkifhanIlgaz/word-memory/services"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -29,6 +30,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Could not connect to mongo: ", err)
 	}
+	db := mongoClient.Database("rues-drop")
 
 	defer mongoClient.Disconnect(ctx)
 
@@ -36,17 +38,20 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	// TODO: Use authService
 	_ = authService
+
+	projectService := services.NewProjectService(ctx, db)
+
+	projectController := controllers.NewProjectController(projectService)
+
+	projectRouteController := routes.NewProjectRouteController(projectController)
 
 	server := gin.Default()
 	setCors(server)
 
 	router := server.Group("/api")
-	router.GET("/health-checker", func(ctx *gin.Context) {
-		// Todo: Read from auth header
-
-		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "API is healthy"})
-	})
+	projectRouteController.Setup(router)
 
 	err = server.Run(":" + config.Port)
 	if err != nil {
