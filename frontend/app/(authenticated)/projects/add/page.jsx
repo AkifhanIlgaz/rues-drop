@@ -70,7 +70,7 @@ export default function AddProject() {
 				</div>
 
 				<div className="flex justify-end mr-3">
-					<Button color={theme === 'light' ? 'primary' : 'default'} type="submit">
+					<Button color={theme === 'light' ? 'primary' : 'default'} type="submit" size="sm">
 						Save
 					</Button>
 				</div>

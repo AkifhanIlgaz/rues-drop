@@ -32,7 +32,7 @@ export default function Layout({ children }) {
 			<AuthenticatedNavbar toggleSidebar={toggleSidebar} />
 			<div className="flex h-full">
 				{isSidebarOpen && <Sidebar />}
-				<div className="w-full h-full p-3">{children}</div>
+				<div className="w-full h-full p-8">{children}</div>
 			</div>
 		</div>
 	)

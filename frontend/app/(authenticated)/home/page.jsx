@@ -8,7 +8,7 @@ export default function Home() {
 	const items = [breadcrumbs.home]
 
 	return (
-		<div className="w-full h-full ">
+		<div className="w-full h-full">
 			<BreadCrumbs items={items}></BreadCrumbs>
 		</div>
 	)
