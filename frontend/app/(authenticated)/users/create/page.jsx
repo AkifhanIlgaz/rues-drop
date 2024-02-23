@@ -4,6 +4,7 @@ import BreadCrumbs from '@/components/breadcrumbs'
 import { breadcrumbs } from '@/config/links'
 
 import PasswordInput from '@/components/inputs/passwordInput'
+import ProjectInput from '@/components/inputs/projectInput'
 import TextInput from '@/components/inputs/textInput'
 import Loading from '@/components/loading'
 import { label } from '@/config/labels'
@@ -12,6 +13,7 @@ import { Button } from '@nextui-org/button'
 import { useTheme } from 'next-themes'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useForm } from 'react-hook-form'
+const projects = [{ name: 'Zircuit' }, { name: 'Dymension' }, { name: 'Blocksense' }, { name: 'Blockless' }, { name: 'Superposition' }]
 
 export default function Page() {
 	const { theme } = useTheme()
@@ -21,12 +23,18 @@ export default function Page() {
 	const {
 		register,
 		handleSubmit,
-		reset,
-		clearErrors,
+		setError,
+		setValue,
 		formState: { errors }
 	} = useForm()
 
 	const onSubmit = async data => {
+		if (data.password !== data.confirmPassword) {
+			setError('password', { type: 'validate' })
+			setError('confirmPassword', { type: 'validate' })
+			return
+		}
+
 		console.log(data)
 	}
 
@@ -42,12 +50,13 @@ export default function Page() {
 			<div className="grid grid-cols-2 gap-3 mt-8">
 				<TextInput errors={errors} label={label.username} register={register} required={true} />
 				<PasswordInput errors={errors} label={label.password} register={register} required={true} />
-			</div>
-
-			<div className="flex justify-end mt-8 mr-3">
-				<Button color={theme === 'light' ? 'primary' : 'default'} type="submit" size="sm">
-					Save
-				</Button>
+				<ProjectInput errors={errors} projects={projects} setValue={setValue} />
+				<div className="flex  flex-col gap-6">
+					<PasswordInput errors={errors} label={label.passwordConfirm} register={register} required={true} />
+					<Button className="w-1/12 self-end " color={theme === 'light' ? 'primary' : 'default'} type="submit" size="sm">
+						Save
+					</Button>
+				</div>
 			</div>
 		</form>
 	)

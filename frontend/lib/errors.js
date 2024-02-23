@@ -4,6 +4,7 @@ export const generateError = (label, error) => {
 	console.log(error)
 
 	switch (label) {
+		case 'confirmPassword':
 		case 'password':
 			return passwordError(error)
 		case 'projectName':
