@@ -16,7 +16,7 @@ export default function Page() {
 		<div className="flex h-5 items-center justify-between">
 			<BreadCrumbs items={items}></BreadCrumbs>
 			<Button as={Link} href={link.createModerator} className="mr-6" color={theme == 'light' ? 'primary' : 'danger'}>
-				Create Moderator
+				Add Moderator
 			</Button>
 		</div>
 	)

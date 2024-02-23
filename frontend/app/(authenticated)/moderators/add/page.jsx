@@ -26,7 +26,7 @@ export default function Page() {
 		setError,
 		setValue,
 		formState: { errors }
-	} = useForm()
+	} = useForm({ defaultValues: { projects: [] } })
 
 	const onSubmit = async data => {
 		if (data.password !== data.confirmPassword) {
@@ -34,6 +34,8 @@ export default function Page() {
 			setError('confirmPassword', { type: 'validate' })
 			return
 		}
+
+		if (data.projects.length === 0) return
 
 		try {
 		} catch (error) {}

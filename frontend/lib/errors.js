@@ -1,8 +1,6 @@
 import { errorMessage } from '@/config/errors'
 
 export const generateError = (label, error) => {
-	console.log(error)
-
 	switch (label) {
 		case 'confirmPassword':
 		case 'password':
@@ -13,6 +11,8 @@ export const generateError = (label, error) => {
 			return userNameError(error)
 		case 'todos':
 			return todoError(error)
+		case 'projects':
+			return projectsError(error)
 	}
 }
 
@@ -31,6 +31,13 @@ const projectNameError = error => {
 	switch (error.type) {
 		case 'required':
 			return errorMessage.requiredProjectName
+	}
+}
+
+const projectsError = error => {
+	switch (error.type) {
+		case 'required':
+			return errorMessage.requiredProjects
 	}
 }
 

@@ -1,8 +1,9 @@
+import { errorMessage } from '@/config/errors'
 import { Autocomplete, AutocompleteItem, Chip } from '@nextui-org/react'
 import { useState } from 'react'
 import { Label } from '../label'
 
-export default function ProjectInput({ projects, setValue }) {
+export default function ProjectInput({ projects, setValue, errors }) {
 	const [selectedProjects, setSelectedProjects] = useState(new Set())
 
 	const selectProject = project => {
@@ -22,7 +23,7 @@ export default function ProjectInput({ projects, setValue }) {
 
 	return (
 		<div className="flex flex-col gap-6">
-			<Autocomplete onSelectionChange={selectProject} variant="bordered" labelPlacement="outside" defaultItems={projects} label={<Label label={'Projects'} isRequired={true} />} placeholder={'Select the projects that user has access'}>
+			<Autocomplete onSelectionChange={selectProject} variant="bordered" labelPlacement="outside" defaultItems={projects} label={<Label label={'Projects'} isRequired={true} />} placeholder={'Select the projects that user has access'} classNames={{ errorMessage: 'text-danger text-sm pt-1' }} errorMessage={selectedProjects.size === 0 && errorMessage.requiredProjects}>
 				{project => <AutocompleteItem key={project.name}>{project.name}</AutocompleteItem>}
 			</Autocomplete>
 			<div className="flex flex-wrap gap-1">

@@ -10,7 +10,7 @@ export const link = {
 	addProject: '/projects/add',
 	todo: '/todo',
 	moderators: '/moderators',
-	createModerator: '/moderators/create'
+	createModerator: '/moderators/add'
 }
 
 export const sidebarLinks = {
