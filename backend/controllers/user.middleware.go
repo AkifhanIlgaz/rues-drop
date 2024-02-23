@@ -40,7 +40,19 @@ func (middleware *UserMiddleware) SetUser() gin.HandlerFunc {
 
 func (middleware *UserMiddleware) IsAdmin() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		user, err := getUserFromContext(ctx)
+		if err != nil {
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
 
+		role, ok := user.CustomClaims["role"]
+		if !ok || role != "admin" {
+			ctx.AbortWithError(http.StatusUnauthorized, fmt.Errorf("user is not admin"))
+			return
+		}
+
+		ctx.Next()
 	}
 }
 
