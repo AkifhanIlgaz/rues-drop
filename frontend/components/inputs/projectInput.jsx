@@ -31,7 +31,7 @@ export default function ProjectInput({ projects, setValue }) {
 						onClose={() => {
 							removeProject(project)
 						}}
-						className=" text-white bg-slate-600 dark:text-indigo-950 dark:bg-emerald-50 "
+						className="text-white bg-indigo-900 dark:text-indigo-950 dark:bg-emerald-50 "
 						key={project}
 					>
 						{project}

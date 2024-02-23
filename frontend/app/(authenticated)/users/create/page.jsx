@@ -35,6 +35,12 @@ export default function Page() {
 			return
 		}
 
+		try {
+			
+		} catch (error) {
+			
+		}
+
 		console.log(data)
 	}
 

@@ -9,8 +9,10 @@ export const generateError = (label, error) => {
 			return passwordError(error)
 		case 'projectName':
 			return projectNameError(error)
+		case 'username':
+			return userNameError(error)
 		case 'todos':
-			return TodoError(error)
+			return todoError(error)
 	}
 }
 
@@ -32,9 +34,16 @@ const projectNameError = error => {
 	}
 }
 
-const TodoError = error => {
+const todoError = error => {
 	switch (error.type) {
 		case 'required':
 			return errorMessage.requiredTodo
+	}
+}
+
+const userNameError = error => {
+	switch (error.type) {
+		case 'required':
+			return errorMessage.requiredUsername
 	}
 }
