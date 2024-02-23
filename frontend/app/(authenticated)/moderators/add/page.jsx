@@ -1,18 +1,21 @@
 'use client'
 
 import BreadCrumbs from '@/components/breadcrumbs'
-import { breadcrumbs } from '@/config/links'
-
 import PasswordInput from '@/components/inputs/passwordInput'
 import ProjectInput from '@/components/inputs/projectInput'
 import TextInput from '@/components/inputs/textInput'
 import Loading from '@/components/loading'
+import api from '@/config/api'
 import { label } from '@/config/labels'
+import { breadcrumbs } from '@/config/links'
 import firebaseClient from '@/lib/firebase'
 import { Button } from '@nextui-org/button'
+import axios from 'axios'
 import { useTheme } from 'next-themes'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useForm } from 'react-hook-form'
+
+// TODO: Get projects from backend
 const projects = [{ name: 'Zircuit' }, { name: 'Dymension' }, { name: 'Blocksense' }, { name: 'Blockless' }, { name: 'Superposition' }]
 
 export default function Page() {
@@ -36,10 +39,20 @@ export default function Page() {
 		}
 
 		if (data.projects.length === 0) return
-
 		try {
-		} catch (error) {}
+			const idToken = await user.getIdToken(true)
 
+			const res = await axios.post(api.addModerator, data, {
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${idToken}`
+				}
+			})
+
+			console.log(res)
+		} catch (error) {
+			console.log(error)
+		}
 		console.log(data)
 	}
 
