@@ -8,10 +8,10 @@ import { label } from '@/config/labels'
 import { breadcrumbs } from '@/config/links'
 import firebaseClient from '@/lib/firebase'
 import { Button } from '@nextui-org/button'
+import axios from 'axios'
 import { useTheme } from 'next-themes'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useForm } from 'react-hook-form'
-import axios from 'axios'
 
 export default function AddProject() {
 	const { theme } = useTheme()
@@ -54,26 +54,24 @@ export default function AddProject() {
 	}
 
 	return (
-		<div className="w-full h-full">
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<div className="h-5 mb-3">
-					<BreadCrumbs items={items}></BreadCrumbs>
-				</div>
+		<form onSubmit={handleSubmit(onSubmit)}>
+			<div className="h-5 mb-3">
+				<BreadCrumbs items={items}></BreadCrumbs>
+			</div>
 
-				<div className="grid grid-cols-2 gap-3 mt-8">
-					<TextInput errors={errors} label={label.projectName} register={register} required={true} />
-					<TextInput errors={errors} label={label.website} register={register} />
-					<TextInput errors={errors} label={label.discord} register={register} />
-					<TextInput errors={errors} label={label.twitter} register={register} />
-					<TextInput errors={errors} label={label.ruesLink} register={register} />
-				</div>
+			<div className="grid grid-cols-2 gap-3 mt-8">
+				<TextInput errors={errors} label={label.projectName} register={register} required={true} />
+				<TextInput errors={errors} label={label.website} register={register} />
+				<TextInput errors={errors} label={label.discord} register={register} />
+				<TextInput errors={errors} label={label.twitter} register={register} />
+				<TextInput errors={errors} label={label.ruesLink} register={register} />
+			</div>
 
-				<div className="flex justify-end mr-3">
-					<Button color={theme === 'light' ? 'primary' : 'default'} type="submit" size="sm">
-						Save
-					</Button>
-				</div>
-			</form>
-		</div>
+			<div className="flex justify-end mr-3">
+				<Button color={theme === 'light' ? 'primary' : 'default'} type="submit" size="sm">
+					Save
+				</Button>
+			</div>
+		</form>
 	)
 }

@@ -34,23 +34,21 @@ export default function Page() {
 		return <Loading />
 	}
 	return (
-		<div className="w-full h-full">
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<div className="h-5 mb-3">
-					<BreadCrumbs items={items}></BreadCrumbs>
-				</div>
+		<form onSubmit={handleSubmit(onSubmit)}>
+			<div className="h-5 mb-3">
+				<BreadCrumbs items={items}></BreadCrumbs>
+			</div>
 
-				<div className="grid grid-cols-2 gap-3 mt-8">
-					<TextInput errors={errors} label={label.username} register={register} required={true} />
-					<PasswordInput errors={errors} label={label.password} register={register} required={true} />
-				</div>
+			<div className="grid grid-cols-2 gap-3 mt-8">
+				<TextInput errors={errors} label={label.username} register={register} required={true} />
+				<PasswordInput errors={errors} label={label.password} register={register} required={true} />
+			</div>
 
-				<div className="flex justify-end mt-8 mr-3">
-					<Button color={theme === 'light' ? 'primary' : 'default'} type="submit" size="sm">
-						Save
-					</Button>
-				</div>
-			</form>
-		</div>
+			<div className="flex justify-end mt-8 mr-3">
+				<Button color={theme === 'light' ? 'primary' : 'default'} type="submit" size="sm">
+					Save
+				</Button>
+			</div>
+		</form>
 	)
 }

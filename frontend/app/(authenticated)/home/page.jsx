@@ -7,9 +7,5 @@ import { breadcrumbs } from '@/config/links'
 export default function Home() {
 	const items = [breadcrumbs.home]
 
-	return (
-		<div className="w-full h-full">
-			<BreadCrumbs items={items}></BreadCrumbs>
-		</div>
-	)
+	return <BreadCrumbs items={items}></BreadCrumbs>
 }
