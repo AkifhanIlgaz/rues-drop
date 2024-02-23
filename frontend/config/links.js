@@ -9,15 +9,15 @@ export const link = {
 	projects: '/projects',
 	addProject: '/projects/add',
 	todo: '/todo',
-	users: '/users',
-	createAdmin: '/users/create'
+	moderators: '/moderators',
+	createModerator: '/moderators/create'
 }
 
 export const sidebarLinks = {
 	home: { name: 'Home', href: link.home, icon: HomeIcon },
 	projects: { name: 'Projects', href: link.projects, icon: BriefcaseIcon },
 	todo: { name: 'Todo', href: link.todo, icon: InboxIcon },
-	users: { name: 'Users', href: link.users, icon: UserGroupIcon }
+	moderators: { name: 'Moderators', href: link.moderators, icon: UserGroupIcon }
 }
 
 export const breadcrumbs = {
@@ -25,6 +25,6 @@ export const breadcrumbs = {
 	projects: { name: 'Projects', href: link.projects, icon: BriefcaseIcon },
 	addProject: { name: 'Add Project', href: link.addProject },
 	todo: { name: 'Todo', href: link.todo, icon: InboxIcon },
-	users: { name: 'Users', href: link.users, icon: UserGroupIcon },
-	createAdmin: { name: 'Create admin', href: link.createAdmin }
+	moderators: { name: 'Moderators', href: link.moderators, icon: UserGroupIcon },
+	createModerator: { name: 'Create moderator', href: link.createModerator }
 }

@@ -18,7 +18,7 @@ const projects = [{ name: 'Zircuit' }, { name: 'Dymension' }, { name: 'Blocksens
 export default function Page() {
 	const { theme } = useTheme()
 	const [user, loading, error] = useAuthState(firebaseClient.auth)
-	const items = [breadcrumbs.users, breadcrumbs.createAdmin]
+	const items = [breadcrumbs.moderators, breadcrumbs.createModerator]
 
 	const {
 		register,
@@ -36,10 +36,7 @@ export default function Page() {
 		}
 
 		try {
-			
-		} catch (error) {
-			
-		}
+		} catch (error) {}
 
 		console.log(data)
 	}
