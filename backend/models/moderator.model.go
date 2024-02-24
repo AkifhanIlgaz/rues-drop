@@ -3,9 +3,10 @@ package models
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type Moderator struct {
-	Id       primitive.ObjectID
-	Username string
-	Projects []string
+	Id       primitive.ObjectID `bson:"_id,omitempty"`
+	Uid      string             `json:"uid"`
+	Username string             `json:"username"`
+	Projects []string           `json:"projects"`
 }
 
 type ModeratorToAdd struct {

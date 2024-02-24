@@ -1,8 +1,7 @@
 package controllers
 
 import (
-	"fmt"
-	"log"
+	"net/http"
 
 	"github.com/AkifhanIlgaz/word-memory/models"
 	"github.com/AkifhanIlgaz/word-memory/services"
@@ -10,23 +9,34 @@ import (
 )
 
 type ModeratorController struct {
-	authService *services.AuthService
+	authService      *services.AuthService
+	moderatorService *services.ModeratorService
 }
 
-func NewModeratorController(authService *services.AuthService) *ModeratorController {
+func NewModeratorController(authService *services.AuthService, moderatorService *services.ModeratorService) *ModeratorController {
 	return &ModeratorController{
-		authService: authService,
+		authService:      authService,
+		moderatorService: moderatorService,
 	}
 }
 
-func (controller *ModeratorController) Add(ctx *gin.Context) {
+func (controller *ModeratorController) Create(ctx *gin.Context) {
 	var moderatorToAdd models.ModeratorToAdd
 
 	if err := ctx.ShouldBindJSON(&moderatorToAdd); err != nil {
-		// TODO:
-		log.Fatal(err)
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
 	}
 
-	fmt.Printf("%+v", moderatorToAdd)
+	uid, err := controller.authService.CreateModerator(&moderatorToAdd)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
 
+	err = controller.moderatorService.CreateModerator(uid, &moderatorToAdd)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
 }

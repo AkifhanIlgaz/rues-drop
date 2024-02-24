@@ -39,9 +39,10 @@ func main() {
 		log.Fatal(err)
 	}
 	projectService := services.NewProjectService(ctx, db)
+	moderatorService := services.NewModeratorService(ctx, db)
 
 	projectController := controllers.NewProjectController(projectService)
-	moderatorController := controllers.NewModeratorController(authService)
+	moderatorController := controllers.NewModeratorController(authService, moderatorService)
 	userMiddleware := controllers.NewUserMiddleware(authService)
 
 	projectRouteController := routes.NewProjectRouteController(projectController, userMiddleware)

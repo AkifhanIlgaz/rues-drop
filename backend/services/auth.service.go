@@ -6,6 +6,7 @@ import (
 
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/auth"
+	"github.com/AkifhanIlgaz/word-memory/models"
 )
 
 type AuthService struct {
@@ -39,24 +40,24 @@ func (service *AuthService) GetUserByIdToken(idToken string) (*auth.UserRecord, 
 	return user, nil
 }
 
-func (service *AuthService) CreateAdmin(username, password string) error {
+func (service *AuthService) CreateModerator(moderator *models.ModeratorToAdd) (string, error) {
 	newUser := &auth.UserToCreate{}
-	newUser.Email(username + "@gmail.com").Password(password)
+	newUser.Email(moderator.Username + "@gmail.com").Password(moderator.Password)
 
 	user, err := service.client.CreateUser(service.ctx, newUser)
 	if err != nil {
-		return fmt.Errorf("create admin: %w", err)
+		return "", fmt.Errorf("create : %w", err)
 	}
 
 	updateUser := &auth.UserToUpdate{}
 	updateUser.CustomClaims(map[string]interface{}{
-		"role": "admin",
+		"projects": moderator.Projects,
 	})
 
 	_, err = service.client.UpdateUser(service.ctx, user.UID, updateUser)
 	if err != nil {
-		return fmt.Errorf("create admin: %w", err)
+		return "", fmt.Errorf("create admin: %w", err)
 	}
 
-	return nil
+	return user.UID, nil
 }
