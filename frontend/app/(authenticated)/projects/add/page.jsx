@@ -66,7 +66,6 @@ export default function AddProject() {
 				<TextInput errors={errors} label={label.website} register={register} />
 				<TextInput errors={errors} label={label.discord} register={register} />
 				<TextInput errors={errors} label={label.twitter} register={register} />
-				<TextInput errors={errors} label={label.ruesLink} register={register} />
 				<TextInput errors={errors} label={label.logo} register={register} />
 			</div>
 
