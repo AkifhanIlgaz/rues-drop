@@ -5,17 +5,19 @@ import TextInput from '@/components/inputs/textInput'
 import Loading from '@/components/loading'
 import api from '@/config/api'
 import { label } from '@/config/labels'
-import { breadcrumbs } from '@/config/links'
+import { breadcrumbs, link } from '@/config/links'
 import firebaseClient from '@/lib/firebase'
 import { Button } from '@nextui-org/button'
 import axios from 'axios'
 import { useTheme } from 'next-themes'
+import { useRouter } from 'next/navigation'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useForm } from 'react-hook-form'
 
 export default function AddProject() {
 	const { theme } = useTheme()
 	const [user, loading, error] = useAuthState(firebaseClient.auth)
+	const router = useRouter()
 
 	const items = [breadcrumbs.projects, breadcrumbs.addProject]
 
@@ -41,7 +43,7 @@ export default function AddProject() {
 				}
 			})
 
-			console.log(res)
+			router.push(link.projects)
 		} catch (error) {
 			console.log(error)
 		}
@@ -59,12 +61,13 @@ export default function AddProject() {
 				<BreadCrumbs items={items}></BreadCrumbs>
 			</div>
 
-			<div className="grid grid-cols-2 gap-3 mt-8">
+			<div className="grid grid-cols-2 gap-3 my-8">
 				<TextInput errors={errors} label={label.projectName} register={register} required={true} />
 				<TextInput errors={errors} label={label.website} register={register} />
 				<TextInput errors={errors} label={label.discord} register={register} />
 				<TextInput errors={errors} label={label.twitter} register={register} />
 				<TextInput errors={errors} label={label.ruesLink} register={register} />
+				<TextInput errors={errors} label={label.logo} register={register} />
 			</div>
 
 			<div className="flex justify-end mr-3">

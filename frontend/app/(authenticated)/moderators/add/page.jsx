@@ -53,11 +53,12 @@ export default function Page() {
 
 			if (res.status === 200) {
 				router.push(link.moderators)
+
+				console.log(res)
 			}
 		} catch (error) {
 			console.log(error)
 		}
-		console.log(data)
 	}
 
 	if (loading) {
@@ -69,7 +70,7 @@ export default function Page() {
 				<BreadCrumbs items={items}></BreadCrumbs>
 			</div>
 
-			<div className="grid grid-cols-2 gap-3 mt-8">
+			<div className="grid grid-cols-2 gap-3 my-8">
 				<TextInput errors={errors} label={label.username} register={register} required={true} />
 				<PasswordInput errors={errors} label={label.password} register={register} required={true} />
 				<ProjectInput errors={errors} projects={projects} setValue={setValue} />
