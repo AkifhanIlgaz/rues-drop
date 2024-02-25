@@ -8,7 +8,7 @@ type Project struct {
 	Website string             `json:"website"`
 	Discord string             `json:"discord"`
 	Twitter string             `json:"twitter"`
-	Rues    string             `json:"rues"`
 	Logo    string             `json:"logo"`
+	// TODO: Add links || Additional info (Rues tweet, github etc.)
 	// TODO: Add todos
 }
