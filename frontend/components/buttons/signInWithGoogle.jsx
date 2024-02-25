@@ -1,6 +1,6 @@
 import { link } from '@/config/links'
 import { text } from '@/config/text'
-import firebase from '@/lib/firebase'
+import firebaseClient from '@/lib/firebase'
 import { Button } from '@nextui-org/button'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -8,8 +8,7 @@ import { useSignInWithGoogle } from 'react-firebase-hooks/auth'
 import { GoogleLogo } from '../icons'
 
 export default function SignInWithGoogleButton() {
-	// TODO: Implement sign in with google
-	const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(firebase.auth)
+	const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(firebaseClient.auth)
 	const [pending, setPending] = useState(false)
 	const router = useRouter()
 
