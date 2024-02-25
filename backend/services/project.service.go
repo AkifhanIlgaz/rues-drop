@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/AkifhanIlgaz/word-memory/models"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -32,4 +33,19 @@ func (service *ProjectService) Create(project *models.Project) error {
 	}
 
 	return nil
+}
+
+func (service *ProjectService) AllProjects() ([]models.Project, error) {
+	cursor, err := service.collection.Find(service.ctx, bson.M{})
+	if err != nil {
+		return nil, fmt.Errorf("get all projects: %w", err)
+	}
+
+	var projects []models.Project
+
+	if err := cursor.All(service.ctx, &projects); err != nil {
+		return nil, fmt.Errorf("get all projects: %w", err)
+	}
+
+	return projects, nil
 }

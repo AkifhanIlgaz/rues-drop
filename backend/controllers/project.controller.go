@@ -27,10 +27,22 @@ func (controller *ProjectController) Add(ctx *gin.Context) {
 		return
 	}
 
+	fmt.Println(project)
+
 	if err := controller.projectService.Create(&project); err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
+}
+
+func (controller *ProjectController) All(ctx *gin.Context) {
+	projects, err := controller.projectService.AllProjects()
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &projects)
 }
 
 func getUserFromContext(ctx *gin.Context) (*auth.UserRecord, error) {

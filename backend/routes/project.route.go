@@ -20,5 +20,6 @@ func NewProjectRouteController(projectController *controllers.ProjectController,
 func (routeController *ProjectRouteController) Setup(rg *gin.RouterGroup) {
 	router := rg.Group("/projects", routeController.userMiddleware.SetUser())
 
+	router.GET("/all", routeController.projectController.All)
 	router.POST("/add", routeController.userMiddleware.IsAdmin(), routeController.projectController.Add)
 }
