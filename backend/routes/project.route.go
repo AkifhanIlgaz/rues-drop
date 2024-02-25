@@ -20,6 +20,5 @@ func NewProjectRouteController(projectController *controllers.ProjectController,
 func (routeController *ProjectRouteController) Setup(rg *gin.RouterGroup) {
 	router := rg.Group("/projects", routeController.userMiddleware.SetUser())
 
-	// TODO: User must be admin to add a new project
-	router.POST("/add", routeController.projectController.Add)
+	router.POST("/add", routeController.userMiddleware.IsAdmin(), routeController.projectController.Add)
 }
