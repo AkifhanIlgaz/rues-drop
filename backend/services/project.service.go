@@ -49,3 +49,17 @@ func (service *ProjectService) AllProjects() ([]models.Project, error) {
 
 	return projects, nil
 }
+
+func (service *ProjectService) GetProjectByName(name string) (*models.Project, error) {
+	res := service.collection.FindOne(service.ctx, bson.M{
+		"name": name,
+	})
+
+	var project models.Project
+
+	if err := res.Decode(&project); err != nil {
+		return nil, fmt.Errorf("get project by id: %w", err)
+	}
+
+	return &project, nil
+}

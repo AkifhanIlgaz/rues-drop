@@ -45,6 +45,18 @@ func (controller *ProjectController) All(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &projects)
 }
 
+func (controller *ProjectController) Project(ctx *gin.Context) {
+	projectName := ctx.Param("projectName")
+
+	project, err := controller.projectService.GetProjectByName(projectName)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, project)
+}
+
 func getUserFromContext(ctx *gin.Context) (*auth.UserRecord, error) {
 	val, exists := ctx.Get("currentUser")
 	if !exists {
