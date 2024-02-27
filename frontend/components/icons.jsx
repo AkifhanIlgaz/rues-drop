@@ -30,6 +30,14 @@ export const SiteIcon = ({ size = 24, width, height, ...props }) => {
 	)
 }
 
+export const EditIcon = ({ size = 24, width, height, ...props }) => {
+	return (
+		<svg height={size || height} viewBox="0 0 24 24" width={size || width} {...props} xmlns="http://www.w3.org/2000/svg" fill="none" {...props} strokeWidth={1.5} stroke="currentColor">
+			<path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+		</svg>
+	)
+}
+
 export const MoonFilledIcon = ({ size = 24, width, height, ...props }) => (
 	<svg aria-hidden="true" focusable="false" height={size || height} role="presentation" viewBox="0 0 24 24" width={size || width} {...props}>
 		<path d="M21.53 15.93c-.16-.27-.61-.69-1.73-.49a8.46 8.46 0 01-1.88.13 8.409 8.409 0 01-5.91-2.82 8.068 8.068 0 01-1.44-8.66c.44-1.01.13-1.54-.09-1.76s-.77-.55-1.83-.11a10.318 10.318 0 00-6.32 10.21 10.475 10.475 0 007.04 8.99 10 10 0 002.89.55c.16.01.32.02.48.02a10.5 10.5 0 008.47-4.27c.67-.93.49-1.519.32-1.79z" fill="currentColor" />
