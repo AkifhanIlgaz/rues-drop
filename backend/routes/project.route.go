@@ -23,5 +23,6 @@ func (routeController *ProjectRouteController) Setup(rg *gin.RouterGroup) {
 	router.GET("/all", routeController.projectController.All)
 	router.GET("/:projectName", routeController.projectController.Project)
 
+	router.DELETE("/:projectName", routeController.userMiddleware.IsAdmin(), routeController.projectController.Delete)
 	router.POST("/add", routeController.userMiddleware.IsAdmin(), routeController.projectController.Add)
 }

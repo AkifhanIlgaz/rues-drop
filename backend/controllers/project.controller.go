@@ -27,8 +27,6 @@ func (controller *ProjectController) Add(ctx *gin.Context) {
 		return
 	}
 
-	fmt.Println(project)
-
 	if err := controller.projectService.Create(&project); err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
@@ -55,6 +53,16 @@ func (controller *ProjectController) Project(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, project)
+}
+
+func (controller *ProjectController) Delete(ctx *gin.Context) {
+	projectName := ctx.Param("projectName")
+
+	err := controller.projectService.DeleteProject(projectName)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
 }
 
 func getUserFromContext(ctx *gin.Context) (*auth.UserRecord, error) {

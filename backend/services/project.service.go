@@ -63,3 +63,18 @@ func (service *ProjectService) GetProjectByName(name string) (*models.Project, e
 
 	return &project, nil
 }
+
+func (service *ProjectService) DeleteProject(name string) error {
+	res, err := service.collection.DeleteOne(service.ctx, bson.M{
+		"name": name,
+	})
+	if err != nil {
+		return fmt.Errorf("delete project: %w", err)
+	}
+
+	if res.DeletedCount == 0 {
+		return fmt.Errorf("cannot found the project %v: %w", name, err)
+	}
+
+	return nil
+}
