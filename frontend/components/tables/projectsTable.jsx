@@ -18,22 +18,9 @@ const columns = [
 ]
 
 export default function ProjectsTable() {
-	const [user, loading, error] = useAuthState(firebaseClient.auth)
+	const [user, loading] = useAuthState(firebaseClient.auth)
 
-	const fetcher = async url => {
-		const idToken = await user.getIdToken(true)
-
-		const res = await axios.get(url, {
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${idToken}`
-			}
-		})
-
-		return res.data
-	}
-
-	const { data, isLoading, mutate } = useSWR(api.allProjects, fetcher)
+	const { data: projects, isLoading, mutate } = useSWR(api.allProjects)
 
 	const deleteProject = async name => {
 		try {
@@ -102,7 +89,7 @@ export default function ProjectsTable() {
 				)}
 			</TableHeader>
 			(
-			<TableBody emptyContent={'There are no projects to display'} items={data} isLoading={isLoading} loadingContent={<Spinner />}>
+			<TableBody emptyContent={'There are no projects to display'} items={projects || []} isLoading={isLoading} loadingContent={<Spinner />}>
 				{item => <TableRow key={item.id}>{columnKey => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>}
 			</TableBody>
 			)
