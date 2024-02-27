@@ -1,6 +1,7 @@
 'use client'
 
 import api from '@/config/api'
+import { link } from '@/config/links'
 import firebaseClient from '@/lib/firebase'
 import { Link, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip, User } from '@nextui-org/react'
 import axios from 'axios'
@@ -18,6 +19,7 @@ const columns = [
 
 export default function ProjectsTable() {
 	const [user, loading, error] = useAuthState(firebaseClient.auth)
+
 	const fetcher = async url => {
 		const idToken = await user.getIdToken(true)
 
@@ -55,7 +57,7 @@ export default function ProjectsTable() {
 
 		switch (columnKey) {
 			case 'projectName':
-				return <User className="text-md font-semibold " avatarProps={{ radius: 'full', src: project.logo }} name={cellValue} />
+				return <User className="text-md font-semibold" as={Link} color="foreground" href={`${link.projects}/${cellValue}`} avatarProps={{ radius: 'full', src: project.logo }} name={cellValue} />
 			case 'links':
 				return (
 					<div className="flex items-center gap-4">
