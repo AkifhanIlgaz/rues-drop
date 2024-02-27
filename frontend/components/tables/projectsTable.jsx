@@ -30,8 +30,26 @@ export default function ProjectsTable() {
 
 		return res.data
 	}
-	const { data, isLoading } = useSWR(api.allProjects, fetcher)
-	console.log(data)
+
+	const { data, isLoading, mutate } = useSWR(api.allProjects, fetcher)
+
+	const deleteProject = async name => {
+		try {
+			const idToken = await user.getIdToken(true)
+
+			await axios.delete(api.projects + `/${name}`, {
+				headers: {
+					Authorization: `Bearer ${idToken}`
+				}
+			})
+
+			const newData = data.filter(project => project.projectName !== name)
+			await mutate(newData, false)
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
 	const renderCell = React.useCallback((project, columnKey) => {
 		const cellValue = project[columnKey]
 
@@ -50,7 +68,12 @@ export default function ProjectsTable() {
 				return (
 					<div className=" flex justify-center items-center">
 						<Tooltip color="danger" content="Delete Project">
-							<span className="text-danger cursor-pointer active:opacity-50" onClick={() => console.log('sfljsdflkj')}>
+							<span
+								className="text-danger cursor-pointer active:opacity-50"
+								onClick={() => {
+									deleteProject(project.projectName)
+								}}
+							>
 								<DeleteIcon />
 							</span>
 						</Tooltip>

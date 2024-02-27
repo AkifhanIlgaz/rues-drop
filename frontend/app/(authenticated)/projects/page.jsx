@@ -33,10 +33,10 @@ export default function ProjectPage() {
 
 	const items = [breadcrumbs.projects]
 
-	if (loading || isLoading) return <Loading />
+	if (isLoading) return <Loading />
 
 	return (
-		<div className="">
+		<div>
 			<div className="flex w-full h-5 items-center justify-between  mb-10">
 				<BreadCrumbs items={items}></BreadCrumbs>
 
