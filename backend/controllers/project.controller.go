@@ -65,6 +65,22 @@ func (controller *ProjectController) Delete(ctx *gin.Context) {
 	}
 }
 
+func (controller *ProjectController) Edit(ctx *gin.Context) {
+	projectName := ctx.Param("projectName")
+
+	query := map[string]string{}
+	if err := ctx.BindQuery(&query); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	err := controller.projectService.EditProject(projectName, query)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+}
+
 func getUserFromContext(ctx *gin.Context) (*auth.UserRecord, error) {
 	val, exists := ctx.Get("currentUser")
 	if !exists {

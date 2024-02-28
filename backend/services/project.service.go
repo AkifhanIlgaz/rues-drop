@@ -78,3 +78,14 @@ func (service *ProjectService) DeleteProject(name string) error {
 
 	return nil
 }
+
+func (service *ProjectService) EditProject(name string, update map[string]string) error {
+	_, err := service.collection.UpdateOne(service.ctx, bson.M{"name": name}, bson.M{
+		"$set": update,
+	})
+	if err != nil {
+		return fmt.Errorf("edit project: %w", err)
+	}
+
+	return nil
+}
