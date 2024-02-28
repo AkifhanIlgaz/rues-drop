@@ -11,8 +11,6 @@ import EditInput from '../../../../components/inputs/editInput'
 import api from '../../../../config/api'
 
 export default function Page() {
-	const defaultContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-
 	const projectName = usePathname().split('/').at(-1)
 	const items = [breadcrumbs.projects, { name: projectName }]
 
@@ -22,13 +20,6 @@ export default function Page() {
 		return <Loading />
 	}
 
-	const itemClasses = {
-		base: 'py-0 w-full bg-danger',
-		title: 'font-normal text-medium',
-		trigger: 'px-2 py-0 data-[hover=true]:bg-default-100 rounded-lg h-14 flex items-center',
-		indicator: 'text-medium',
-		content: 'text-small px-2'
-	}
 	// TODO: Links & Todo
 
 	return (
@@ -48,10 +39,10 @@ export default function Page() {
 			</div>
 
 			<div className="grid grid-cols-2 gap-3 pb-8">
-				<EditInput label={label.website} value={project.website} />
-				<EditInput label={label.discord} value={project.discord} />
-				<EditInput label={label.twitter} value={project.twitter} />
-				<EditInput label={label.logo} value={project.logo} />
+				<EditInput projectName={projectName} label={label.website} value={project.website} />
+				<EditInput projectName={projectName} label={label.discord} value={project.discord} />
+				<EditInput projectName={projectName} label={label.twitter} value={project.twitter} />
+				<EditInput projectName={projectName} label={label.logo} value={project.logo} />
 			</div>
 
 			<Accordion variant="bordered" isCompact>
