@@ -14,7 +14,7 @@ type Project struct {
 	Twitter      string             `json:"twitter"`
 	Logo         string             `json:"logo"`
 	HelpfulLinks []string           `json:"helpfulLinks"`
-	Todos        []string           `json:"todos"`
+	Tasks        []string           `json:"tasks"`
 	CreatedAt    time.Time          `json:"createdAt"`
 	LastUpdate   time.Time          `json:"lastUpdate"`
 	LastUpdateBy string             `json:"lastUpdateBy"`
