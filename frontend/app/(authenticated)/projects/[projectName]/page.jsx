@@ -33,7 +33,7 @@ export default function Page() {
 				</div>
 
 				<div className="flex gap-2">
-					<Button>Add To-do</Button>
+					<Button>Add Task</Button>
 					<Button>Add Helpful Link</Button>
 				</div>
 			</div>
