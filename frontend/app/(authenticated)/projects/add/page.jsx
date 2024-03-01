@@ -18,21 +18,17 @@ export default function AddProject() {
 	const { theme } = useTheme()
 	const [user, loading, error] = useAuthState(firebaseClient.auth)
 	const router = useRouter()
-
 	const items = [breadcrumbs.projects, breadcrumbs.addProject]
 
 	const {
 		register,
 		handleSubmit,
 		reset,
-
 		clearErrors,
 		formState: { errors }
 	} = useForm()
 
 	const onSubmit = async data => {
-		console.log(data)
-
 		try {
 			const idToken = await user.getIdToken(true)
 

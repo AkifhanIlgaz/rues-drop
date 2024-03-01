@@ -2,20 +2,23 @@
 
 import BreadCrumbs from '@/components/breadcrumbs'
 import Loading from '@/components/loading'
-import { label } from '@/config/labels'
+import AddTaskModal from '@/components/modals/addTask'
+import ProjectInfo from '@/components/project/info'
+import Tasks from '@/components/project/tasks'
 import { breadcrumbs } from '@/config/links'
-import { Accordion, AccordionItem, Avatar, Button } from '@nextui-org/react'
+import { Avatar, Button, Tab, Tabs, useDisclosure } from '@nextui-org/react'
 import { usePathname } from 'next/navigation'
 import useSWR from 'swr'
-import EditInput from '../../../../components/inputs/editInput'
 import api from '../../../../config/api'
 
 export default function Page() {
+	const { isOpen, onOpen, onOpenChange } = useDisclosure()
+
 	const projectName = usePathname().split('/').at(-1)
 	const items = [breadcrumbs.projects, { name: projectName }]
 
 	const { data: project, isLoading } = useSWR(`${api.projects}/${projectName}`)
-
+	console.log(project)
 	if (isLoading) {
 		return <Loading />
 	}
@@ -33,26 +36,21 @@ export default function Page() {
 				</div>
 
 				<div className="flex gap-2">
-					<Button>Add Task</Button>
+					<Button onPress={onOpen}>Add Task</Button>
 					<Button>Add Helpful Link</Button>
 				</div>
 			</div>
 
-			<div className="grid grid-cols-2 gap-3 pb-8">
-				<EditInput projectName={projectName} label={label.website} value={project.website} />
-				<EditInput projectName={projectName} label={label.discord} value={project.discord} />
-				<EditInput projectName={projectName} label={label.twitter} value={project.twitter} />
-				<EditInput projectName={projectName} label={label.logo} value={project.logo} />
-			</div>
+			<Tabs variant="underlined">
+				<Tab title={'Info'}>
+					<ProjectInfo project={project} />
+				</Tab>
+				<Tab title={'Tasks'}>
+					<Tasks />
+				</Tab>
+			</Tabs>
 
-			<Accordion variant="bordered" isCompact>
-				<AccordionItem key="1" aria-label="Accordion 1" title="Accordion 1">
-					<div color="foreground" className="w-full flex items-center justify-between">
-						<span>Ddsfşlkdsflkdsf</span>
-						<Button>sdşlfk</Button>
-					</div>
-				</AccordionItem>
-			</Accordion>
+			<AddTaskModal isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} />
 		</div>
 	)
 }
