@@ -56,6 +56,12 @@ func (middleware *UserMiddleware) IsAdmin() gin.HandlerFunc {
 	}
 }
 
+func (middleware *UserMiddleware) IsModerator() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		// TODO: Read project from ctx
+	}
+}
+
 func parseIdTokenFromHeader(header http.Header) (string, error) {
 	authorizationHeader := header.Get("Authorization")
 	fields := strings.Fields(authorizationHeader)
