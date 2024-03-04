@@ -13,6 +13,10 @@ export const generateError = (label, error) => {
 			return todoError(error)
 		case 'projects':
 			return projectsError(error)
+		case 'description':
+			return descriptionError(error)
+		case 'url':
+			return errorMessage.requiredUrl
 	}
 }
 
@@ -24,6 +28,13 @@ const passwordError = error => {
 			return errorMessage.requiredPassword
 		case 'validate':
 			return errorMessage.notMatchPassword
+	}
+}
+
+const descriptionError = error => {
+	switch (error.type) {
+		case 'required':
+			return errorMessage.requiredDescription
 	}
 }
 

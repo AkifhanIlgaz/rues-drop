@@ -11,5 +11,7 @@ export const label = {
 	discord: { title: 'Discord', key: 'discord' },
 	twitter: { title: 'Twitter', key: 'twitter' },
 	logo: { title: 'Logo URL', key: 'logo' },
-	ruesLink: { title: 'Rues Link', key: 'rues' }
+	ruesLink: { title: 'Rues Link', key: 'rues' },
+	description: { title: 'Description', key: 'description' },
+	url: { title: 'URL', key: 'url' }
 }
