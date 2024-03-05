@@ -7,13 +7,18 @@ import axios from 'axios'
 import { useIdToken } from 'react-firebase-hooks/auth'
 export default function AddTask({ errors, register, handleSubmit, projectId }) {
 	const [user] = useIdToken(firebaseClient.auth)
-	const { isOpen, onOpen, onOpenChange } = useDisclosure()
+	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 
 	const addTask = async data => {
 		const idToken = await user.getIdToken(true)
 		try {
 			const res = await axios.post(api.addTask, { ...data, projectId }, { headers: { Authorization: `Bearer ${idToken}` } })
 			console.log(res)
+
+			// TODO: Handle errors
+			if (res.status === 200) {
+				onClose()
+			}
 		} catch (error) {
 			console.log(error)
 		}
