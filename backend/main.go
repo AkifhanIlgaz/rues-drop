@@ -40,13 +40,16 @@ func main() {
 	}
 	projectService := services.NewProjectService(ctx, db)
 	moderatorService := services.NewModeratorService(ctx, db)
+	taskService := services.NewTaskService(ctx, db)
 
 	projectController := controllers.NewProjectController(projectService)
 	moderatorController := controllers.NewModeratorController(authService, moderatorService)
+	taskController := controllers.NewTaskController(taskService)
 	userMiddleware := controllers.NewUserMiddleware(authService)
 
 	projectRouteController := routes.NewProjectRouteController(projectController, userMiddleware)
 	moderatorRouteController := routes.NewModeratorRouteController(moderatorController, userMiddleware)
+	taskRouteController := routes.NewTaskRouteController(taskController, userMiddleware)
 
 	server := gin.Default()
 	setCors(server)
@@ -55,6 +58,7 @@ func main() {
 
 	projectRouteController.Setup(router)
 	moderatorRouteController.Setup(router)
+	taskRouteController.Setup(router)
 
 	err = server.Run(":" + config.Port)
 	if err != nil {
