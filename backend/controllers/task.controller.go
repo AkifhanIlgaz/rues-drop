@@ -32,3 +32,15 @@ func (controller *TaskController) Add(ctx *gin.Context) {
 		return
 	}
 }
+
+func (controller *TaskController) All(ctx *gin.Context) {
+	projectId := ctx.Param("projectId")
+
+	tasks, err := controller.taskService.GetTasks(projectId)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, tasks)
+}
