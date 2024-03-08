@@ -1,8 +1,10 @@
 import api from '@/config/api'
-import { Chip, Link, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip } from '@nextui-org/react'
-import { useCallback } from 'react'
+
+import { Chip, Input, Link, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip } from '@nextui-org/react'
+import React, { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import useSWR from 'swr'
+import { CheckIcon } from '../icons/check'
 import { DeleteIcon } from '../icons/delete'
 import { EditIcon } from '../icons/edit'
 import AddTask from '../modals/addTask'
@@ -19,10 +21,6 @@ const columns = [
 	{
 		key: 'status',
 		label: 'Status'
-	},
-	{
-		key: 'url',
-		label: 'URL'
 	},
 	{
 		key: 'actions',
@@ -42,24 +40,28 @@ export default function Tasks({ projectId }) {
 		formState: { errors }
 	} = useForm({})
 
-	const renderCell = useCallback((user, columnKey) => {
-		const cellValue = user[columnKey]
+	const renderCell = useCallback((task, columnKey) => {
+		const cellValue = task[columnKey]
 
 		switch (columnKey) {
+			case 'description':
+				return (
+					<Link href={cellValue} isExternal showAnchorIcon isBlock className="text-sm">
+						{cellValue}
+					</Link>
+				)
 			case 'status':
 				return (
 					<Chip className="capitalize" color={statusColorMap[cellValue]} size="sm" variant="flat">
 						{cellValue}
 					</Chip>
 				)
-			case 'url':
-				return <Link href={cellValue} isExternal showAnchorIcon color="primary"></Link>
 			case 'createdAt':
 				const date = new Date(cellValue)
 				return date.toLocaleDateString('tr-TR')
 			case 'actions':
 				return (
-					<div className="relative flex items-center gap-2">
+					<div className="relative flex items-center justify-center gap-2">
 						<Tooltip content="Edit task">
 							<span className="text-lg text-default-400 cursor-pointer active:opacity-50">
 								<EditIcon />
@@ -70,6 +72,11 @@ export default function Tasks({ projectId }) {
 								<DeleteIcon />
 							</span>
 						</Tooltip>
+						<Tooltip color="success" content="Finish task" className="text-white">
+							<span className="text-lg text-success cursor-pointer active:opacity-50">
+								<CheckIcon />
+							</span>
+						</Tooltip>
 					</div>
 				)
 			default:
@@ -77,22 +84,28 @@ export default function Tasks({ projectId }) {
 		}
 	}, [])
 
+	const topContent = React.useMemo(() => {
+		return (
+			<div className="flex justify-between items-center ">
+				<Input isClearable className="w-full sm:max-w-[44%]" placeholder="Search by description..." variant="flat" labelPlacement="outside" />
+				<AddTask errors={errors} register={register} handleSubmit={handleSubmit} projectId={projectId} />
+			</div>
+		)
+	}, [])
+
 	const { data: tasks, isLoading } = useSWR(`${api.tasks}/${projectId}`)
 	if (isLoading) return
 
 	return (
-		<>
-			<AddTask errors={errors} register={register} handleSubmit={handleSubmit} projectId={projectId} />
-			<Table isStriped aria-label="Example table with dynamic content">
-				<TableHeader columns={columns}>
-					{column => (
-						<TableColumn align={column.key === 'actions' ? 'end' : 'start'} key={column.key}>
-							{column.label}
-						</TableColumn>
-					)}
-				</TableHeader>
-				<TableBody items={tasks}>{item => <TableRow key={item.key}>{columnKey => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>}</TableBody>
-			</Table>
-		</>
+		<Table aria-label="Tasks table" topContent={topContent} topContentPlacement="outside" className="mt-2">
+			<TableHeader columns={columns}>
+				{column => (
+					<TableColumn className={column.key === 'actions' && ' text-center '} key={column.key}>
+						{column.label}
+					</TableColumn>
+				)}
+			</TableHeader>
+			<TableBody items={tasks}>{item => <TableRow key={item.key}>{columnKey => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>}</TableBody>
+		</Table>
 	)
 }

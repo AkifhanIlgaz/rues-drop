@@ -2,8 +2,10 @@ import TextInput from '@/components/inputs/textInput'
 import api from '@/config/api'
 import { label } from '@/config/labels'
 import firebaseClient from '@/lib/firebase'
+import { PlusIcon } from '@heroicons/react/24/outline'
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react'
 import axios from 'axios'
+import clsx from 'clsx'
 import { useIdToken } from 'react-firebase-hooks/auth'
 export default function AddTask({ errors, register, handleSubmit, projectId }) {
 	const [user] = useIdToken(firebaseClient.auth)
@@ -26,7 +28,9 @@ export default function AddTask({ errors, register, handleSubmit, projectId }) {
 
 	return (
 		<>
-			<Button onPress={onOpen}>Add Task</Button>
+			<Button onPress={onOpen} className={clsx('text-primary-foreground bg-primary', 'dark:text-danger-foreground dark:bg-danger')} startContent={<PlusIcon className="text-white w-5 h-5" />}>
+				Add Task
+			</Button>
 			<Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
 				<form onSubmit={handleSubmit(addTask)}>
 					<ModalContent>
