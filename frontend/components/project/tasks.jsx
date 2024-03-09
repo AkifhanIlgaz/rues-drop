@@ -1,12 +1,12 @@
 import api from '@/config/api'
 
+import EditTask from '@/components/modals/editTask'
 import { Chip, Input, Link, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip } from '@nextui-org/react'
 import React, { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import { CheckIcon } from '../icons/check'
 import { DeleteIcon } from '../icons/delete'
-import { EditIcon } from '../icons/edit'
 import AddTask from '../modals/addTask'
 
 const columns = [
@@ -63,9 +63,7 @@ export default function Tasks({ projectId }) {
 				return (
 					<div className="relative flex items-center justify-center gap-2">
 						<Tooltip content="Edit task">
-							<span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-								<EditIcon />
-							</span>
+							<EditTask />
 						</Tooltip>
 						<Tooltip color="danger" content="Delete task">
 							<span className="text-lg text-danger cursor-pointer active:opacity-50">
