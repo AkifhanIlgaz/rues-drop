@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/AkifhanIlgaz/word-memory/models"
@@ -28,6 +29,17 @@ func (controller *TaskController) Add(ctx *gin.Context) {
 
 	err := controller.taskService.Create(&taskToAdd)
 	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+}
+
+func (controller *TaskController) Delete(ctx *gin.Context) {
+	taskId := ctx.Param("taskId")
+
+	err := controller.taskService.Delete(taskId)
+	if err != nil {
+		fmt.Println(err)
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}

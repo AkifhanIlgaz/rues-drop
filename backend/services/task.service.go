@@ -37,6 +37,24 @@ func (service *TaskService) Create(taskToAdd *models.TaskToAdd) error {
 	return nil
 }
 
+func (service *TaskService) Delete(taskId string) error {
+	id, err := primitive.ObjectIDFromHex(taskId)
+	if err != nil {
+		return fmt.Errorf("delete task: %w", err)
+	}
+
+	filter := bson.M{
+		"_id": id,
+	}
+
+	_, err = service.collection.DeleteOne(service.ctx, filter)
+	if err != nil {
+		return fmt.Errorf("delete task: %w", err)
+	}
+
+	return nil
+}
+
 func (service *TaskService) GetTasks(projectId string) ([]models.Task, error) {
 	id, err := primitive.ObjectIDFromHex(projectId)
 	if err != nil {
