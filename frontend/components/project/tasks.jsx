@@ -48,7 +48,17 @@ export default function Tasks({ projectId }) {
 		try {
 			const idToken = await user.getIdToken(true)
 
-			const res = await axios.delete(`${api.tasks}/${taskId}`, { headers: { Authorization: `Bearer ${idToken}` } })
+			await axios.delete(`${api.tasks}/${taskId}`, { headers: { Authorization: `Bearer ${idToken}` } })
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	const finishTask = async taskId => {
+		try {
+			const idToken = await user.getIdToken(true)
+			const res = await axios.put(`${api.finishTask}/${taskId}`, undefined, { headers: { Authorization: `Bearer ${idToken}` } })
+
 			console.log(res)
 		} catch (error) {
 			console.log(error)
@@ -86,7 +96,7 @@ export default function Tasks({ projectId }) {
 							</span>
 						</Tooltip>
 						<Tooltip color="success" content="Finish task" className="text-white">
-							<span className="text-lg text-success cursor-pointer active:opacity-50">
+							<span className="text-lg text-success cursor-pointer active:opacity-50" onClick={() => finishTask(task.id)}>
 								<CheckIcon />
 							</span>
 						</Tooltip>
