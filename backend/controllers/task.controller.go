@@ -45,6 +45,17 @@ func (controller *TaskController) Delete(ctx *gin.Context) {
 	}
 }
 
+func (controller *TaskController) Finish(ctx *gin.Context) {
+	taskId := ctx.Param("taskId")
+
+	err := controller.taskService.Finish(taskId)
+	if err != nil {
+		fmt.Println(err)
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+}
+
 func (controller *TaskController) All(ctx *gin.Context) {
 	projectId := ctx.Param("projectId")
 

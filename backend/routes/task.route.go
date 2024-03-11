@@ -24,6 +24,7 @@ func (routeController *TaskRouteController) Setup(rg *gin.RouterGroup) {
 	// TODO: Read project Id from body or query
 	router.POST("/add", routeController.userMiddleware.IsAdmin(), routeController.taskController.Add)
 	router.DELETE("/:taskId", routeController.taskController.Delete)
+	router.PUT("/finish/:taskId", routeController.taskController.Finish)
 	router.GET("/:projectId", routeController.taskController.All)
 
 }

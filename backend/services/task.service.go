@@ -55,6 +55,28 @@ func (service *TaskService) Delete(taskId string) error {
 	return nil
 }
 
+func (service *TaskService) Finish(taskId string) error {
+	id, err := primitive.ObjectIDFromHex(taskId)
+	if err != nil {
+		return fmt.Errorf("delete task: %w", err)
+	}
+
+	filter := bson.M{
+		"_id": id,
+	}
+
+	err = service.collection.FindOneAndUpdate(service.ctx, filter, bson.M{
+		"$set": bson.M{
+			"status": models.StatusFinished,
+		},
+	}).Err()
+	if err != nil {
+		return fmt.Errorf("delete task: %w", err)
+	}
+
+	return nil
+}
+
 func (service *TaskService) GetTasks(projectId string) ([]models.Task, error) {
 	id, err := primitive.ObjectIDFromHex(projectId)
 	if err != nil {
