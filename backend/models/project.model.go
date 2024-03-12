@@ -13,11 +13,8 @@ type Project struct {
 	Discord      string             `json:"discord"`
 	Twitter      string             `json:"twitter"`
 	Logo         string             `json:"logo"`
-	HelpfulLinks []string           `json:"helpfulLinks"`
 	Tasks        []string           `json:"tasks"`
 	CreatedAt    time.Time          `json:"createdAt"`
 	LastUpdate   time.Time          `json:"lastUpdate"`
 	LastUpdateBy string             `json:"lastUpdateBy"`
 }
-
-
