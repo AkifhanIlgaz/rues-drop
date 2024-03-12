@@ -5,10 +5,11 @@ import Loading from '@/components/loading'
 import ProjectInfo from '@/components/project/info'
 import Tasks from '@/components/project/tasks'
 import { breadcrumbs } from '@/config/links'
-import { Avatar, Button, Tab, Tabs } from '@nextui-org/react'
+import { Avatar, Tab, Tabs } from '@nextui-org/react'
 import { usePathname } from 'next/navigation'
 import useSWR from 'swr'
 import api from '../../../../config/api'
+
 export default function Page() {
 	const projectName = usePathname().split('/').at(-1)
 	const items = [breadcrumbs.projects, { name: projectName }]
@@ -28,10 +29,6 @@ export default function Page() {
 				<div className="flex w-full items-center gap-4 ">
 					<Avatar src={project.logo} size="lg" />
 					<span className="text-2xl">{projectName}</span>
-				</div>
-
-				<div className="flex gap-2">
-					<Button>Add Helpful Link</Button>
 				</div>
 			</div>
 
