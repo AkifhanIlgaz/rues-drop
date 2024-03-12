@@ -20,8 +20,14 @@ type Task struct {
 
 type TaskToAdd struct {
 	ProjectId   primitive.ObjectID `json:"projectId"`
-	Description string             `json:"description"`
-	URL         string             `json:"url"`
+	Description string             `json:"description" binding:"required"`
+	URL         string             `json:"url" binding:"required"`
+}
+
+type TaskToEdit struct {
+	TaskId      string `json:"-"`
+	Description string `json:"description,omitempty"`
+	URL         string `json:"url,omitempty"`
 }
 
 func (t TaskToAdd) ConvertToTask() Task {

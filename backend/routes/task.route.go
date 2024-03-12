@@ -23,6 +23,7 @@ func (routeController *TaskRouteController) Setup(rg *gin.RouterGroup) {
 	// TODO: Add IsMod middleware in prod
 	// TODO: Read project Id from body or query
 	router.POST("/add", routeController.userMiddleware.IsAdmin(), routeController.taskController.Add)
+	router.PUT("/:taskId", routeController.taskController.Edit)
 	router.DELETE("/:taskId", routeController.taskController.Delete)
 	router.PUT("/finish/:taskId", routeController.taskController.Finish)
 	router.GET("/:projectId", routeController.taskController.All)

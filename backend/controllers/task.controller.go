@@ -56,6 +56,23 @@ func (controller *TaskController) Finish(ctx *gin.Context) {
 	}
 }
 
+func (controller *TaskController) Edit(ctx *gin.Context) {
+	taskToEdit := models.TaskToEdit{
+		TaskId: ctx.Param("taskId"),
+	}
+	if err := ctx.BindJSON(&taskToEdit); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	err := controller.taskService.Edit(taskToEdit)
+	if err != nil {
+		fmt.Println(err)
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+}
+
 func (controller *TaskController) All(ctx *gin.Context) {
 	projectId := ctx.Param("projectId")
 
