@@ -88,7 +88,7 @@ export default function Tasks({ projectId }) {
 				return (
 					<div className="relative flex items-center justify-center gap-2">
 						<Tooltip content="Edit task">
-							<EditTask />
+							<EditTask task={task} />
 						</Tooltip>
 						<Tooltip color="danger" content="Delete task">
 							<span className="text-lg text-danger cursor-pointer active:opacity-50 " onClick={() => deleteTask(task.id)}>
