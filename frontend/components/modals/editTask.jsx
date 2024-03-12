@@ -1,16 +1,43 @@
 'use client'
 
 import { Label } from '@/components/label'
+import api from '@/config/api'
+import firebaseClient from '@/lib/firebase'
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react'
+import axios from 'axios'
 import { useState } from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import { EditIcon } from '../icons/edit'
 
 export default function EditTask({ task }) {
+	const [user] = useAuthState(firebaseClient.auth)
 	const [description, setDescription] = useState(task.description)
 	const [url, setUrl] = useState(task.url)
-	const { isOpen, onOpen, onOpenChange } = useDisclosure()
+	const { isOpen, onOpen, onOpenChange, onClose, } = useDisclosure()
 
-	const editTask = async () => {}
+	const editTask = async () => {
+		// TODO: Handle the situation that user doesn't change values
+		// TODO: Mutate || Revalidate data
+
+		try {
+			const idToken = await user.getIdToken(true)
+
+			const res = await axios.put(
+				`${api.tasks}/${task.id}`,
+				{
+					description,
+					url
+				},
+				{ headers: { Authorization: `Bearer ${idToken}` } }
+			)
+
+			console.log(res)
+		} catch (error) {
+			console.log(error)
+		} finally {
+			onClose()
+		}
+	}
 
 	return (
 		<>
@@ -34,6 +61,7 @@ export default function EditTask({ task }) {
 											<EditIcon size={16} />
 										</Button>
 									}
+									autoFocus
 									onValueChange={setDescription}
 									value={description}
 								></Input>
@@ -64,7 +92,12 @@ export default function EditTask({ task }) {
 								>
 									Cancel
 								</Button>
-								<Button color="primary" onPress={onClose}>
+								<Button
+									color="primary"
+									onPress={() => {
+										editTask()
+									}}
+								>
 									Edit
 								</Button>
 							</ModalFooter>
