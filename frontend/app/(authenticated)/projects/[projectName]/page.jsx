@@ -11,9 +11,9 @@ import useSWR from 'swr'
 import api from '../../../../config/api'
 
 export default function Page() {
-	const projectName = usePathname().split('/').at(-1)
-	const items = [breadcrumbs.projects, { name: projectName }]
+	const projectName = decodeURI(usePathname().split('/').at(-1).toString())
 
+	const items = [breadcrumbs.projects, { name: projectName }]
 	const { data: project, isLoading } = useSWR(`${api.projects}/${projectName}`)
 	if (isLoading) {
 		return <Loading />

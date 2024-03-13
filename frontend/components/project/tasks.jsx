@@ -71,7 +71,7 @@ export default function Tasks({ projectId }) {
 		switch (columnKey) {
 			case 'description':
 				return (
-					<Link href={cellValue} isExternal showAnchorIcon isBlock className="text-sm">
+					<Link href={task['url']} isExternal showAnchorIcon isBlock className="text-sm">
 						{cellValue}
 					</Link>
 				)
