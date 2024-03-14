@@ -40,3 +40,15 @@ func (controller *ModeratorController) Create(ctx *gin.Context) {
 		return
 	}
 }
+
+func (controller *ModeratorController) Moderators(ctx *gin.Context) {
+	projectName := ctx.Param("projectName")
+
+	mods, err := controller.moderatorService.GetModerators(projectName)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, mods)
+}

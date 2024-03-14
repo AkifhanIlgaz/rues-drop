@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/AkifhanIlgaz/word-memory/models"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -37,4 +38,22 @@ func (service *ModeratorService) CreateModerator(uid string, moderatorToAdd *mod
 	}
 
 	return nil
+}
+
+func (service *ModeratorService) GetModerators(projectName string) ([]models.Moderator, error) {
+	var moderators []models.Moderator
+
+	cur, err := service.collection.Find(service.ctx, bson.M{
+		"projects": projectName,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("get moderators: %w", err)
+	}
+
+	err = cur.All(service.ctx, &moderators)
+	if err != nil {
+		return nil, fmt.Errorf("get moderators: %w", err)
+	}
+
+	return moderators, nil
 }

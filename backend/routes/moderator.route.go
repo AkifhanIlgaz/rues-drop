@@ -18,7 +18,10 @@ func NewModeratorRouteController(moderatorController *controllers.ModeratorContr
 }
 
 func (routeController *ModeratorRouteController) Setup(rg *gin.RouterGroup) {
+
 	router := rg.Group("/moderators", routeController.userMiddleware.SetUser(), routeController.userMiddleware.IsAdmin())
 
 	router.POST("/add", routeController.moderatorController.Create)
+	// TODO: Add IsMod middleware
+	router.GET("/:projectName", routeController.moderatorController.Moderators)
 }
