@@ -33,15 +33,16 @@ export default function Page() {
 			setError('email', { type: 'validate' })
 			return
 		}
-
+		console.log(data)
 		setPending(true)
 		try {
 			const credentials = await signInWithEmailAndPassword(data.email, data.password)
+			// TODO: Redirect to different pages based on role
 			if (credentials == undefined) {
 				// TODO: show error
 				return
 			}
-			router.replace(link.home)
+			router.replace(link.root)
 		} catch (error) {
 			console.log(error)
 			// TODO: Handler error

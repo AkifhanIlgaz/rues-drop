@@ -9,8 +9,13 @@ export const link = {
 	projects: '/projects',
 	addProject: '/projects/add',
 	todo: '/todo',
-	moderators: '/moderators',
-	createModerator: '/moderators/add'
+	admin: {
+		projects: '/admin/projects',
+		addProject: '/admin/projects/add',
+		moderators: '/admin/moderators',
+		createModerator: '/moderators/add',
+		createModerator: '/admin/moderators/add'
+	}
 }
 
 export const sidebarLinks = {
@@ -20,11 +25,23 @@ export const sidebarLinks = {
 	moderators: { name: 'Moderators', href: link.moderators, icon: UserGroupIcon }
 }
 
+export const adminSidebarLinks = {
+	projects: { name: 'Projects', href: link.admin.projects, icon: BriefcaseIcon },
+	moderators: { name: 'Moderators', href: link.admin.moderators, icon: UserGroupIcon }
+}
+
+export const adminBreadcrumbs = {
+	projects: { name: 'Projects', href: link.admin.projects, icon: BriefcaseIcon },
+	addProject: { name: 'Add Project', href: link.admin.addProject },
+	moderators: { name: 'Moderators', href: link.admin.moderators, icon: UserGroupIcon },
+	createModerator: { name: 'Create moderator', href: link.admin.createModerator }
+}
+
 export const breadcrumbs = {
 	home: { name: 'Home', href: link.home, icon: HomeIcon },
 	projects: { name: 'Projects', href: link.projects, icon: BriefcaseIcon },
 	addProject: { name: 'Add Project', href: link.addProject },
 	todo: { name: 'Todo', href: link.todo, icon: InboxIcon },
-	moderators: { name: 'Moderators', href: link.moderators, icon: UserGroupIcon },
-	createModerator: { name: 'Create moderator', href: link.createModerator }
+	moderators: { name: 'Moderators', href: link.admin.moderators, icon: UserGroupIcon },
+	createModerator: { name: 'Create moderator', href: link.admin.createModerator }
 }

@@ -4,7 +4,7 @@ import { useSignOut } from 'react-firebase-hooks/auth'
 import Loading from '../loading'
 import NavLinks from './nav-links'
 
-export default function Sidebar() {
+export default function Sidebar({ sidebarLinks }) {
 	const [signOut, loading] = useSignOut(firebase.auth)
 
 	if (loading) {
@@ -13,7 +13,7 @@ export default function Sidebar() {
 
 	return (
 		<div className="flex h-full w-1/12 flex-col px-3 py-2 ">
-			<NavLinks />
+			<NavLinks links={sidebarLinks} />
 			<SignOutButton signOut={signOut} />
 		</div>
 	)

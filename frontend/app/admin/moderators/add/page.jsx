@@ -7,7 +7,7 @@ import TextInput from '@/components/inputs/textInput'
 import Loading from '@/components/loading'
 import api from '@/config/api'
 import { label } from '@/config/labels'
-import { breadcrumbs, link } from '@/config/links'
+import { adminBreadcrumbs, link } from '@/config/links'
 import firebaseClient from '@/lib/firebase'
 import { Button } from '@nextui-org/button'
 import axios from 'axios'
@@ -23,7 +23,7 @@ export default function Page() {
 	const { theme } = useTheme()
 	const [user, loading, error] = useAuthState(firebaseClient.auth)
 	const router = useRouter()
-	const items = [breadcrumbs.moderators, breadcrumbs.createModerator]
+	const items = [adminBreadcrumbs.moderators, adminBreadcrumbs.createModerator]
 
 	const {
 		register,
@@ -52,7 +52,7 @@ export default function Page() {
 			})
 
 			if (res.status === 200) {
-				router.push(link.moderators)
+				router.push(link.admin.moderators)
 
 				console.log(res)
 			}

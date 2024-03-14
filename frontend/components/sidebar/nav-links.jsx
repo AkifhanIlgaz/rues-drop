@@ -1,14 +1,13 @@
 'use client'
 
-import { sidebarLinks } from '@/config/links'
 import { clsx } from 'clsx'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-export default function NavLinks() {
+export default function NavLinks({ links }) {
 	const pathName = usePathname()
 
-	return Object.values(sidebarLinks).map(link => {
+	return Object.values(links).map(link => {
 		const LinkIcon = link.icon
 
 		return (
