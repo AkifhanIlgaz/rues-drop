@@ -120,15 +120,17 @@ export default function Tasks({ projectId }) {
 	if (isLoading) return
 
 	return (
-		<Table aria-label="Tasks table" topContent={topContent} topContentPlacement="outside" className="mt-2">
-			<TableHeader columns={columns}>
-				{column => (
-					<TableColumn className={column.key === 'actions' && ' text-center '} key={column.key}>
-						{column.label}
-					</TableColumn>
-				)}
-			</TableHeader>
-			<TableBody items={tasks}>{item => <TableRow key={item.key}>{columnKey => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>}</TableBody>
-		</Table>
+		<div className="flex justify-center">
+			<Table aria-label="Tasks table" topContent={topContent} topContentPlacement="outside" className="mt-2 w-2/3">
+				<TableHeader columns={columns}>
+					{column => (
+						<TableColumn className={column.key === 'actions' && ' text-center '} key={column.key}>
+							{column.label}
+						</TableColumn>
+					)}
+				</TableHeader>
+				<TableBody items={tasks}>{item => <TableRow key={item.key}>{columnKey => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>}</TableBody>
+			</Table>
+		</div>
 	)
 }

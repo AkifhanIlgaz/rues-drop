@@ -23,7 +23,7 @@ export default function Page() {
 	const { theme } = useTheme()
 	const [user, loading, error] = useAuthState(firebaseClient.auth)
 	const router = useRouter()
-	const items = [adminBreadcrumbs.moderators, adminBreadcrumbs.createModerator]
+	const items = [adminBreadcrumbs.createModerator]
 
 	const {
 		register,

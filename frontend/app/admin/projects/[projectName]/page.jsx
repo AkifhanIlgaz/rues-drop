@@ -5,8 +5,10 @@ import { DeleteIcon } from '@/components/icons/delete'
 import Loading from '@/components/loading'
 import ProjectInfo from '@/components/project/info'
 import Tasks from '@/components/project/tasks'
+import ModeratorsTable from '@/components/tables/moderatorsTable'
 import { adminBreadcrumbs } from '@/config/links'
 import firebaseClient from '@/lib/firebase'
+import { BriefcaseIcon, InformationCircleIcon, UserGroupIcon } from '@heroicons/react/24/outline'
 import { Avatar, Button, Tab, Tabs } from '@nextui-org/react'
 import { usePathname } from 'next/navigation'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -52,11 +54,35 @@ export default function Page() {
 			</div>
 
 			<Tabs variant="underlined">
-				<Tab title={'Info'}>
+				<Tab
+					title={
+						<div className="flex items-center space-x-2">
+							<InformationCircleIcon className="w-5 h-5" />
+							<span>Info</span>
+						</div>
+					}
+				>
 					<ProjectInfo project={project} />
 				</Tab>
-				<Tab title={'Tasks'}>
+				<Tab
+					title={
+						<div className="flex items-center space-x-2">
+							<BriefcaseIcon className="w-5 h-5" />
+							<span>Tasks</span>
+						</div>
+					}
+				>
 					<Tasks projectId={project.id} />
+				</Tab>
+				<Tab
+					title={
+						<div className="flex items-center space-x-2">
+							<UserGroupIcon className="w-5 h-5" />
+							<span>Moderators</span>
+						</div>
+					}
+				>
+					<ModeratorsTable projectName={projectName} />
 				</Tab>
 			</Tabs>
 		</div>

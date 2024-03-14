@@ -1,4 +1,4 @@
-import { BriefcaseIcon, HomeIcon, InboxIcon, UserGroupIcon } from '@heroicons/react/24/outline'
+import { BriefcaseIcon, HomeIcon, InboxIcon, UserGroupIcon, UserPlusIcon } from '@heroicons/react/24/outline'
 
 export const link = {
 	root: '/',
@@ -27,14 +27,13 @@ export const sidebarLinks = {
 
 export const adminSidebarLinks = {
 	projects: { name: 'Projects', href: link.admin.projects, icon: BriefcaseIcon },
-	moderators: { name: 'Moderators', href: link.admin.moderators, icon: UserGroupIcon }
+	moderators: { name: 'Moderator', href: link.admin.createModerator, icon: UserPlusIcon }
 }
 
 export const adminBreadcrumbs = {
 	projects: { name: 'Projects', href: link.admin.projects, icon: BriefcaseIcon },
 	addProject: { name: 'Add Project', href: link.admin.addProject },
-	moderators: { name: 'Moderators', href: link.admin.moderators, icon: UserGroupIcon },
-	createModerator: { name: 'Create moderator', href: link.admin.createModerator }
+	createModerator: { name: 'Create moderator', href: link.admin.createModerator, icon: UserPlusIcon }
 }
 
 export const breadcrumbs = {

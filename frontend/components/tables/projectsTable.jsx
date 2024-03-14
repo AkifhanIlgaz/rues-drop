@@ -2,12 +2,9 @@
 
 import api from '@/config/api'
 import { link } from '@/config/links'
-import firebaseClient from '@/lib/firebase'
 import { Link, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, User } from '@nextui-org/react'
-import axios from 'axios'
 import clsx from 'clsx'
 import React from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import useSWR from 'swr'
 import { DiscordIcon, SiteIcon, TwitterIcon } from '../icons'
 
@@ -17,11 +14,7 @@ const columns = [
 ]
 
 export default function ProjectsTable() {
-	const [user, loading] = useAuthState(firebaseClient.auth)
-
-	const { data: projects, isLoading, mutate } = useSWR(api.allProjects)
-
-
+	const { data: projects, isLoading } = useSWR(api.allProjects)
 
 	const renderCell = React.useCallback((project, columnKey) => {
 		const cellValue = project[columnKey]
@@ -43,25 +36,27 @@ export default function ProjectsTable() {
 	}, [])
 
 	return (
-		<Table aria-label="Example table with custom cells">
-			<TableHeader columns={columns}>
-				{column => (
-					<TableColumn
-						key={column.uid}
-						className={clsx({
-							'text-center': column.uid === 'actions',
-							'pl-12': column.uid === 'links'
-						})}
-					>
-						{column.name}
-					</TableColumn>
-				)}
-			</TableHeader>
-			(
-			<TableBody emptyContent={'There are no projects to display'} items={projects || []} isLoading={isLoading} loadingContent={<Spinner />}>
-				{item => <TableRow key={item.id}>{columnKey => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>}
-			</TableBody>
-			)
-		</Table>
+		<div className="flex justify-center">
+			<Table aria-label="Example table with custom cells" className="w-2/3">
+				<TableHeader columns={columns}>
+					{column => (
+						<TableColumn
+							key={column.uid}
+							className={clsx({
+								'text-center': column.uid === 'actions',
+								'pl-12': column.uid === 'links'
+							})}
+						>
+							{column.name}
+						</TableColumn>
+					)}
+				</TableHeader>
+				(
+				<TableBody emptyContent={'There are no projects to display'} items={projects || []} isLoading={isLoading} loadingContent={<Spinner />}>
+					{item => <TableRow key={item.id}>{columnKey => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>}
+				</TableBody>
+				)
+			</Table>
+		</div>
 	)
 }
