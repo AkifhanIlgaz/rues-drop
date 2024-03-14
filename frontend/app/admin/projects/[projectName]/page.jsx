@@ -1,16 +1,20 @@
 'use client'
 
 import BreadCrumbs from '@/components/breadcrumbs'
+import { DeleteIcon } from '@/components/icons/delete'
 import Loading from '@/components/loading'
 import ProjectInfo from '@/components/project/info'
 import Tasks from '@/components/project/tasks'
 import { adminBreadcrumbs } from '@/config/links'
-import { Avatar, Tab, Tabs } from '@nextui-org/react'
+import firebaseClient from '@/lib/firebase'
+import { Avatar, Button, Tab, Tabs } from '@nextui-org/react'
 import { usePathname } from 'next/navigation'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import useSWR from 'swr'
 import api from '../../../../config/api'
 
 export default function Page() {
+	const [user] = useAuthState(firebaseClient.auth)
 	const projectName = decodeURI(usePathname().split('/').at(-1).toString())
 
 	const items = [adminBreadcrumbs.projects, { name: projectName }]
@@ -19,7 +23,19 @@ export default function Page() {
 		return <Loading />
 	}
 
-	// TODO: Links & Todo
+	const deleteProject = async () => {
+		try {
+			const idToken = await user.getIdToken(true)
+
+			await axios.delete(api.projects + `/${projectName}`, {
+				headers: {
+					Authorization: `Bearer ${idToken}`
+				}
+			})
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
 	return (
 		<div className="w-full h-full">
@@ -30,6 +46,9 @@ export default function Page() {
 					<Avatar src={project.logo} size="lg" />
 					<span className="text-2xl">{projectName}</span>
 				</div>
+				<Button color="danger" startContent={<DeleteIcon className="w-7 h-7" />} onClick={deleteProject}>
+					Delete Project
+				</Button>
 			</div>
 
 			<Tabs variant="underlined">
