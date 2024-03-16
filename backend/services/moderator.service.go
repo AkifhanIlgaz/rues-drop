@@ -69,3 +69,19 @@ func (service *ModeratorService) GetModerators(projectName string) ([]models.Mod
 
 	return moderators, nil
 }
+
+func (service *ModeratorService) AllModerators() ([]models.Moderator, error) {
+	var moderators []models.Moderator
+
+	cur, err := service.collection.Find(service.ctx, bson.M{})
+	if err != nil {
+		return nil, fmt.Errorf("get moderators: %w", err)
+	}
+
+	err = cur.All(service.ctx, &moderators)
+	if err != nil {
+		return nil, fmt.Errorf("get moderators: %w", err)
+	}
+
+	return moderators, nil
+}

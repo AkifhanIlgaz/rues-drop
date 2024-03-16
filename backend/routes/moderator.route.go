@@ -24,5 +24,6 @@ func (routeController *ModeratorRouteController) Setup(rg *gin.RouterGroup) {
 	router.POST("/add", routeController.moderatorController.Create)
 	router.DELETE("/delete", routeController.moderatorController.Delete)
 	// TODO: Add IsMod middleware
-	router.GET("/:projectName", routeController.moderatorController.Moderators)
+	router.GET("/:projectName", routeController.moderatorController.ModeratorsOfProject)
+	router.GET("/:all", routeController.moderatorController.Moderators)
 }
