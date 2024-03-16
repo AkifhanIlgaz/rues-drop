@@ -40,6 +40,18 @@ func (service *ModeratorService) CreateModerator(uid string, moderatorToAdd *mod
 	return nil
 }
 
+func (service *ModeratorService) DeleteModerator(modToDelete models.ModeratorToDelete) error {
+	filter := bson.M{"uid": modToDelete.Uid}
+	update := bson.M{"$pull": bson.M{"projects": modToDelete.ProjectName}}
+
+	_, err := service.collection.UpdateOne(service.ctx, filter, update)
+	if err != nil {
+		return fmt.Errorf("delete moderator: %w", err)
+	}
+
+	return nil
+}
+
 func (service *ModeratorService) GetModerators(projectName string) ([]models.Moderator, error) {
 	var moderators []models.Moderator
 

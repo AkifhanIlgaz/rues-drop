@@ -14,3 +14,8 @@ type ModeratorToAdd struct {
 	Password string   `json:"password"`
 	Projects []string `json:"projects"`
 }
+
+type ModeratorToDelete struct {
+	Uid         string `json:"uid" binding:"required"`
+	ProjectName string `json:"projectName" binding:"required"`
+}

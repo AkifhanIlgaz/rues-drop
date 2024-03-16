@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/AkifhanIlgaz/word-memory/models"
@@ -36,6 +37,22 @@ func (controller *ModeratorController) Create(ctx *gin.Context) {
 
 	err = controller.moderatorService.CreateModerator(uid, &moderatorToAdd)
 	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+}
+
+func (controller *ModeratorController) Delete(ctx *gin.Context) {
+	var modToDelete models.ModeratorToDelete
+
+	if err := ctx.BindJSON(&modToDelete); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	err := controller.moderatorService.DeleteModerator(modToDelete)
+	if err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
