@@ -6,6 +6,7 @@ const api = {
 	addProject: baseUrl + '/projects/add',
 	moderators: baseUrl + '/moderators',
 	addModerator: baseUrl + '/moderators/add',
+	deleteModerator: baseUrl + '/moderators/delete',
 	addTask: baseUrl + '/tasks/add',
 	tasks: baseUrl + '/tasks',
 	finishTask: baseUrl + '/tasks/finish'

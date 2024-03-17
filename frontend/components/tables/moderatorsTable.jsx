@@ -1,9 +1,12 @@
 'use client'
 
 import api from '@/config/api'
+import firebaseClient from '@/lib/firebase'
 import { Button, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, User } from '@nextui-org/react'
+import axios from 'axios'
 import clsx from 'clsx'
 import React from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import useSWR from 'swr'
 import { DeleteIcon } from '../icons/delete'
 
@@ -13,7 +16,25 @@ const columns = [
 ]
 
 export default function ModeratorsTable({ projectName }) {
+	const [user] = useAuthState(firebaseClient.auth)
 	const { data: moderators, isLoading } = useSWR(`${api.moderators}/${projectName}`)
+
+	const deleteModerator = async uid => {
+		try {
+			const idToken = await user.getIdToken(true)
+
+			const res = await axios.delete(api.deleteModerator, {
+				data: { uid, projectName },
+				headers: {
+					Authorization: `Bearer ${idToken}`
+				}
+			})
+
+			console.log(res)
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
 	const renderCell = React.useCallback((mod, columnKey) => {
 		const cellValue = mod[columnKey]
@@ -24,7 +45,7 @@ export default function ModeratorsTable({ projectName }) {
 			case 'action':
 				return (
 					<div className="flex justify-end">
-						<Button color="danger" startContent={<DeleteIcon className="w-4 h-4" />} size="sm">
+						<Button color="danger" startContent={<DeleteIcon className="w-4 h-4" />} size="sm" onClick={() => deleteModerator(mod.uid)}>
 							Remove
 						</Button>
 					</div>
