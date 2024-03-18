@@ -2,13 +2,14 @@
 
 import api from '@/config/api'
 import firebaseClient from '@/lib/firebase'
-import { Button, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, User } from '@nextui-org/react'
+import { Autocomplete, AutocompleteItem, Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, User, useDisclosure } from '@nextui-org/react'
 import axios from 'axios'
 import clsx from 'clsx'
-import React from 'react'
+import React, { useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import useSWR from 'swr'
 import { DeleteIcon } from '../icons/delete'
+import { Label } from '../label'
 
 const columns = [
 	{ name: 'Username', uid: 'username' },
@@ -17,6 +18,7 @@ const columns = [
 
 export default function ModeratorsTable({ projectName }) {
 	const [user] = useAuthState(firebaseClient.auth)
+
 	const { data: moderators, isLoading } = useSWR(`${api.moderators}/${projectName}`)
 
 	const deleteModerator = async uid => {
@@ -57,7 +59,7 @@ export default function ModeratorsTable({ projectName }) {
 
 	return (
 		<div className="flex justify-center mt-6">
-			<Table aria-label="Example table with custom cells" className="w-1/2">
+			<Table aria-label="Example table with custom cells" className="w-1/2" topContentPlacement="outside" topContent={<AddModerator projectName={projectName} />}>
 				<TableHeader columns={columns}>
 					{column => (
 						<TableColumn
@@ -76,6 +78,45 @@ export default function ModeratorsTable({ projectName }) {
 				</TableBody>
 				)
 			</Table>
+		</div>
+	)
+}
+
+function AddModerator({ projectName }) {
+	const { isOpen, onOpen, onOpenChange } = useDisclosure()
+	const [selectedModerator, setSelectedModerator] = useState('')
+
+	const { data: moderators } = useSWR(api.allModerators)
+
+	const addMod = async () => {}
+
+	return (
+		<div className="flex self-end">
+			<Button onClick={onOpen} size="sm">
+				Add Moderator
+			</Button>
+			<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+				<ModalContent>
+					{onClose => (
+						<>
+							<ModalHeader className="flex flex-col gap-1">Add Moderator</ModalHeader>
+							<ModalBody>
+								<Autocomplete onSelectionChange={setSelectedModerator} variant="bordered" labelPlacement="outside" defaultItems={moderators} label={<Label label={'Moderators'} isRequired={true} />} placeholder={'Select the moderators'}>
+									{mod => <AutocompleteItem key={mod.id}>{mod.username}</AutocompleteItem>}
+								</Autocomplete>
+							</ModalBody>
+							<ModalFooter>
+								<Button color="danger" variant="light" onPress={onClose}>
+									Cancel
+								</Button>
+								<Button color="primary" onPress={onClose}>
+									Add
+								</Button>
+							</ModalFooter>
+						</>
+					)}
+				</ModalContent>
+			</Modal>
 		</div>
 	)
 }

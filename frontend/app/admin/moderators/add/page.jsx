@@ -44,7 +44,7 @@ export default function Page() {
 		try {
 			const idToken = await user.getIdToken(true)
 
-			const res = await axios.post(api.addModerator, data, {
+			const res = await axios.post(api.createModerator, data, {
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${idToken}`
