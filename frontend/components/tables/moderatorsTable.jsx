@@ -73,7 +73,7 @@ export default function ModeratorsTable({ projectName }) {
 					)}
 				</TableHeader>
 				(
-				<TableBody emptyContent={'There are no projects to display'} items={moderators || []} isLoading={isLoading} loadingContent={<Spinner />}>
+				<TableBody emptyContent={'There are no moderators to display'} items={moderators || []} isLoading={isLoading} loadingContent={<Spinner />}>
 					{item => <TableRow key={item.uid}>{columnKey => <TableCell align="end">{renderCell(item, columnKey)}</TableCell>}</TableRow>}
 				</TableBody>
 				)
@@ -83,12 +83,34 @@ export default function ModeratorsTable({ projectName }) {
 }
 
 function AddModerator({ projectName }) {
-	const { isOpen, onOpen, onOpenChange } = useDisclosure()
+	const [user] = useAuthState(firebaseClient.auth)
+	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 	const [selectedModerator, setSelectedModerator] = useState('')
 
 	const { data: moderators } = useSWR(api.allModerators)
 
-	const addMod = async () => {}
+	const addMod = async () => {
+		try {
+			const idToken = await user.getIdToken(true)
+
+			const res = await axios.put(
+				api.addModerator,
+				{ projectName, id: selectedModerator },
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${idToken}`
+					}
+				}
+			)
+
+			console.log(res)
+		} catch (error) {
+			console.log(error)
+		} finally {
+			onClose()
+		}
+	}
 
 	return (
 		<div className="flex self-end">
@@ -101,7 +123,7 @@ function AddModerator({ projectName }) {
 						<>
 							<ModalHeader className="flex flex-col gap-1">Add Moderator</ModalHeader>
 							<ModalBody>
-								<Autocomplete onSelectionChange={setSelectedModerator} variant="bordered" labelPlacement="outside" defaultItems={moderators} label={<Label label={'Moderators'} isRequired={true} />} placeholder={'Select the moderators'}>
+								<Autocomplete onSelectionChange={setSelectedModerator} variant="bordered" labelPlacement="outside" defaultItems={moderators} label={<Label label={'Moderators'} isRequired={true} />} placeholder={'Select a moderator'}>
 									{mod => <AutocompleteItem key={mod.id}>{mod.username}</AutocompleteItem>}
 								</Autocomplete>
 							</ModalBody>
@@ -109,7 +131,7 @@ function AddModerator({ projectName }) {
 								<Button color="danger" variant="light" onPress={onClose}>
 									Cancel
 								</Button>
-								<Button color="primary" onPress={onClose}>
+								<Button color="primary" onPress={addMod}>
 									Add
 								</Button>
 							</ModalFooter>

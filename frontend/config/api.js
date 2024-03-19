@@ -7,6 +7,7 @@ const api = {
 	moderators: baseUrl + '/moderators',
 	allModerators: baseUrl + '/moderators/all',
 	createModerator: baseUrl + '/moderators/create',
+	addModerator: baseUrl + '/moderators/add',
 	deleteModerator: baseUrl + '/moderators/delete',
 	addTask: baseUrl + '/tasks/add',
 	tasks: baseUrl + '/tasks',
