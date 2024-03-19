@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -22,20 +23,37 @@ func NewModeratorController(authService *services.AuthService, moderatorService 
 }
 
 func (controller *ModeratorController) Create(ctx *gin.Context) {
-	var moderatorToAdd models.ModeratorToAdd
+	var moderatorToCreate models.ModeratorToCreate
 
-	if err := ctx.ShouldBindJSON(&moderatorToAdd); err != nil {
+	if err := ctx.ShouldBindJSON(&moderatorToCreate); err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	uid, err := controller.authService.CreateModerator(&moderatorToAdd)
+	uid, err := controller.authService.CreateModerator(&moderatorToCreate)
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
-	err = controller.moderatorService.CreateModerator(uid, &moderatorToAdd)
+	err = controller.moderatorService.CreateModerator(uid, &moderatorToCreate)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+}
+
+func (controller *ModeratorController) Add(ctx *gin.Context) {
+	var modToAdd models.ModeratorToAdd
+
+	if err := ctx.BindJSON(&modToAdd); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	fmt.Println(modToAdd)
+
+	err := controller.moderatorService.AddModerator(&modToAdd)
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return

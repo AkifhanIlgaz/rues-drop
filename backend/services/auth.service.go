@@ -40,7 +40,7 @@ func (service *AuthService) GetUserByIdToken(idToken string) (*auth.UserRecord, 
 	return user, nil
 }
 
-func (service *AuthService) CreateModerator(moderator *models.ModeratorToAdd) (string, error) {
+func (service *AuthService) CreateModerator(moderator *models.ModeratorToCreate) (string, error) {
 	newUser := &auth.UserToCreate{}
 	newUser.Email(moderator.Username + "@gmail.com").Password(moderator.Password)
 

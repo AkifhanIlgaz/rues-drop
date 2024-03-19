@@ -6,6 +6,7 @@ import (
 
 	"github.com/AkifhanIlgaz/word-memory/models"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -25,7 +26,7 @@ func NewModeratorService(ctx context.Context, db *mongo.Database) *ModeratorServ
 	}
 }
 
-func (service *ModeratorService) CreateModerator(uid string, moderatorToAdd *models.ModeratorToAdd) error {
+func (service *ModeratorService) CreateModerator(uid string, moderatorToAdd *models.ModeratorToCreate) error {
 	moderator := models.Moderator{
 		Uid:      uid,
 		Username: moderatorToAdd.Username,
@@ -36,6 +37,20 @@ func (service *ModeratorService) CreateModerator(uid string, moderatorToAdd *mod
 	if err != nil {
 		return fmt.Errorf("create moderator: %w", err)
 	}
+
+	return nil
+}
+
+func (service *ModeratorService) AddModerator(moderatorToAdd *models.ModeratorToAdd) error {
+	id, _ := primitive.ObjectIDFromHex(moderatorToAdd.Id)
+	update := bson.M{"$push": bson.M{"projects": moderatorToAdd.ProjectName}}
+
+	res, err := service.collection.UpdateByID(service.ctx, id, update)
+	if err != nil {
+		return fmt.Errorf("add moderator: %w", err)
+	}
+
+	fmt.Println(res)
 
 	return nil
 }
