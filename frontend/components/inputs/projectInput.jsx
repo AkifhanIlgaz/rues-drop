@@ -1,9 +1,12 @@
+import api from '@/config/api'
 import { errorMessage } from '@/config/errors'
 import { Autocomplete, AutocompleteItem, Chip } from '@nextui-org/react'
 import { useState } from 'react'
+import useSWR from 'swr'
 import { Label } from '../label'
 
-export default function ProjectInput({ projects, setValue, errors }) {
+export default function ProjectInput({ setValue, errors }) {
+	const { data: allProjects, isLoading } = useSWR(api.allProjects)
 	const [selectedProjects, setSelectedProjects] = useState(new Set())
 
 	const selectProject = project => {
@@ -21,10 +24,12 @@ export default function ProjectInput({ projects, setValue, errors }) {
 		setValue('projects', [...updatedProjects])
 	}
 
+	if (isLoading) return
+
 	return (
 		<div className="flex flex-col gap-6">
-			<Autocomplete onSelectionChange={selectProject} variant="bordered" labelPlacement="outside" defaultItems={projects} label={<Label label={'Projects'} isRequired={true} />} placeholder={'Select the projects that user has access'} classNames={{ errorMessage: 'text-danger text-sm pt-1' }} errorMessage={selectedProjects.size === 0 && errorMessage.requiredProjects}>
-				{project => <AutocompleteItem key={project.name}>{project.name}</AutocompleteItem>}
+			<Autocomplete onSelectionChange={selectProject} variant="bordered" labelPlacement="outside" defaultItems={allProjects} label={<Label label={'Projects'} isRequired={true} />} placeholder={'Select the projects that user has access'} classNames={{ errorMessage: 'text-danger text-sm pt-1' }} errorMessage={selectedProjects.size === 0 && errorMessage.requiredProjects}>
+				{project => <AutocompleteItem key={project.projectName}>{project.projectName}</AutocompleteItem>}
 			</Autocomplete>
 			<div className="flex flex-wrap gap-1">
 				{Array.from(selectedProjects).map(project => (
