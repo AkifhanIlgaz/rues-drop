@@ -2,6 +2,7 @@
 
 import { link } from '@/config/links'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../lib/firebase'
 
