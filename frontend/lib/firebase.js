@@ -1,20 +1,13 @@
+// import { firebaseConfig } from '@/config/firebase'
+import { getAuth } from 'firebase/auth'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
-import { firebaseConfig } from '../config/firebase'
 
-firebase.initializeApp(firebaseConfig)
+const init = () => {
+	const config = JSON.parse(process.env.FIREBASE)
 
-class Firebase {
-	constructor() {
-		this.auth = firebase.auth()
-		this.googleProvider = new firebase.auth.GoogleAuthProvider()
-	}
-
-	async signOut() {
-		this.auth.signOut()
-	}
+	return firebase.initializeApp(config)
 }
 
-const firebaseClient = new Firebase()
-
-export default firebaseClient
+const app = init()
+export const auth = getAuth(app)

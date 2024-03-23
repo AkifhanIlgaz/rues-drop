@@ -8,17 +8,17 @@ import Loading from '@/components/loading'
 import api from '@/config/api'
 import { label } from '@/config/labels'
 import { adminBreadcrumbs } from '@/config/links'
-import firebaseClient from '@/lib/firebase'
 import { Button } from '@nextui-org/button'
 import axios from 'axios'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useForm } from 'react-hook-form'
+import { auth } from '../../../../lib/firebase'
 
 export default function Page() {
 	const { theme } = useTheme()
-	const [user, loading, error] = useAuthState(firebaseClient.auth)
+	const [user, loading, error] = useAuthState(auth)
 
 	const router = useRouter()
 	const items = [adminBreadcrumbs.createModerator]

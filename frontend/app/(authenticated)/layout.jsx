@@ -4,16 +4,16 @@ import Loading from '@/components/loading'
 import AuthenticatedNavbar from '@/components/navbar/authenticatedNavbar'
 import Sidebar from '@/components/sidebar/sidebar'
 import { link } from '@/config/links'
-import firebaseClient from '@/lib/firebase'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { SWRConfig } from 'swr'
 import { sidebarLinks } from '../../config/links'
+import { auth } from '../../lib/firebase'
 
 export default function Layout({ children }) {
-	const [user, loading, error] = useAuthState(firebaseClient.auth)
+	const [user, loading, error] = useAuthState(auth)
 	const router = useRouter()
 
 	const [isSidebarOpen, setIsSidebarOpen] = useState(true)

@@ -1,11 +1,11 @@
 import SignOutButton from '@/components/buttons/signOut'
-import firebase from '@/lib/firebase'
 import { useSignOut } from 'react-firebase-hooks/auth'
+import { auth } from '../../lib/firebase'
 import Loading from '../loading'
 import NavLinks from './nav-links'
 
 export default function Sidebar({ sidebarLinks }) {
-	const [signOut, loading] = useSignOut(firebase.auth)
+	const [signOut, loading] = useSignOut(auth)
 
 	if (loading) {
 		return <Loading />

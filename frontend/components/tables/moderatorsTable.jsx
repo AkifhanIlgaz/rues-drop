@@ -8,6 +8,7 @@ import clsx from 'clsx'
 import React, { useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import useSWR from 'swr'
+import { auth } from '../../lib/firebase'
 import { DeleteIcon } from '../icons/delete'
 import { Label } from '../label'
 
@@ -17,7 +18,7 @@ const columns = [
 ]
 
 export default function ModeratorsTable({ projectName }) {
-	const [user] = useAuthState(firebaseClient.auth)
+	const [user] = useAuthState(auth)
 
 	const { data: moderators, isLoading } = useSWR(`${api.moderators}/${projectName}`)
 

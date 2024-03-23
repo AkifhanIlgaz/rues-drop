@@ -1,14 +1,14 @@
 import TextInput from '@/components/inputs/textInput'
 import api from '@/config/api'
 import { label } from '@/config/labels'
-import firebaseClient from '@/lib/firebase'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react'
 import axios from 'axios'
 import clsx from 'clsx'
 import { useIdToken } from 'react-firebase-hooks/auth'
+import { auth } from '../../lib/firebase'
 export default function AddTask({ errors, register, handleSubmit, projectId }) {
-	const [user] = useIdToken(firebaseClient.auth)
+	const [user] = useIdToken(auth)
 	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 
 	const addTask = async data => {

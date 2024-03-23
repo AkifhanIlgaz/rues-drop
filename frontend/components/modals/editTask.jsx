@@ -2,18 +2,18 @@
 
 import { Label } from '@/components/label'
 import api from '@/config/api'
-import firebaseClient from '@/lib/firebase'
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react'
 import axios from 'axios'
 import { useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '../../lib/firebase'
 import { EditIcon } from '../icons/edit'
 
 export default function EditTask({ task }) {
-	const [user] = useAuthState(firebaseClient.auth)
+	const [user] = useAuthState(auth)
 	const [description, setDescription] = useState(task.description)
 	const [url, setUrl] = useState(task.url)
-	const { isOpen, onOpen, onOpenChange, onClose, } = useDisclosure()
+	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 
 	const editTask = async () => {
 		// TODO: Handle the situation that user doesn't change values

@@ -1,7 +1,6 @@
 import api from '@/config/api'
 
 import EditTask from '@/components/modals/editTask'
-import firebaseClient from '@/lib/firebase'
 import { Chip, Input, Link, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip } from '@nextui-org/react'
 import axios from 'axios'
 import React, { useCallback } from 'react'
@@ -37,7 +36,7 @@ const statusColorMap = {
 }
 
 export default function Tasks({ projectId }) {
-	const [user] = useAuthState(firebaseClient.auth)
+	const [user] = useAuthState(auth)
 	const {
 		register,
 		handleSubmit,

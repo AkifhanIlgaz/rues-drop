@@ -7,16 +7,16 @@ import ProjectInfo from '@/components/project/info'
 import Tasks from '@/components/project/tasks'
 import ModeratorsTable from '@/components/tables/moderatorsTable'
 import { adminBreadcrumbs } from '@/config/links'
-import firebaseClient from '@/lib/firebase'
 import { BriefcaseIcon, InformationCircleIcon, UserGroupIcon } from '@heroicons/react/24/outline'
 import { Avatar, Button, Tab, Tabs } from '@nextui-org/react'
 import { usePathname } from 'next/navigation'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import useSWR from 'swr'
 import api from '../../../../config/api'
+import { auth } from '../../../../lib/firebase'
 
 export default function Page() {
-	const [user] = useAuthState(firebaseClient.auth)
+	const [user] = useAuthState(auth)
 	const projectName = decodeURI(usePathname().split('/').at(-1).toString())
 
 	const items = [adminBreadcrumbs.projects, { name: projectName }]

@@ -3,7 +3,6 @@ import { siteConfig } from '@/config/site'
 import '@/styles/globals.css'
 import clsx from 'clsx'
 import { Providers } from './providers'
-
 export const metadata = {
 	title: {
 		default: siteConfig.name,

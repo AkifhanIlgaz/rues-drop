@@ -2,15 +2,15 @@
 
 import { Label } from '@/components/label'
 import api from '@/config/api'
-import firebaseClient from '@/lib/firebase'
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react'
 import axios from 'axios'
 import { useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '../../lib/firebase'
 import { EditIcon } from '../icons'
 
 export default function EditInput({ projectName, label, value }) {
-	const [user] = useAuthState(firebaseClient.auth)
+	const [user] = useAuthState(auth)
 	const { isOpen, onOpen, onOpenChange } = useDisclosure()
 	const [editInput, setEditInput] = useState('')
 

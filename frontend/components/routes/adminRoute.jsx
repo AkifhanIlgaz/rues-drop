@@ -1,14 +1,14 @@
 'use client'
 
-import firebaseClient from '@/lib/firebase'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '../../lib/firebase'
 
 export default function AdminRoute({ children }) {
 	const router = useRouter()
 
-	const [user, loading, error] = useAuthState(firebaseClient.auth)
+	const [user, loading, error] = useAuthState(auth)
 
 	useEffect(() => {
 		user.getIdTokenResult(true).then(res => {
