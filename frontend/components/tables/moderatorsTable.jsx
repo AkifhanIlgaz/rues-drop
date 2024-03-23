@@ -1,7 +1,6 @@
 'use client'
 
 import api from '@/config/api'
-import firebaseClient from '@/lib/firebase'
 import { Autocomplete, AutocompleteItem, Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, User, useDisclosure } from '@nextui-org/react'
 import axios from 'axios'
 import clsx from 'clsx'
@@ -84,7 +83,7 @@ export default function ModeratorsTable({ projectName }) {
 }
 
 function AddModerator({ projectName }) {
-	const [user] = useAuthState(firebaseClient.auth)
+	const [user] = useAuthState(auth)
 	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 	const [selectedModerator, setSelectedModerator] = useState('')
 
