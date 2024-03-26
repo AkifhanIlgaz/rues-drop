@@ -1,16 +1,13 @@
 import api from '@/config/api'
 
-import EditTask from '@/components/modals/editTask'
+import { CheckIcon } from '@/components/icons/check'
 import { auth } from '@/lib/firebase'
-import { Chip, Input, Link, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip } from '@nextui-org/react'
+import { Button, Chip, Link, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import axios from 'axios'
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useForm } from 'react-hook-form'
 import useSWR from 'swr'
-import { CheckIcon } from '../icons/check'
-import { DeleteIcon } from '../icons/delete'
-import AddTask from '../modals/addTask'
 
 const columns = [
 	{
@@ -76,20 +73,13 @@ export default function Tasks({ projectId }) {
 				return date.toLocaleDateString('tr-TR')
 			case 'actions':
 				return (
-					<div className="relative flex items-center justify-center gap-2">
-						<Tooltip content="Edit task">
-							<EditTask task={task} />
-						</Tooltip>
-						<Tooltip color="danger" content="Delete task">
-							<span className="text-lg text-danger cursor-pointer active:opacity-50 " onClick={() => deleteTask(task.id)}>
-								<DeleteIcon />
-							</span>
-						</Tooltip>
-						<Tooltip color="success" content="Finish task" className="text-white">
-							<span className="text-lg text-success cursor-pointer active:opacity-50" onClick={() => finishTask(task.id)}>
+					<div className="relative flex items-center justify-center ">
+						<Chip as={Button} variant="shadow" color="success" onClick={() => finishTask(task.id)}>
+							<div className="flex text-white">
 								<CheckIcon />
-							</span>
-						</Tooltip>
+								Finish Task
+							</div>
+						</Chip>
 					</div>
 				)
 			default:
@@ -97,21 +87,12 @@ export default function Tasks({ projectId }) {
 		}
 	}, [])
 
-	const topContent = React.useMemo(() => {
-		return (
-			<div className="flex justify-between items-center ">
-				<Input isClearable className="w-full sm:max-w-[44%]" placeholder="Search by description..." variant="flat" labelPlacement="outside" />
-				<AddTask errors={errors} register={register} handleSubmit={handleSubmit} projectId={projectId} />
-			</div>
-		)
-	}, [])
-
 	const { data: tasks, isLoading } = useSWR(`${api.tasks}/${projectId}`)
 	if (isLoading) return
 
 	return (
 		<div className="flex justify-center">
-			<Table aria-label="Tasks table" topContent={topContent} topContentPlacement="outside" className="mt-2 ">
+			<Table aria-label="Tasks table" topContentPlacement="outside" className="mt-2 ">
 				<TableHeader columns={columns}>
 					{column => (
 						<TableColumn className={column.key === 'actions' && ' text-center '} key={column.key}>

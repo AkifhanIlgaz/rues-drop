@@ -21,7 +21,7 @@ export default function ProjectsTable() {
 
 		switch (columnKey) {
 			case 'projectName':
-				return <User className="text-md font-semibold" as={Link} color="foreground" href={`${link.projects}/${cellValue}`} avatarProps={{ radius: 'full', src: project.logo }} name={cellValue} />
+				return <User className="text-md font-semibold" as={Link} color="foreground" href={`/admin/${link.projects}/${cellValue}`} avatarProps={{ radius: 'full', src: project.logo }} name={cellValue} />
 			case 'links':
 				return (
 					<div className="flex items-center gap-4">

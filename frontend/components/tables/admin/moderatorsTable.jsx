@@ -7,9 +7,9 @@ import clsx from 'clsx'
 import React, { useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import useSWR from 'swr'
-import { auth } from '../../lib/firebase'
-import { DeleteIcon } from '../icons/delete'
-import { Label } from '../label'
+import { auth } from '../../../lib/firebase'
+import { DeleteIcon } from '../../icons/delete'
+import { Label } from '../../label'
 
 const columns = [
 	{ name: 'Username', uid: 'username' },

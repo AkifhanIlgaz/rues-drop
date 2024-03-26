@@ -1,7 +1,7 @@
 'use client'
 
 import BreadCrumbs from '@/components/breadcrumbs'
-import ProjectsTable from '@/components/tables/projectsTable'
+import ProjectsTable from '@/components/tables/admin/projectsTable'
 import { adminBreadcrumbs, link } from '@/config/links'
 import { Button } from '@nextui-org/button'
 import { Link } from '@nextui-org/link'

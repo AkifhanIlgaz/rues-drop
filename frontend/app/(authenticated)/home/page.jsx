@@ -1,5 +1,4 @@
 'use client'
-'use client'
 
 import BreadCrumbs from '@/components/breadcrumbs'
 import { breadcrumbs } from '@/config/links'
