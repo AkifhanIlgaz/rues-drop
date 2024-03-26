@@ -19,7 +19,7 @@ func NewModeratorRouteController(moderatorController *controllers.ModeratorContr
 
 func (routeController *ModeratorRouteController) Setup(rg *gin.RouterGroup) {
 
-	router := rg.Group("/moderators", routeController.userMiddleware.SetUser(), routeController.userMiddleware.IsAdmin())
+	router := rg.Group("/moderators", routeController.userMiddleware.SetUser(), routeController.userMiddleware.MustAdmin())
 
 	router.POST("/create", routeController.moderatorController.Create)
 	router.PUT("/add", routeController.moderatorController.Add)

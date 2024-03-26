@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"slices"
 	"strings"
 
 	"github.com/AkifhanIlgaz/word-memory/services"
@@ -10,12 +11,14 @@ import (
 )
 
 type UserMiddleware struct {
-	authService *services.AuthService
+	authService      *services.AuthService
+	moderatorService *services.ModeratorService
 }
 
-func NewUserMiddleware(authService *services.AuthService) *UserMiddleware {
+func NewUserMiddleware(authService *services.AuthService, moderatorService *services.ModeratorService) *UserMiddleware {
 	return &UserMiddleware{
-		authService: authService,
+		authService:      authService,
+		moderatorService: moderatorService,
 	}
 }
 
@@ -38,7 +41,41 @@ func (middleware *UserMiddleware) SetUser() gin.HandlerFunc {
 	}
 }
 
-func (middleware *UserMiddleware) IsAdmin() gin.HandlerFunc {
+func (middleware *UserMiddleware) HasAccess() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		project := ctx.Param("projectName")
+		if len(project) == 0 {
+			ctx.AbortWithStatus(http.StatusBadRequest)
+			return
+		}
+
+		user, err := getUserFromContext(ctx)
+		if err != nil {
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+
+		switch user.CustomClaims["role"] {
+		case "admin":
+			ctx.Next()
+			return
+		case "moderator":
+			projects, ok := user.CustomClaims["projects"].([]string)
+			if !ok {
+				ctx.AbortWithStatus(http.StatusUnauthorized)
+				return
+			}
+			if !slices.Contains(projects, project) {
+				ctx.AbortWithStatus(http.StatusUnauthorized)
+				return
+			}
+		}
+
+		ctx.Next()
+	}
+}
+
+func (middleware *UserMiddleware) MustAdmin() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		user, err := getUserFromContext(ctx)
 		if err != nil {
@@ -53,12 +90,6 @@ func (middleware *UserMiddleware) IsAdmin() gin.HandlerFunc {
 		}
 
 		ctx.Next()
-	}
-}
-
-func (middleware *UserMiddleware) IsModerator() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		// TODO: Read project from ctx
 	}
 }
 

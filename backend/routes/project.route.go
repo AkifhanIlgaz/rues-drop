@@ -20,10 +20,20 @@ func NewProjectRouteController(projectController *controllers.ProjectController,
 func (routeController *ProjectRouteController) Setup(rg *gin.RouterGroup) {
 	router := rg.Group("/projects", routeController.userMiddleware.SetUser())
 
-	router.GET("/all", routeController.projectController.All)
-	router.GET("/:projectName", routeController.projectController.Project)
+	public := router.Group("/")
+	{
+		public.GET("/all", routeController.projectController.All)
+		public.GET("/:projectName", routeController.projectController.Project)
+	}
 
-	router.PUT("/:projectName", routeController.userMiddleware.IsAdmin(), routeController.projectController.Edit)
-	router.DELETE("/:projectName", routeController.userMiddleware.IsAdmin(), routeController.projectController.Delete)
-	router.POST("/add", routeController.userMiddleware.IsAdmin(), routeController.projectController.Add)
+	onlyAdmin := router.Group("/", routeController.userMiddleware.MustAdmin())
+	{
+		onlyAdmin.DELETE("/:projectName", routeController.projectController.Delete)
+		onlyAdmin.POST("/add", routeController.projectController.Add)
+	}
+
+	private := router.Group("/", routeController.userMiddleware.HasAccess())
+	{
+		private.PUT("/:projectName", routeController.userMiddleware.HasAccess(), routeController.projectController.Edit)
+	}
 }

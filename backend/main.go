@@ -45,7 +45,7 @@ func main() {
 	projectController := controllers.NewProjectController(projectService)
 	moderatorController := controllers.NewModeratorController(authService, moderatorService)
 	taskController := controllers.NewTaskController(taskService)
-	userMiddleware := controllers.NewUserMiddleware(authService)
+	userMiddleware := controllers.NewUserMiddleware(authService, moderatorService)
 
 	projectRouteController := routes.NewProjectRouteController(projectController, userMiddleware)
 	moderatorRouteController := routes.NewModeratorRouteController(moderatorController, userMiddleware)
@@ -54,7 +54,7 @@ func main() {
 	server := gin.Default()
 	setCors(server)
 
-	router := server.Group("/api")
+	router := server.Group("/api", userMiddleware.SetUser())
 
 	projectRouteController.Setup(router)
 	moderatorRouteController.Setup(router)

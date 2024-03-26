@@ -51,7 +51,8 @@ func (service *AuthService) CreateModerator(moderator *models.ModeratorToCreate)
 
 	updateUser := &auth.UserToUpdate{}
 	updateUser.CustomClaims(map[string]interface{}{
-		"role": "moderator",
+		"role":     "moderator",
+		"projects": moderator.Projects,
 	})
 
 	_, err = service.client.UpdateUser(service.ctx, user.UID, updateUser)
