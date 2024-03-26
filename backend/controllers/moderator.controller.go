@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -50,8 +49,6 @@ func (controller *ModeratorController) Add(ctx *gin.Context) {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
-
-	fmt.Println(modToAdd)
 
 	err := controller.moderatorService.AddModerator(&modToAdd)
 	if err != nil {

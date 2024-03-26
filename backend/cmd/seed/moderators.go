@@ -41,6 +41,7 @@ func createModerators() {
 
 func createMod(mod *models.Moderator) error {
 	newUser := &auth.UserToCreate{}
+	// TODO: Update password
 	newUser.Email(mod.Username + "@gmail.com").Password("123456789")
 
 	user, err := authentication.CreateUser(context.Background(), newUser)
@@ -50,7 +51,7 @@ func createMod(mod *models.Moderator) error {
 
 	updateUser := &auth.UserToUpdate{}
 	updateUser.CustomClaims(map[string]interface{}{
-		"projects": mod.Projects,
+		"role": "moderator",
 	})
 
 	_, err = authentication.UpdateUser(context.Background(), user.UID, updateUser)

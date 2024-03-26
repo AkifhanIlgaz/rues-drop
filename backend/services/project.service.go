@@ -12,16 +12,19 @@ import (
 const projectsCollection = "projects"
 
 type ProjectService struct {
-	collection *mongo.Collection
-	ctx        context.Context
+	collection    *mongo.Collection
+	modCollection *mongo.Collection
+	ctx           context.Context
 }
 
 func NewProjectService(ctx context.Context, db *mongo.Database) *ProjectService {
 	collection := db.Collection(projectsCollection)
+	modCollection := db.Collection(moderatorsCollection)
 
 	return &ProjectService{
-		collection: collection,
-		ctx:        ctx,
+		collection:    collection,
+		modCollection: modCollection,
+		ctx:           ctx,
 	}
 }
 
@@ -35,7 +38,26 @@ func (service *ProjectService) Create(project *models.Project) error {
 	return nil
 }
 
-func (service *ProjectService) AllProjects() ([]models.Project, error) {
+func (service *ProjectService) GetProjects(role interface{}, uid string) ([]models.Project, error) {
+	var projects []models.Project
+	var err error
+
+	if role == "moderator" {
+		projects, err = service.modProjects(uid)
+		if err != nil {
+			return nil, fmt.Errorf("get all projects: %w", err)
+		}
+	} else {
+		projects, err = service.allProjects()
+		if err != nil {
+			return nil, fmt.Errorf("get all projects: %w", err)
+		}
+	}
+
+	return projects, err
+}
+
+func (service *ProjectService) allProjects() ([]models.Project, error) {
 	cursor, err := service.collection.Find(service.ctx, bson.M{})
 	if err != nil {
 		return nil, fmt.Errorf("get all projects: %w", err)
@@ -45,6 +67,29 @@ func (service *ProjectService) AllProjects() ([]models.Project, error) {
 
 	if err := cursor.All(service.ctx, &projects); err != nil {
 		return nil, fmt.Errorf("get all projects: %w", err)
+	}
+
+	return projects, nil
+}
+
+func (service *ProjectService) modProjects(uid string) ([]models.Project, error) {
+	var moderator models.Moderator
+	modFilter := bson.M{
+		"uid": uid,
+	}
+
+	if err := service.modCollection.FindOne(service.ctx, modFilter).Decode(&moderator); err != nil {
+		return []models.Project{}, fmt.Errorf("get moderator projects: %w", err)
+	}
+
+	cursor, err := service.collection.Find(service.ctx, bson.M{"name": bson.M{"$in": moderator.Projects}})
+	if err != nil {
+		return []models.Project{}, fmt.Errorf("get moderator projects: %w", err)
+	}
+
+	var projects []models.Project
+	if err := cursor.All(service.ctx, &projects); err != nil {
+		return nil, fmt.Errorf("get moderator projects: %w", err)
 	}
 
 	return projects, nil

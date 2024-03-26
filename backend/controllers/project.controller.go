@@ -34,7 +34,13 @@ func (controller *ProjectController) Add(ctx *gin.Context) {
 }
 
 func (controller *ProjectController) All(ctx *gin.Context) {
-	projects, err := controller.projectService.AllProjects()
+	user, err := getUserFromContext(ctx)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	projects, err := controller.projectService.GetProjects(user.CustomClaims["role"], user.UID)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
