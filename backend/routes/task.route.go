@@ -18,14 +18,20 @@ func NewTaskRouteController(taskController *controllers.TaskController, userMidd
 }
 
 func (routeController *TaskRouteController) Setup(rg *gin.RouterGroup) {
-	router := rg.Group("/tasks", routeController.userMiddleware.SetUser())
+	router := rg.Group("/tasks/:projectName")
 
-	// TODO: Add IsMod middleware in prod
-	// TODO: Read project Id from body or query
-	router.POST("/add", routeController.userMiddleware.MustAdmin(), routeController.taskController.Add)
-	router.PUT("/:taskId", routeController.taskController.Edit)
-	router.DELETE("/:taskId", routeController.taskController.Delete)
-	router.PUT("/finish/:taskId", routeController.taskController.Finish)
-	router.GET("/:projectId", routeController.taskController.All)
+	public := router.Group("/")
+	{
+		public.GET("/", routeController.taskController.All)
+	}
+
+	private := router.Group("/", routeController.userMiddleware.HasAccess())
+	{
+		// TODO: Update handlers
+		private.POST("/add", routeController.taskController.Add)
+		private.PUT("/:taskId", routeController.taskController.Edit)
+		private.DELETE("/:taskId", routeController.taskController.Delete)
+		private.PUT("/finish/:taskId", routeController.taskController.Finish)
+	}
 
 }
