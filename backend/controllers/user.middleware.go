@@ -43,7 +43,11 @@ func (middleware *UserMiddleware) SetUser() gin.HandlerFunc {
 
 func (middleware *UserMiddleware) HasAccess() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		project := ctx.Param("projectName")
+		var project string
+
+		if project = ctx.Param("projectName"); len(project) == 0 {
+			project = ctx.Query("projectName")
+		}
 		if len(project) == 0 {
 			ctx.AbortWithStatus(http.StatusBadRequest)
 			return

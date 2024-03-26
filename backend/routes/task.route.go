@@ -18,16 +18,16 @@ func NewTaskRouteController(taskController *controllers.TaskController, userMidd
 }
 
 func (routeController *TaskRouteController) Setup(rg *gin.RouterGroup) {
-	router := rg.Group("/tasks/:projectName")
+	router := rg.Group("/tasks")
 
 	public := router.Group("/")
 	{
-		public.GET("/", routeController.taskController.All)
+		public.GET("/:projectId", routeController.taskController.All)
 	}
 
 	private := router.Group("/", routeController.userMiddleware.HasAccess())
 	{
-		// TODO: Update handlers
+		// TODO: Update handlers to read project name from url
 		private.POST("/add", routeController.taskController.Add)
 		private.PUT("/:taskId", routeController.taskController.Edit)
 		private.DELETE("/:taskId", routeController.taskController.Delete)
