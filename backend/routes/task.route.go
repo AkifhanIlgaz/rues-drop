@@ -27,7 +27,6 @@ func (routeController *TaskRouteController) Setup(rg *gin.RouterGroup) {
 
 	private := router.Group("/", routeController.userMiddleware.HasAccess())
 	{
-		// TODO: Update handlers to read project name from url
 		private.POST("/add", routeController.taskController.Add)
 		private.PUT("/:taskId", routeController.taskController.Edit)
 		private.DELETE("/:taskId", routeController.taskController.Delete)
