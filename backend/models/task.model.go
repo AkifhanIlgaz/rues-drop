@@ -6,15 +6,26 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-const StatusFinished = "Finished"
-const StatusInProgress = "In Progress"
+type ActionType string
+
+const (
+	ActionDone     ActionType = "Done"
+	ActionBookmark ActionType = "Bookmark"
+)
+
+type Status string
+
+const (
+	StatusFinished   Status = "Finished"
+	StatusInProgress Status = "In Progress"
+)
 
 type Task struct {
 	Id          primitive.ObjectID `json:"id" bson:"_id,omitempty"`
 	ProjectId   primitive.ObjectID `json:"projectId" bson:"projectId"`
 	Description string             `json:"description"`
 	URL         string             `json:"url"`
-	Status      string             `json:"status"`
+	Status      Status             `json:"status"`
 	CreatedAt   time.Time          `json:"createdAt"`
 }
 
@@ -28,6 +39,13 @@ type TaskToEdit struct {
 	TaskId      string `json:"-"`
 	Description string `json:"description,omitempty"`
 	URL         string `json:"url,omitempty"`
+}
+
+type TaskAction struct {
+	TaskId     primitive.ObjectID `json:"taskId" bson:"taskId"`
+	UserId     string             `json:"userId" bson:"userId"`
+	ActionType ActionType         `json:"actionType" bson:"actionType"`
+	Info       string             `json:"info" bson:"info"`
 }
 
 func (t TaskToAdd) ConvertToTask() Task {

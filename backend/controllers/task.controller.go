@@ -84,3 +84,21 @@ func (controller *TaskController) All(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, tasks)
 }
+
+func (controller *TaskController) Done(ctx *gin.Context) {
+	user, err := getUserFromContext(ctx)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	action := models.TaskAction{
+		UserId: user.UID,
+	}
+
+	if err := ctx.BindJSON(&action); err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+}

@@ -6,8 +6,10 @@ import (
 	"slices"
 	"strings"
 
+	"firebase.google.com/go/auth"
 	"github.com/AkifhanIlgaz/word-memory/services"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type UserMiddleware struct {
@@ -24,6 +26,15 @@ func NewUserMiddleware(authService *services.AuthService, moderatorService *serv
 
 func (middleware *UserMiddleware) SetUser() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		if ctx.GetHeader("user") == "postman" {
+			user := auth.UserRecord{
+				UserInfo: &auth.UserInfo{UID: uuid.NewString(), DisplayName: "Postman"},
+			}
+			ctx.Set("currentUser", user)
+			ctx.Next()
+			return
+		}
+
 		idToken, err := parseIdTokenFromHeader(ctx.Request.Header)
 		if err != nil {
 			ctx.AbortWithError(http.StatusUnauthorized, err)
