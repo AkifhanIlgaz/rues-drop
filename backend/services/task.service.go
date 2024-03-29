@@ -82,6 +82,7 @@ func (service *TaskService) Finish(taskId string) error {
 func (service *TaskService) Action(action models.TaskAction) error {
 	var err error
 
+	// ? It can be done by using 2 functions ( add & remove )
 	switch action.Type {
 	case models.ActionDone:
 		err = service.done(action)
@@ -113,7 +114,8 @@ func (service *TaskService) done(action models.TaskAction) error {
 
 func (service *TaskService) undo(action models.TaskAction) error {
 	filter := bson.M{
-		"_id": action.Id,
+		"_id":    action.Id,
+		"userId": action.UserId,
 	}
 
 	res, err := service.actionsCollection.DeleteOne(service.ctx, filter)
@@ -129,11 +131,30 @@ func (service *TaskService) undo(action models.TaskAction) error {
 }
 
 func (service *TaskService) bookmark(action models.TaskAction) error {
-	panic("Implement")
+	_, err := service.actionsCollection.InsertOne(service.ctx, action)
+	if err != nil {
+		return fmt.Errorf("bookmark: %w", err)
+	}
+
+	return nil
 }
 
 func (service *TaskService) removeBookmark(action models.TaskAction) error {
-	panic("Implement")
+	filter := bson.M{
+		"_id":    action.Id,
+		"userId": action.UserId,
+	}
+
+	res, err := service.actionsCollection.DeleteOne(service.ctx, filter)
+	if err != nil {
+		return fmt.Errorf("remove bookmark: %w", err)
+	}
+
+	if res.DeletedCount == 0 {
+		return fmt.Errorf("cannot found action: %v", action.Id)
+	}
+
+	return nil
 }
 
 func (service *TaskService) Edit(taskToEdit models.TaskToEdit) error {
