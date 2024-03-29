@@ -85,7 +85,7 @@ func (controller *TaskController) All(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, tasks)
 }
 
-func (controller *TaskController) Done(ctx *gin.Context) {
+func (controller *TaskController) Action(ctx *gin.Context) {
 	user, err := getUserFromContext(ctx)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusUnauthorized)
@@ -101,4 +101,9 @@ func (controller *TaskController) Done(ctx *gin.Context) {
 		return
 	}
 
+	err = controller.taskService.Action(action)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
 }
