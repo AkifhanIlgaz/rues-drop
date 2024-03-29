@@ -101,8 +101,6 @@ func (controller *TaskController) Action(ctx *gin.Context) {
 		return
 	}
 
-	// TODO: Check if user owns the action that is interacting
-
 	err = controller.taskService.Action(action)
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
