@@ -1,8 +1,8 @@
-import api from '@/config/api'
-
+import { BookmarkIcon } from '@/components/icons/bookmark'
 import { CheckIcon } from '@/components/icons/check'
+import api from '@/config/api'
 import { auth } from '@/lib/firebase'
-import { Button, Chip, Link, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
+import { Chip, Link, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import axios from 'axios'
 import { useCallback } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -44,7 +44,18 @@ export default function Tasks({ projectId }) {
 	const finishTask = async taskId => {
 		try {
 			const idToken = await user.getIdToken(true)
-			const res = await axios.put(`${api.finishTask}/${taskId}`, undefined, { headers: { Authorization: `Bearer ${idToken}` } })
+			const res = await axios.post(api.action, { taskId, type: 'Done' }, { headers: { Authorization: `Bearer ${idToken}` } })
+
+			console.log(res)
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	const bookmarkTask = async taskId => {
+		try {
+			const idToken = await user.getIdToken(true)
+			const res = await axios.post(api.action, { taskId, type: 'Bookmark' }, { headers: { Authorization: `Bearer ${idToken}` } })
 
 			console.log(res)
 		} catch (error) {
@@ -73,12 +84,12 @@ export default function Tasks({ projectId }) {
 				return date.toLocaleDateString('tr-TR')
 			case 'actions':
 				return (
-					<div className="relative flex items-center justify-center ">
-						<Chip as={Button} variant="shadow" color="success" onClick={() => finishTask(task.id)}>
-							<div className="flex text-white">
-								<CheckIcon />
-								Finish Task
-							</div>
+					<div className="flex items-center justify-center gap-2 ">
+						<Chip size="sm" variant="shadow" startContent={<CheckIcon className="w-4 h-4 " />} color="warning" className="cursor-pointer text-white" onClick={() => finishTask(task.id)}>
+							Done
+						</Chip>
+						<Chip size="sm" variant="shadow" startContent={<BookmarkIcon className="w-4 h-4" />} color="primary" className="cursor-pointer" onClick={() => bookmarkTask(task.id)}>
+							Save
 						</Chip>
 					</div>
 				)

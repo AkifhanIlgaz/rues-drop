@@ -96,3 +96,4 @@ export const DeleteIcon = ({ size = 24, width, height, ...props }) => {
 		</svg>
 	)
 }
+

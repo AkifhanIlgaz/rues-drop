@@ -11,7 +11,7 @@ export default function AdminRoute({ children }) {
 
 	useEffect(() => {
 		user.getIdTokenResult(true).then(res => {
-			if (res.claims.role !== 'admin' || res.claims.projects.length === 0) {
+			if (!['moderator', 'admin'].includes(res.claims.role)) {
 				router.push('/')
 			}
 		})

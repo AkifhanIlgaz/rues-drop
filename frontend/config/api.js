@@ -11,7 +11,8 @@ const api = {
 	deleteModerator: baseUrl + '/moderators/delete',
 	addTask: baseUrl + '/tasks/add',
 	tasks: baseUrl + '/tasks',
-	finishTask: baseUrl + '/tasks/finish'
+	finishTask: baseUrl + '/tasks/finish',
+	action: baseUrl + '/tasks/action'
 }
 
 export default api
