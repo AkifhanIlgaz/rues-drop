@@ -29,6 +29,8 @@ func (controller *ModeratorController) Create(ctx *gin.Context) {
 		return
 	}
 
+	// TODO: Must have at least 1 project
+
 	uid, err := controller.authService.CreateModerator(&moderatorToCreate)
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)

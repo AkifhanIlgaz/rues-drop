@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -40,7 +41,17 @@ func (controller *ProjectController) All(ctx *gin.Context) {
 		return
 	}
 
-	projects, err := controller.projectService.GetProjects(user.CustomClaims["role"], user.UID)
+	names := []string{}
+	if user.CustomClaims["role"] == "moderator" {
+		projects, ok := user.CustomClaims["projects"].([]string)
+		if !ok {
+			ctx.AbortWithError(http.StatusUnauthorized, errors.New("projects claim is not an array"))
+			return
+		}
+		names = append(names, projects...)
+	}
+
+	projects, err := controller.projectService.GetProjects(names...)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
@@ -52,13 +63,17 @@ func (controller *ProjectController) All(ctx *gin.Context) {
 func (controller *ProjectController) Project(ctx *gin.Context) {
 	projectName := ctx.Param("projectName")
 
-	project, err := controller.projectService.GetProjectByName(projectName)
+	project, err := controller.projectService.GetProjects(projectName)
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
+	if len(project) == 0 {
+		ctx.AbortWithError(http.StatusNotFound, fmt.Errorf("%v doesn't exist", projectName))
+		return
+	}
 
-	ctx.JSON(http.StatusOK, project)
+	ctx.JSON(http.StatusOK, project[0])
 }
 
 func (controller *ProjectController) Delete(ctx *gin.Context) {
