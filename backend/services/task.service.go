@@ -40,6 +40,7 @@ func (service *TaskService) Create(taskToAdd *models.TaskToAdd) error {
 }
 
 func (service *TaskService) Delete(taskId string) error {
+
 	id, err := primitive.ObjectIDFromHex(taskId)
 	if err != nil {
 		return fmt.Errorf("delete task: %w", err)

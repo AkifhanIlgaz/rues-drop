@@ -97,6 +97,7 @@ func (controller *TaskController) Action(ctx *gin.Context) {
 	}
 
 	if err := ctx.BindJSON(&action); err != nil {
+		fmt.Println(err)
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}

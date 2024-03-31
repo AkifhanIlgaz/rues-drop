@@ -40,13 +40,23 @@ func createModerators() {
 }
 
 func createMod(mod *models.Moderator) error {
+	var user *auth.UserRecord
+	var err error
+	
 	newUser := &auth.UserToCreate{}
 	// TODO: Update password
 	newUser.Email(mod.Username + "@gmail.com").Password("123456789")
 
-	user, err := authentication.CreateUser(context.Background(), newUser)
+	user, err = authentication.CreateUser(context.Background(), newUser)
 	if err != nil {
-		return fmt.Errorf("create : %w", err)
+		if auth.IsEmailAlreadyExists(err) {
+			user, err = authentication.GetUserByEmail(context.Background(), mod.Username+"@gmail.com")
+			if err != nil {
+				return fmt.Errorf("create : %w", err)
+			}
+		} else {
+			return fmt.Errorf("create : %w", err)
+		}
 	}
 
 	updateUser := &auth.UserToUpdate{}

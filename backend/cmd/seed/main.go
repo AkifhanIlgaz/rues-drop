@@ -24,7 +24,12 @@ func main() {
 	if err != nil {
 		log.Fatal("Could not connect to mongo: ", err)
 	}
+
 	db = mongoClient.Database("rues-drop")
+	err = db.Drop(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	firebaseApp, err := connect.Firebase(ctx, config)
 	if err != nil {
@@ -40,6 +45,5 @@ func main() {
 	createProjects()
 	createTasks()
 	createModerators()
+	addActions()
 }
-
-
