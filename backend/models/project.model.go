@@ -5,7 +5,7 @@ import (
 )
 
 type Project struct {
-	Name      string    `json:"projectName" bson:"name"`
+	Name      string    `json:"projectName" bson:"-"`
 	Website   string    `json:"website"`
 	Discord   string    `json:"discord"`
 	Twitter   string    `json:"twitter"`

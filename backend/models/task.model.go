@@ -22,9 +22,11 @@ const (
 	StatusInProgress Status = "In Progress"
 )
 
+// ? Do I need projectName on Task struct
+
 type Task struct {
 	Id          primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	ProjectId   primitive.ObjectID `json:"projectId" bson:"projectId"`
+	ProjectName string             `json:"projectName" bson:"-"`
 	Description string             `json:"description"`
 	URL         string             `json:"url"`
 	Status      Status             `json:"status"`
@@ -32,7 +34,7 @@ type Task struct {
 }
 
 type TaskToAdd struct {
-	ProjectId   primitive.ObjectID `json:"projectId"`
+	ProjectName primitive.ObjectID `json:"projectName"`
 	Description string             `json:"description" binding:"required"`
 	URL         string             `json:"url" binding:"required"`
 }
@@ -53,7 +55,6 @@ type TaskAction struct {
 
 func (t TaskToAdd) ConvertToTask() Task {
 	return Task{
-		ProjectId:   t.ProjectId,
 		Description: t.Description,
 		URL:         t.URL,
 		Status:      StatusInProgress,

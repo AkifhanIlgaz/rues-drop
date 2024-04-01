@@ -12,6 +12,7 @@ import (
 
 var db *mongo.Database
 var authentication *auth.Client
+var client *mongo.Client
 
 func main() {
 	config, err := cfg.LoadConfig(".")
@@ -20,12 +21,12 @@ func main() {
 	}
 
 	ctx := context.TODO()
-	mongoClient, err := connect.Mongo(ctx, config)
+	client, err = connect.Mongo(ctx, config)
 	if err != nil {
 		log.Fatal("Could not connect to mongo: ", err)
 	}
 
-	db = mongoClient.Database("rues-drop")
+	db = client.Database("rues-drop")
 	err = db.Drop(ctx)
 	if err != nil {
 		log.Fatal(err)
@@ -40,7 +41,7 @@ func main() {
 		log.Fatal("new auth service: %w", err)
 	}
 
-	defer mongoClient.Disconnect(ctx)
+	defer client.Disconnect(ctx)
 
 	createProjects()
 	createTasks()

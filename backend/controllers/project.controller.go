@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"firebase.google.com/go/auth"
 	"github.com/AkifhanIlgaz/word-memory/models"
@@ -27,6 +28,8 @@ func (controller *ProjectController) Add(ctx *gin.Context) {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
+
+	// TODO: Serialize project name
 
 	if err := controller.projectService.Create(&project); err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
@@ -114,4 +117,8 @@ func getUserFromContext(ctx *gin.Context) (*auth.UserRecord, error) {
 	}
 
 	return user, nil
+}
+
+func serializeName(name string) string {
+	return strings.Join(strings.Fields(name), "-")
 }

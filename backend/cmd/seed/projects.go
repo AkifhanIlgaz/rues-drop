@@ -2,16 +2,16 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/AkifhanIlgaz/word-memory/models"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var (
 	dymension = models.Project{
-		Id:        primitive.NewObjectID(),
 		Name:      "Dymension",
 		Website:   "https://dymension.xyz/",
 		Discord:   "https://discord.com/invite/dymension",
@@ -20,8 +20,7 @@ var (
 		CreatedAt: time.Now(),
 	}
 	lava = models.Project{
-		Id:        primitive.NewObjectID(),
-		Name:      "Lava Network",
+		Name:      "Lava-Network",
 		Website:   "https://www.lavanet.xyz/",
 		Discord:   "https://discord.com/invite/Tbk5NxTCdA",
 		Twitter:   "https://twitter.com/lavanetxyz",
@@ -29,7 +28,6 @@ var (
 		CreatedAt: time.Now(),
 	}
 	hyperlane = models.Project{
-		Id:        primitive.NewObjectID(),
 		Name:      "Hyperlane",
 		Website:   "https://www.hyperlane.xyz/",
 		Discord:   "http://discord.gg/hyperlane",
@@ -40,10 +38,21 @@ var (
 )
 
 func createProjects() {
-	collection := db.Collection("projects")
+	for _, project := range []models.Project{dymension, lava, hyperlane} {
 
-	_, err := collection.InsertMany(context.Background(), []any{dymension, lava, hyperlane})
-	if err != nil {
-		log.Fatal(err)
+		err := client.Database(project.Name).Drop(context.TODO())
+		if err != nil {
+			fmt.Println(err)
+			log.Fatal("cannot drop: ", project.Name)
+		}
+
+		_, err = client.Database(project.Name).Collection("info").InsertOne(context.TODO(), project)
+		if err != nil {
+			log.Fatal("cannot insert info for:", project.Name)
+		}
 	}
+}
+
+func serializeName(name string) string {
+	return strings.Join(strings.Fields(name), "-")
 }
