@@ -38,7 +38,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	projectService := services.NewProjectService(ctx, db)
+	projectService := services.NewProjectService(ctx, mongoClient)
 	moderatorService := services.NewModeratorService(ctx, db)
 	taskService := services.NewTaskService(ctx, db)
 
