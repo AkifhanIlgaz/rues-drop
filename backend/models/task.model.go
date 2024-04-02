@@ -46,15 +46,16 @@ type TaskToEdit struct {
 
 type TaskAction struct {
 	Id          primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	TaskId      primitive.ObjectID `json:"taskId" bson:"taskId"`
-	UserId      string             `json:"userId" bson:"-"`
-	ProjectName string             `json:"projectName" bson:"-"`
-	Type        ActionType         `json:"type" bson:"type"`
+	TaskId      primitive.ObjectID `json:"taskId" bson:"taskId" binding:"required"`
+	UserId      string             `json:"userId" bson:"-" binding:"required"`
+	ProjectName string             `json:"projectName" bson:"-" binding:"required"`
+	Type        ActionType         `json:"type" bson:"type" binding:"required"`
 	Info        string             `json:"info" bson:"info"`
 }
 
 func (t TaskToAdd) ConvertToTask() Task {
 	return Task{
+		ProjectName: t.ProjectName,
 		Description: t.Description,
 		URL:         t.URL,
 		Status:      StatusInProgress,

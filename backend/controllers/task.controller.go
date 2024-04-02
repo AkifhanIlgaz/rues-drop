@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/AkifhanIlgaz/word-memory/models"
@@ -23,9 +24,12 @@ func (controller *TaskController) Add(ctx *gin.Context) {
 	var taskToAdd models.TaskToAdd
 
 	if err := ctx.BindJSON(&taskToAdd); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
+
+	taskToAdd.ProjectName = serializeDbName(taskToAdd.ProjectName)
 
 	err := controller.taskService.Create(&taskToAdd)
 	if err != nil {
@@ -34,10 +38,9 @@ func (controller *TaskController) Add(ctx *gin.Context) {
 	}
 }
 
-// TODO: Get projectName from param or query
 func (controller *TaskController) Delete(ctx *gin.Context) {
 	taskId := ctx.Param("taskId")
-	project := ctx.Query("project")
+	project := ctx.Query("projectName")
 
 	err := controller.taskService.Delete(taskId, project)
 	if err != nil {
@@ -47,10 +50,9 @@ func (controller *TaskController) Delete(ctx *gin.Context) {
 	}
 }
 
-// TODO: Get projectName from param or query
 func (controller *TaskController) Finish(ctx *gin.Context) {
 	taskId := ctx.Param("taskId")
-	project := ctx.Query("project")
+	project := ctx.Query("projectName")
 
 	err := controller.taskService.Finish(taskId, project)
 	if err != nil {
@@ -62,7 +64,8 @@ func (controller *TaskController) Finish(ctx *gin.Context) {
 
 func (controller *TaskController) Edit(ctx *gin.Context) {
 	taskToEdit := models.TaskToEdit{
-		TaskId: ctx.Param("taskId"),
+		TaskId:      ctx.Param("taskId"),
+		ProjectName: serializeDbName(ctx.Query("projectName")),
 	}
 	if err := ctx.BindJSON(&taskToEdit); err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
@@ -78,9 +81,9 @@ func (controller *TaskController) Edit(ctx *gin.Context) {
 }
 
 func (controller *TaskController) All(ctx *gin.Context) {
-	projectId := ctx.Param("projectId")
+	projectName := ctx.Param("projectName")
 
-	tasks, err := controller.taskService.GetTasks(projectId)
+	tasks, err := controller.taskService.GetTasks(projectName)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return

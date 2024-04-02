@@ -159,7 +159,7 @@ func (service *TaskService) Edit(taskToEdit models.TaskToEdit) error {
 	tasks := service.client.Database(taskToEdit.ProjectName).Collection(collectionTasks)
 
 	if err := tasks.FindOneAndUpdate(service.ctx, filter, edit).Err(); err != nil {
-		return fmt.Errorf("delete task: %w", err)
+		return fmt.Errorf("edit task: %w", err)
 
 	}
 

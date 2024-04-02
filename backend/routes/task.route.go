@@ -23,7 +23,7 @@ func (routeController *TaskRouteController) Setup(rg *gin.RouterGroup) {
 	// TODO: Get projectName from param or query
 	public := router.Group("/")
 	{
-		public.GET("/:projectId", routeController.taskController.All)
+		public.GET("/:projectName", routeController.taskController.All)
 		public.POST("/action", routeController.taskController.Action)
 	}
 

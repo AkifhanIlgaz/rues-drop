@@ -62,6 +62,17 @@ func (middleware *UserMiddleware) SetUser() gin.HandlerFunc {
 
 func (middleware *UserMiddleware) HasAccess() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		user, err := getUserFromContext(ctx)
+		if err != nil {
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+
+		if user.CustomClaims["role"] == "admin" {
+			ctx.Next()
+			return
+		}
+
 		var project string
 
 		if project = ctx.Param("projectName"); len(project) == 0 {
@@ -72,17 +83,7 @@ func (middleware *UserMiddleware) HasAccess() gin.HandlerFunc {
 			return
 		}
 
-		user, err := getUserFromContext(ctx)
-		if err != nil {
-			ctx.AbortWithStatus(http.StatusUnauthorized)
-			return
-		}
-
-		switch user.CustomClaims["role"] {
-		case "admin":
-			ctx.Next()
-			return
-		case "moderator":
+		if user.CustomClaims["role"] == "moderator" {
 			projects, ok := user.CustomClaims["projects"].([]string)
 			if !ok {
 				ctx.AbortWithStatus(http.StatusUnauthorized)
