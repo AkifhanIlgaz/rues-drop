@@ -48,9 +48,10 @@ type TaskToEdit struct {
 type TaskAction struct {
 	Id     primitive.ObjectID `json:"id" bson:"_id,omitempty"`
 	TaskId primitive.ObjectID `json:"taskId" bson:"taskId"`
-	UserId string             `json:"userId" bson:"userId"`
-	Type   ActionType         `json:"type" bson:"type"`
-	Info   string             `json:"info" bson:"info"`
+	// TODO: Remove userid
+	UserId string     `json:"userId" bson:"userId"`
+	Type   ActionType `json:"type" bson:"type"`
+	Info   string     `json:"info" bson:"info"`
 }
 
 func (t TaskToAdd) ConvertToTask() Task {

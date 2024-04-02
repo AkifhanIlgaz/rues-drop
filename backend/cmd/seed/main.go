@@ -15,6 +15,7 @@ var authentication *auth.Client
 var client *mongo.Client
 
 func main() {
+
 	config, err := cfg.LoadConfig(".")
 	if err != nil {
 		log.Fatal("Could not read environment variables", err)

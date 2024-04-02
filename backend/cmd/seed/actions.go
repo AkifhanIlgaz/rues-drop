@@ -2,70 +2,92 @@ package main
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"log"
 
 	"github.com/AkifhanIlgaz/word-memory/models"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-var actions = []any{
-	models.TaskAction{
+var dymensionActions = []models.TaskAction{
+	{
 		TaskId: validObjectId("660330aa29c550b32bc3e7fc"),
-		UserId: user.uid,
 		Type:   "Done",
 		Info:   "Deployed Rollapp",
 	},
-	models.TaskAction{
+	{
 		TaskId: validObjectId("660330aa29c550b32bc3e7fc"),
-		UserId: user.uid,
 		Type:   "Bookmark",
 	},
-	models.TaskAction{
+	{
 		TaskId: validObjectId("660330aa29c550b32bc3e7fd"),
-		UserId: user.uid,
 		Type:   "Bookmark",
 		Info:   "Staked 1000 DYM on 8 wallets",
 	},
-	models.TaskAction{
+}
+
+var lavaActions = []models.TaskAction{
+	{
 		TaskId: validObjectId("660330aa29c550b32bc3e7fe"),
-		UserId: user.uid,
 		Type:   "Done",
 		Info:   "Sender Wallet Script",
 	},
-	models.TaskAction{
+	{
 		TaskId: validObjectId("660330aa29c550b32bc3e7ff"),
-		UserId: user.uid,
 		Type:   "Done",
 		Info:   "Squid router used",
 	},
-	models.TaskAction{
+}
+
+var hyperlaneActions = []models.TaskAction{
+	{
 		TaskId: validObjectId("660330aa29c550b32bc3e800"),
-		UserId: user.uid,
 		Type:   "Bookmark",
 	},
-	models.TaskAction{
+	{
 		TaskId: validObjectId("660330aa29c550b32bc3e801"),
-		UserId: user.uid,
 		Type:   "Bookmark",
 	},
-	models.TaskAction{
+	{
 		TaskId: validObjectId("660330aa29c550b32bc3e800"),
-		UserId: user.uid,
 		Type:   "Done",
 		Info:   "10 TIA Bridged",
 	},
-	models.TaskAction{
+	{
 		TaskId: validObjectId("660330aa29c550b32bc3e801"),
-		UserId: user.uid,
 		Type:   "Done",
 		Info:   "Used 5 different chains as source",
 	},
 }
 
 func addActions() {
-	collection := db.Collection("actions")
+	addActionsForProject("Dymension", dymensionActions)
+	addActionsForProject("Lava-Network", lavaActions)
+	addActionsForProject("Hyperlane", hyperlaneActions)
+}
 
-	_, err := collection.InsertMany(context.Background(), actions)
+func addActionsForProject(name string, actions []models.TaskAction) {
+	collection := client.Database(name).Collection("actions")
+
+	_, err := collection.InsertOne(context.Background(), bson.M{
+		"_id":     uidToObjId(user.uid, name),
+		"actions": actions,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func uidToObjId(uid string, project string) primitive.ObjectID {
+	h := sha256.Sum256([]byte(uid + project))
+	hash := hex.EncodeToString(h[:])
+
+	id, err := primitive.ObjectIDFromHex(hash[:24])
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return id
 }

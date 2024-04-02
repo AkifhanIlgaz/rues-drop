@@ -15,17 +15,17 @@ var (
 		{
 			Id:       primitive.NewObjectID(),
 			Username: "Enayi",
-			Projects: []string{"Dymension", "Lava Network"},
+			Projects: []string{"Dymension", "Lava-Network"},
 		},
 		{
 			Id:       primitive.NewObjectID(),
 			Username: "Bakkalgazi",
-			Projects: []string{"Lava Network", "Hyperlane"},
+			Projects: []string{"Lava-Network", "Hyperlane"},
 		},
 		{
 			Id:       primitive.NewObjectID(),
 			Username: "Rahil",
-			Projects: []string{"Dymension", "Lava Network", "Hyperlane"},
+			Projects: []string{"Dymension", "Lava-Network", "Hyperlane"},
 		},
 	}
 )
@@ -40,9 +40,11 @@ func createModerators() {
 }
 
 func createMod(mod *models.Moderator) error {
+	coll := client.Database("auth").Collection("moderators")
+
 	var user *auth.UserRecord
 	var err error
-	
+
 	newUser := &auth.UserToCreate{}
 	// TODO: Update password
 	newUser.Email(mod.Username + "@gmail.com").Password("123456789")
@@ -71,9 +73,7 @@ func createMod(mod *models.Moderator) error {
 	}
 	mod.Uid = user.UID
 
-	collection := db.Collection("moderators")
-
-	_, err = collection.InsertOne(context.TODO(), mod)
+	_, err = coll.InsertOne(context.TODO(), mod)
 	if err != nil {
 		return fmt.Errorf("create moderator: %w", err)
 	}
