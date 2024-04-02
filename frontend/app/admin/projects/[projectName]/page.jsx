@@ -9,6 +9,7 @@ import ModeratorsTable from '@/components/tables/admin/moderatorsTable'
 import { adminBreadcrumbs } from '@/config/links'
 import { BriefcaseIcon, InformationCircleIcon, UserGroupIcon } from '@heroicons/react/24/outline'
 import { Avatar, Button, Tab, Tabs } from '@nextui-org/react'
+import axios from 'axios'
 import { usePathname } from 'next/navigation'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import useSWR from 'swr'
@@ -29,7 +30,7 @@ export default function Page() {
 		try {
 			const idToken = await user.getIdToken(true)
 
-			await axios.delete(api.projects + `/${projectName}`, {
+			const res = await axios.delete(api.projects + `/${projectName}`, {
 				headers: {
 					Authorization: `Bearer ${idToken}`
 				}

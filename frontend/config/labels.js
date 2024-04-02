@@ -6,7 +6,7 @@ export const label = {
 	name: { title: 'Name', key: 'name' },
 	phone: { title: 'Phone', key: 'phone' },
 	email: { title: 'E-mail', key: 'email' },
-	projectName: { title: 'Project Name', key: 'projectName' },
+	projectName: { title: 'Name', key: 'name' },
 	website: { title: 'Website', key: 'website' },
 	discord: { title: 'Discord', key: 'discord' },
 	twitter: { title: 'Twitter', key: 'twitter' },
