@@ -34,10 +34,12 @@ func (controller *TaskController) Add(ctx *gin.Context) {
 	}
 }
 
+// TODO: Get projectName from param or query
 func (controller *TaskController) Delete(ctx *gin.Context) {
 	taskId := ctx.Param("taskId")
+	project := ctx.Query("project")
 
-	err := controller.taskService.Delete(taskId)
+	err := controller.taskService.Delete(taskId, project)
 	if err != nil {
 		fmt.Println(err)
 		ctx.AbortWithError(http.StatusInternalServerError, err)
@@ -45,10 +47,12 @@ func (controller *TaskController) Delete(ctx *gin.Context) {
 	}
 }
 
+// TODO: Get projectName from param or query
 func (controller *TaskController) Finish(ctx *gin.Context) {
 	taskId := ctx.Param("taskId")
+	project := ctx.Query("project")
 
-	err := controller.taskService.Finish(taskId)
+	err := controller.taskService.Finish(taskId, project)
 	if err != nil {
 		fmt.Println(err)
 		ctx.AbortWithError(http.StatusInternalServerError, err)

@@ -2,8 +2,11 @@ package services
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/AkifhanIlgaz/word-memory/models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -14,24 +17,26 @@ import (
 const tasksCollection = "tasks"
 const actionsCollection = "actions"
 
+// TODO: Create helper functions to get database and collections for project
+
 type TaskService struct {
-	collection        *mongo.Collection
-	actionsCollection *mongo.Collection
-	ctx               context.Context
+	client *mongo.Client
+	ctx    context.Context
 }
 
-func NewTaskService(ctx context.Context, db *mongo.Database) *TaskService {
+func NewTaskService(ctx context.Context, client *mongo.Client) *TaskService {
 	return &TaskService{
-		collection:        db.Collection(tasksCollection),
-		actionsCollection: db.Collection(actionsCollection),
-		ctx:               ctx,
+		client: client,
+		ctx:    ctx,
 	}
 }
 
 func (service *TaskService) Create(taskToAdd *models.TaskToAdd) error {
 	task := taskToAdd.ConvertToTask()
 
-	_, err := service.collection.InsertOne(service.ctx, task)
+	tasks := service.client.Database(task.ProjectName).Collection(collectionTasks)
+
+	_, err := tasks.InsertOne(service.ctx, task)
 	if err != nil {
 		return fmt.Errorf("create task: %w", err)
 	}
@@ -39,8 +44,7 @@ func (service *TaskService) Create(taskToAdd *models.TaskToAdd) error {
 	return nil
 }
 
-func (service *TaskService) Delete(taskId string) error {
-
+func (service *TaskService) Delete(taskId string, project string) error {
 	id, err := primitive.ObjectIDFromHex(taskId)
 	if err != nil {
 		return fmt.Errorf("delete task: %w", err)
@@ -50,7 +54,9 @@ func (service *TaskService) Delete(taskId string) error {
 		"_id": id,
 	}
 
-	_, err = service.collection.DeleteOne(service.ctx, filter)
+	tasks := service.client.Database(project).Collection(collectionTasks)
+
+	_, err = tasks.DeleteOne(service.ctx, filter)
 	if err != nil {
 		return fmt.Errorf("delete task: %w", err)
 	}
@@ -58,7 +64,7 @@ func (service *TaskService) Delete(taskId string) error {
 	return nil
 }
 
-func (service *TaskService) Finish(taskId string) error {
+func (service *TaskService) Finish(taskId string, project string) error {
 	id, err := primitive.ObjectIDFromHex(taskId)
 	if err != nil {
 		return fmt.Errorf("delete task: %w", err)
@@ -68,7 +74,9 @@ func (service *TaskService) Finish(taskId string) error {
 		"_id": id,
 	}
 
-	err = service.collection.FindOneAndUpdate(service.ctx, filter, bson.M{
+	tasks := service.client.Database(project).Collection(collectionTasks)
+
+	err = tasks.FindOneAndUpdate(service.ctx, filter, bson.M{
 		"$set": bson.M{
 			"status": models.StatusFinished,
 		},
@@ -83,16 +91,11 @@ func (service *TaskService) Finish(taskId string) error {
 func (service *TaskService) Action(action models.TaskAction) error {
 	var err error
 
-	// ? It can be done by using 2 functions ( add & remove )
 	switch action.Type {
-	case models.ActionDone:
-		err = service.done(action)
-	case models.ActionUndo:
-		err = service.undo(action)
-	case models.ActionBookmark:
-		err = service.bookmark(action)
-	case models.ActionRemoveBookmark:
-		err = service.removeBookmark(action)
+	case models.ActionDone, models.ActionBookmark:
+		err = service.insert(action)
+	case models.ActionUndo, models.ActionRemoveBookmark:
+		err = service.remove(action)
 	default:
 		err = errors.New("unknown action type")
 	}
@@ -104,54 +107,33 @@ func (service *TaskService) Action(action models.TaskAction) error {
 	return err
 }
 
-func (service *TaskService) done(action models.TaskAction) error {
-	_, err := service.actionsCollection.InsertOne(service.ctx, action)
+func (service *TaskService) insert(action models.TaskAction) error {
+	id := uidToObjId(action.UserId, action.ProjectName)
+	update := bson.M{"$push": bson.M{"actions": action}}
+
+	actions := service.client.Database(action.ProjectName).Collection(collectionActions)
+	_, err := actions.UpdateByID(service.ctx, id, update)
 	if err != nil {
-		return fmt.Errorf("done: %w", err)
+		return fmt.Errorf("insert action: %w", err)
 	}
 
 	return nil
 }
 
-func (service *TaskService) undo(action models.TaskAction) error {
-	filter := bson.M{
-		"_id":    action.Id,
-		"userId": action.UserId,
-	}
+func (service *TaskService) remove(action models.TaskAction) error {
+	id := uidToObjId(action.UserId, action.ProjectName)
+	update := bson.M{"$pull": bson.M{
+		"taskId": action.TaskId,
+		"type":   action.Type,
+	}}
 
-	res, err := service.actionsCollection.DeleteOne(service.ctx, filter)
+	actions := service.client.Database(action.ProjectName).Collection(collectionActions)
+	res, err := actions.UpdateByID(service.ctx, id, update)
 	if err != nil {
 		return fmt.Errorf("undo: %w", err)
 	}
 
-	if res.DeletedCount == 0 {
-		return fmt.Errorf("cannot found action: %v", action.Id)
-	}
-
-	return nil
-}
-
-func (service *TaskService) bookmark(action models.TaskAction) error {
-	_, err := service.actionsCollection.InsertOne(service.ctx, action)
-	if err != nil {
-		return fmt.Errorf("bookmark: %w", err)
-	}
-
-	return nil
-}
-
-func (service *TaskService) removeBookmark(action models.TaskAction) error {
-	filter := bson.M{
-		"_id":    action.Id,
-		"userId": action.UserId,
-	}
-
-	res, err := service.actionsCollection.DeleteOne(service.ctx, filter)
-	if err != nil {
-		return fmt.Errorf("remove bookmark: %w", err)
-	}
-
-	if res.DeletedCount == 0 {
+	if res.ModifiedCount == 0 {
 		return fmt.Errorf("cannot found action: %v", action.Id)
 	}
 
@@ -174,7 +156,9 @@ func (service *TaskService) Edit(taskToEdit models.TaskToEdit) error {
 		},
 	}
 
-	if err := service.collection.FindOneAndUpdate(service.ctx, filter, edit).Err(); err != nil {
+	tasks := service.client.Database(taskToEdit.ProjectName).Collection(collectionTasks)
+
+	if err := tasks.FindOneAndUpdate(service.ctx, filter, edit).Err(); err != nil {
 		return fmt.Errorf("delete task: %w", err)
 
 	}
@@ -182,16 +166,10 @@ func (service *TaskService) Edit(taskToEdit models.TaskToEdit) error {
 	return nil
 }
 
-func (service *TaskService) GetTasks(projectId string) ([]models.Task, error) {
-	id, err := primitive.ObjectIDFromHex(projectId)
-	if err != nil {
-		return nil, fmt.Errorf("get all tasks: %w", err)
-	}
+func (service *TaskService) GetTasks(projectName string) ([]models.Task, error) {
+	tasksColl := service.client.Database(projectName).Collection(collectionTasks)
 
-	filter := bson.M{
-		"projectId": id,
-	}
-	cur, err := service.collection.Find(service.ctx, filter)
+	cur, err := tasksColl.Find(service.ctx, bson.M{})
 	if err != nil {
 		return nil, fmt.Errorf("get all tasks: %w", err)
 	}
@@ -202,4 +180,16 @@ func (service *TaskService) GetTasks(projectId string) ([]models.Task, error) {
 	}
 
 	return tasks, nil
+}
+
+func uidToObjId(uid string, project string) primitive.ObjectID {
+	h := sha256.Sum256([]byte(uid + project))
+	hash := hex.EncodeToString(h[:])
+
+	id, err := primitive.ObjectIDFromHex(hash[:24])
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return id
 }

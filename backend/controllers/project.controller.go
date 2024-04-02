@@ -3,6 +3,7 @@ package controllers
 import (
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -28,8 +29,7 @@ func (controller *ProjectController) Add(ctx *gin.Context) {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
-
-	// TODO: Serialize project name
+	project.Name = serializeDbName(project.Name)
 
 	if err := controller.projectService.Create(&project); err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
@@ -56,6 +56,7 @@ func (controller *ProjectController) All(ctx *gin.Context) {
 
 	projects, err := controller.projectService.GetProjects(names...)
 	if err != nil {
+		log.Println(err)
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
@@ -119,6 +120,6 @@ func getUserFromContext(ctx *gin.Context) (*auth.UserRecord, error) {
 	return user, nil
 }
 
-func serializeName(name string) string {
+func serializeDbName(name string) string {
 	return strings.Join(strings.Fields(name), "-")
 }

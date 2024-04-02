@@ -20,6 +20,7 @@ func NewTaskRouteController(taskController *controllers.TaskController, userMidd
 func (routeController *TaskRouteController) Setup(rg *gin.RouterGroup) {
 	router := rg.Group("/tasks")
 
+	// TODO: Get projectName from param or query
 	public := router.Group("/")
 	{
 		public.GET("/:projectId", routeController.taskController.All)

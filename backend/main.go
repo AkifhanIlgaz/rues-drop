@@ -40,7 +40,7 @@ func main() {
 	}
 	projectService := services.NewProjectService(ctx, mongoClient)
 	moderatorService := services.NewModeratorService(ctx, db)
-	taskService := services.NewTaskService(ctx, db)
+	taskService := services.NewTaskService(ctx, mongoClient)
 
 	projectController := controllers.NewProjectController(projectService)
 	moderatorController := controllers.NewModeratorController(authService, moderatorService)

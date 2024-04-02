@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"slices"
 
 	"github.com/AkifhanIlgaz/word-memory/models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -12,8 +13,7 @@ import (
 
 type ProjectService struct {
 	client *mongo.Client
-
-	ctx context.Context
+	ctx    context.Context
 }
 
 func NewProjectService(ctx context.Context, client *mongo.Client) *ProjectService {
@@ -49,12 +49,12 @@ func (service *ProjectService) GetProjects(names ...string) ([]models.Project, e
 		var p models.Project
 
 		info := service.client.Database(name).Collection(collectionInfo)
-
-		err := info.FindOne(service.ctx, bson.M{}).Decode(&p)
+		err = info.FindOne(service.ctx, bson.M{}).Decode(&p)
 		if err != nil {
 			err = errors.Join(err, fmt.Errorf("%v | ", name))
 			continue
 		}
+		p.Name = name
 
 		projects = append(projects, p)
 	}
@@ -107,5 +107,8 @@ func (service *ProjectService) projectNames() []string {
 		return []string{}
 	}
 
-	return result
+	return slices.DeleteFunc[[]string, string](result, func(s string) bool {
+		return slices.Contains(defaultDatabaseNames, s)
+	})
+
 }

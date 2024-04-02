@@ -22,8 +22,6 @@ const (
 	StatusInProgress Status = "In Progress"
 )
 
-// ? Do I need projectName on Task struct
-
 type Task struct {
 	Id          primitive.ObjectID `json:"id" bson:"_id,omitempty"`
 	ProjectName string             `json:"projectName" bson:"-"`
@@ -34,24 +32,25 @@ type Task struct {
 }
 
 type TaskToAdd struct {
-	ProjectName primitive.ObjectID `json:"projectName"`
-	Description string             `json:"description" binding:"required"`
-	URL         string             `json:"url" binding:"required"`
+	ProjectName string `json:"projectName"`
+	Description string `json:"description" binding:"required"`
+	URL         string `json:"url" binding:"required"`
 }
 
 type TaskToEdit struct {
 	TaskId      string `json:"-"`
+	ProjectName string `json:"projectName"`
 	Description string `json:"description,omitempty"`
 	URL         string `json:"url,omitempty"`
 }
 
 type TaskAction struct {
-	Id     primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	TaskId primitive.ObjectID `json:"taskId" bson:"taskId"`
-	// TODO: Remove userid
-	UserId string     `json:"userId" bson:"userId"`
-	Type   ActionType `json:"type" bson:"type"`
-	Info   string     `json:"info" bson:"info"`
+	Id          primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	TaskId      primitive.ObjectID `json:"taskId" bson:"taskId"`
+	UserId      string             `json:"userId" bson:"-"`
+	ProjectName string             `json:"projectName" bson:"-"`
+	Type        ActionType         `json:"type" bson:"type"`
+	Info        string             `json:"info" bson:"info"`
 }
 
 func (t TaskToAdd) ConvertToTask() Task {
