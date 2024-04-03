@@ -27,6 +27,7 @@ export default function Page() {
 	const [pending, setPending] = useState(false)
 
 	const onSubmit = async data => {
+		console.log(data)
 		if (setErrors(data)) {
 			return
 		}
@@ -47,7 +48,7 @@ export default function Page() {
 	const setErrors = data => {
 		let errorCount = 0
 
-		if (data.password !== data.passwordConfirm) {
+		if (data.password !== data.confirmPassword) {
 			setError('password', { type: 'validate' })
 			setError('passwordConfirm', { type: 'validate' })
 			errorCount++
