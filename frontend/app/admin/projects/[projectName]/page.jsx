@@ -30,7 +30,7 @@ export default function Page() {
 		try {
 			const idToken = await user.getIdToken(true)
 
-			const res = await axios.delete(api.projects + `/${projectName}`, {
+			await axios.delete(api.projects + `/${projectName}`, {
 				headers: {
 					Authorization: `Bearer ${idToken}`
 				}
@@ -73,7 +73,7 @@ export default function Page() {
 						</div>
 					}
 				>
-					<Tasks projectId={project.id} />
+					<Tasks projectName={project.name} />
 				</Tab>
 				<Tab
 					title={

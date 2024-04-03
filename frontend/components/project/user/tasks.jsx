@@ -6,7 +6,6 @@ import { Chip, Link, Table, TableBody, TableCell, TableColumn, TableHeader, Tabl
 import axios from 'axios'
 import { useCallback } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { useForm } from 'react-hook-form'
 import useSWR from 'swr'
 
 const columns = [
@@ -33,29 +32,13 @@ const statusColorMap = {
 	Finished: 'success'
 }
 
-export default function Tasks({ projectId }) {
+export default function Tasks({ projectName }) {
 	const [user] = useAuthState(auth)
-	const {
-		register,
-		handleSubmit,
-		formState: { errors }
-	} = useForm({})
 
-	const finishTask = async taskId => {
+	const action = async (taskId, type) => {
 		try {
 			const idToken = await user.getIdToken(true)
-			const res = await axios.post(api.action, { taskId, type: 'Done' }, { headers: { Authorization: `Bearer ${idToken}` } })
-
-			console.log(res)
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
-	const bookmarkTask = async taskId => {
-		try {
-			const idToken = await user.getIdToken(true)
-			const res = await axios.post(api.action, { taskId, type: 'Bookmark' }, { headers: { Authorization: `Bearer ${idToken}` } })
+			const res = await axios.post(api.action, { projectName, taskId, type }, { headers: { Authorization: `Bearer ${idToken}` } })
 
 			console.log(res)
 		} catch (error) {
@@ -85,10 +68,10 @@ export default function Tasks({ projectId }) {
 			case 'actions':
 				return (
 					<div className="flex items-center justify-center gap-2 ">
-						<Chip size="sm" variant="shadow" startContent={<CheckIcon className="w-4 h-4 " />} color="warning" className="cursor-pointer text-white" onClick={() => finishTask(task.id)}>
+						<Chip size="sm" variant="shadow" startContent={<CheckIcon className="w-4 h-4 " />} color="warning" className="cursor-pointer text-white" onClick={() => action(task.id, 'Done')}>
 							Done
 						</Chip>
-						<Chip size="sm" variant="shadow" startContent={<BookmarkIcon className="w-4 h-4" />} color="primary" className="cursor-pointer" onClick={() => bookmarkTask(task.id)}>
+						<Chip size="sm" variant="shadow" startContent={<BookmarkIcon className="w-4 h-4" />} color="primary" className="cursor-pointer" onClick={() => action(task.id, 'Bookmark')}>
 							Save
 						</Chip>
 					</div>
@@ -98,7 +81,7 @@ export default function Tasks({ projectId }) {
 		}
 	}, [])
 
-	const { data: tasks, isLoading } = useSWR(`${api.tasks}/${projectId}`)
+	const { data: tasks, isLoading } = useSWR(`${api.tasks}/${projectName}`)
 	if (isLoading) return
 
 	return (

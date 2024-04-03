@@ -7,14 +7,15 @@ import axios from 'axios'
 import clsx from 'clsx'
 import { useIdToken } from 'react-firebase-hooks/auth'
 import { auth } from '../../lib/firebase'
-export default function AddTask({ errors, register, handleSubmit, projectId }) {
+export default function AddTask({ errors, register, handleSubmit, projectName }) {
 	const [user] = useIdToken(auth)
 	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 
 	const addTask = async data => {
 		const idToken = await user.getIdToken(true)
+		console.log({ ...data, projectName })
 		try {
-			const res = await axios.post(api.addTask, { ...data, projectId }, { headers: { Authorization: `Bearer ${idToken}` } })
+			const res = await axios.post(api.addTask, { ...data, projectName }, { headers: { Authorization: `Bearer ${idToken}` } })
 			console.log(res)
 
 			// TODO: Handle errors

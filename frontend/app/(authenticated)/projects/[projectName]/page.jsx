@@ -42,7 +42,7 @@ export default function Page() {
 
 			<Tabs variant="underlined">
 				<Tab title={'Tasks'}>
-					<Tasks projectId={project.id} />
+					<Tasks projectName={project.name} />
 				</Tab>
 			</Tabs>
 		</div>

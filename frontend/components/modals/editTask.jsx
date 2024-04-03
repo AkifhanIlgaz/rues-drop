@@ -9,7 +9,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../../lib/firebase'
 import { EditIcon } from '../icons/edit'
 
-export default function EditTask({ task }) {
+export default function EditTask({ task, projectName }) {
 	const [user] = useAuthState(auth)
 	const [description, setDescription] = useState(task.description)
 	const [url, setUrl] = useState(task.url)
@@ -23,7 +23,7 @@ export default function EditTask({ task }) {
 			const idToken = await user.getIdToken(true)
 
 			const res = await axios.put(
-				`${api.tasks}/${task.id}`,
+				`${api.tasks}/${task.id}?` + new URLSearchParams({ projectName: projectName }),
 				{
 					description,
 					url
