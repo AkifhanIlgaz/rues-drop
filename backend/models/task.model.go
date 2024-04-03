@@ -50,6 +50,7 @@ type TaskAction struct {
 	UserId      string             `json:"userId" bson:"-" binding:"required"`
 	ProjectName string             `json:"projectName" bson:"-" binding:"required"`
 	Type        ActionType         `json:"type" bson:"type" binding:"required"`
+	Timestamp   time.Time          `json:"timestamp" bson:"timestamp"`
 	Info        string             `json:"info" bson:"info"`
 }
 

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/AkifhanIlgaz/word-memory/models"
 	"github.com/AkifhanIlgaz/word-memory/services"
@@ -100,7 +101,8 @@ func (controller *TaskController) Action(ctx *gin.Context) {
 	}
 
 	action := models.TaskAction{
-		UserId: user.UID,
+		UserId:    user.UID,
+		Timestamp: time.Now(),
 	}
 
 	if err := ctx.BindJSON(&action); err != nil {
