@@ -112,9 +112,20 @@ func (service *TaskService) insert(action models.TaskAction) error {
 	update := bson.M{"$push": bson.M{"actions": action}}
 
 	actions := service.client.Database(action.ProjectName).Collection(collectionActions)
-	_, err := actions.UpdateByID(service.ctx, id, update)
+
+	res, err := actions.UpdateByID(service.ctx, id, update)
 	if err != nil {
 		return fmt.Errorf("insert action: %w", err)
+	}
+
+	if res.MatchedCount == 0 {
+		_, err := actions.InsertOne(context.Background(), bson.M{
+			"_id":     id,
+			"actions": []models.TaskAction{action},
+		})
+		if err != nil {
+			return fmt.Errorf("insert action: %w", err)
+		}
 	}
 
 	return nil
