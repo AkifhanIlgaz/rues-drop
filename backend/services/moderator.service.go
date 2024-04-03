@@ -17,11 +17,9 @@ type ModeratorService struct {
 	ctx        context.Context
 }
 
-func NewModeratorService(ctx context.Context, db *mongo.Database) *ModeratorService {
-	collection := db.Collection(moderatorsCollection)
-
+func NewModeratorService(ctx context.Context, client *mongo.Client) *ModeratorService {
 	return &ModeratorService{
-		collection: collection,
+		collection: client.Database("auth").Collection(moderatorsCollection),
 		ctx:        ctx,
 	}
 }

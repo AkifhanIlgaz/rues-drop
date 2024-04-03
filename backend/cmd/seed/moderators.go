@@ -7,7 +7,6 @@ import (
 
 	"firebase.google.com/go/auth"
 	"github.com/AkifhanIlgaz/word-memory/models"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -40,6 +39,7 @@ func createModerators() {
 	for _, mod := range moderators {
 		if err := createMod(&mod); err != nil {
 			log.Fatal(err)
+			continue
 		}
 	}
 }
@@ -77,14 +77,6 @@ func createMod(mod *models.Moderator) error {
 		return fmt.Errorf("create admin: %w", err)
 	}
 	mod.Uid = user.UID
-
-	for _, project := range mod.Projects {
-		moderators := client.Database(project).Collection("moderators")
-		_, err = moderators.InsertOne(context.TODO(), bson.M{"uid": mod.Uid})
-		if err != nil {
-			return fmt.Errorf("create moderator: %w", err)
-		}
-	}
 
 	_, err = coll.InsertOne(context.TODO(), mod)
 	if err != nil {

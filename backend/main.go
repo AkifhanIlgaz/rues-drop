@@ -30,7 +30,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Could not connect to mongo: ", err)
 	}
-	db := mongoClient.Database("rues-drop")
 
 	defer mongoClient.Disconnect(ctx)
 
@@ -38,8 +37,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	projectService := services.NewProjectService(ctx, mongoClient)
-	moderatorService := services.NewModeratorService(ctx, db)
+	moderatorService := services.NewModeratorService(ctx, mongoClient)
 	taskService := services.NewTaskService(ctx, mongoClient)
 
 	projectController := controllers.NewProjectController(projectService)
