@@ -54,6 +54,12 @@ type TaskAction struct {
 	Info        string             `json:"info" bson:"info"`
 }
 
+type TaskResponse struct {
+	Task
+	IsDone       bool `json:"isDone"`
+	IsBookmarked bool `json:"isBookmarked"`
+}
+
 func (t TaskToAdd) ConvertToTask() Task {
 	return Task{
 		ProjectName: t.ProjectName,

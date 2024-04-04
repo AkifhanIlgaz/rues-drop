@@ -88,6 +88,48 @@ func (service *TaskService) Finish(taskId string, project string) error {
 	return nil
 }
 
+func (service *TaskService) Edit(taskToEdit models.TaskToEdit) error {
+	id, err := primitive.ObjectIDFromHex(taskToEdit.TaskId)
+	if err != nil {
+		return fmt.Errorf("edit task: %w", err)
+	}
+
+	filter := bson.M{
+		"_id": id,
+	}
+	edit := bson.M{
+		"$set": bson.M{
+			"description": taskToEdit.Description,
+			"url":         taskToEdit.URL,
+		},
+	}
+
+	tasks := service.client.Database(taskToEdit.ProjectName).Collection(collectionTasks)
+
+	if err := tasks.FindOneAndUpdate(service.ctx, filter, edit).Err(); err != nil {
+		return fmt.Errorf("edit task: %w", err)
+
+	}
+
+	return nil
+}
+
+func (service *TaskService) GetTasks(projectName string) ([]models.Task, error) {
+	tasksColl := service.client.Database(projectName).Collection(collectionTasks)
+
+	cur, err := tasksColl.Find(service.ctx, bson.M{})
+	if err != nil {
+		return nil, fmt.Errorf("get all tasks: %w", err)
+	}
+
+	var tasks []models.Task
+	if err := cur.All(service.ctx, &tasks); err != nil {
+		return nil, fmt.Errorf("get all tasks: %w", err)
+	}
+
+	return tasks, nil
+}
+
 func (service *TaskService) Action(action models.TaskAction) error {
 	var err error
 
@@ -151,46 +193,32 @@ func (service *TaskService) remove(action models.TaskAction) error {
 	return nil
 }
 
-func (service *TaskService) Edit(taskToEdit models.TaskToEdit) error {
-	id, err := primitive.ObjectIDFromHex(taskToEdit.TaskId)
-	if err != nil {
-		return fmt.Errorf("edit task: %w", err)
-	}
-
+// TODO: Get action state for the user with aggregate pipeline
+func (service *TaskService) GetActions(projectName string, uid string) (map[primitive.ObjectID]models.TaskAction, error) {
 	filter := bson.M{
-		"_id": id,
+		"_id": uidToObjId(uid, projectName),
 	}
-	edit := bson.M{
-		"$set": bson.M{
-			"description": taskToEdit.Description,
-			"url":         taskToEdit.URL,
-		},
-	}
+	coll := service.client.Database(projectName).Collection(collectionActions)
 
-	tasks := service.client.Database(taskToEdit.ProjectName).Collection(collectionTasks)
-
-	if err := tasks.FindOneAndUpdate(service.ctx, filter, edit).Err(); err != nil {
-		return fmt.Errorf("edit task: %w", err)
-
+	type V struct {
+		Actions []models.TaskAction
 	}
 
-	return nil
-}
+	var val V
 
-func (service *TaskService) GetTasks(projectName string) ([]models.Task, error) {
-	tasksColl := service.client.Database(projectName).Collection(collectionTasks)
-
-	cur, err := tasksColl.Find(service.ctx, bson.M{})
-	if err != nil {
-		return nil, fmt.Errorf("get all tasks: %w", err)
+	if err := coll.FindOne(service.ctx, filter).Decode(&val); err != nil {
+		return nil, fmt.Errorf("get actions for the user: %w", err)
 	}
 
-	var tasks []models.Task
-	if err := cur.All(service.ctx, &tasks); err != nil {
-		return nil, fmt.Errorf("get all tasks: %w", err)
+	actionsMap := map[primitive.ObjectID]models.TaskAction{}
+
+	for _, action := range val.Actions {
+		actionsMap[action.TaskId] = action
 	}
 
-	return tasks, nil
+	fmt.Println(actionsMap)
+
+	return actionsMap, nil
 }
 
 func uidToObjId(uid string, project string) primitive.ObjectID {

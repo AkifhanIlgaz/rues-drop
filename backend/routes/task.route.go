@@ -24,6 +24,7 @@ func (routeController *TaskRouteController) Setup(rg *gin.RouterGroup) {
 	public := router.Group("/")
 	{
 		public.GET("/:projectName", routeController.taskController.All)
+		public.GET("/:projectName/state", routeController.taskController.State)
 		public.POST("/action", routeController.taskController.Action)
 	}
 
