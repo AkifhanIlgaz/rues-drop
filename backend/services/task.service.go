@@ -14,9 +14,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-const tasksCollection = "tasks"
-const actionsCollection = "actions"
-
 // TODO: Create helper functions to get database and collections for project
 
 type TaskService struct {
@@ -115,6 +112,10 @@ func (service *TaskService) Edit(taskToEdit models.TaskToEdit) error {
 }
 
 func (service *TaskService) GetTasks(projectName string) ([]models.Task, error) {
+	return service.allTasks(projectName)
+}
+
+func (service *TaskService) allTasks(projectName string) ([]models.Task, error) {
 	tasksColl := service.client.Database(projectName).Collection(collectionTasks)
 
 	cur, err := tasksColl.Find(service.ctx, bson.M{})
@@ -125,6 +126,36 @@ func (service *TaskService) GetTasks(projectName string) ([]models.Task, error) 
 	var tasks []models.Task
 	if err := cur.All(service.ctx, &tasks); err != nil {
 		return nil, fmt.Errorf("get all tasks: %w", err)
+	}
+
+	return tasks, nil
+}
+
+// TODO: Use aggregation pipeline
+func (service *TaskService) GetTasksWithState(projectName string, uid string) ([]models.Task, error) {
+	tasks, err := service.GetTasks(projectName)
+	if err != nil {
+		return nil, fmt.Errorf("get tasks with state: %w", err)
+	}
+
+	// TODO: Convert to map ?
+	actions, err := service.GetActions(projectName, uid)
+	if err != nil {
+		return nil, fmt.Errorf("get tasks with state: %w", err)
+	}
+
+	for i, task := range tasks {
+		fmt.Printf("%+v", task)
+		for _, a := range filterActionByTask(task.Id, actions) {
+			fmt.Printf("%+v", a)
+			switch a.Type {
+			case models.ActionDone:
+				tasks[i].IsDone = true
+				fmt.Printf("%+v", tasks)
+			case models.ActionBookmark:
+				tasks[i].IsBookmarked = true
+			}
+		}
 	}
 
 	return tasks, nil
@@ -193,32 +224,21 @@ func (service *TaskService) remove(action models.TaskAction) error {
 	return nil
 }
 
-// TODO: Get action state for the user with aggregate pipeline
-func (service *TaskService) GetActions(projectName string, uid string) (map[primitive.ObjectID]models.TaskAction, error) {
+func (service *TaskService) GetActions(projectName string, uid string) ([]models.TaskAction, error) {
 	filter := bson.M{
 		"_id": uidToObjId(uid, projectName),
 	}
 	coll := service.client.Database(projectName).Collection(collectionActions)
 
-	type V struct {
+	var val struct {
 		Actions []models.TaskAction
 	}
-
-	var val V
 
 	if err := coll.FindOne(service.ctx, filter).Decode(&val); err != nil {
 		return nil, fmt.Errorf("get actions for the user: %w", err)
 	}
 
-	actionsMap := map[primitive.ObjectID]models.TaskAction{}
-
-	for _, action := range val.Actions {
-		actionsMap[action.TaskId] = action
-	}
-
-	fmt.Println(actionsMap)
-
-	return actionsMap, nil
+	return val.Actions, nil
 }
 
 func uidToObjId(uid string, project string) primitive.ObjectID {
@@ -231,4 +251,16 @@ func uidToObjId(uid string, project string) primitive.ObjectID {
 	}
 
 	return id
+}
+
+func filterActionByTask(taskId primitive.ObjectID, actions []models.TaskAction) []models.TaskAction {
+	var filteredActions []models.TaskAction
+
+	for _, action := range actions {
+		if action.TaskId == taskId {
+			filteredActions = append(filteredActions, action)
+		}
+	}
+
+	return filteredActions
 }

@@ -83,57 +83,29 @@ func (controller *TaskController) Edit(ctx *gin.Context) {
 
 func (controller *TaskController) All(ctx *gin.Context) {
 	projectName := ctx.Param("projectName")
-
-	tasks, err := controller.taskService.GetTasks(projectName)
-	if err != nil {
-		ctx.AbortWithStatus(http.StatusInternalServerError)
-		return
-	}
-
-	ctx.JSON(http.StatusOK, tasks)
-}
-
-func (controller *TaskController) State(ctx *gin.Context) {
 	user, err := getUserFromContext(ctx)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
 
-	projectName := ctx.Param("projectName")
+	var tasks []models.Task
 
-	tasks, err := controller.taskService.GetTasks(projectName)
-	if err != nil {
-		ctx.AbortWithStatus(http.StatusInternalServerError)
-		return
-	}
-
-	actions, err := controller.taskService.GetActions(projectName, user.UID)
-	if err != nil {
-		fmt.Println(err)
-		ctx.AbortWithStatus(http.StatusInternalServerError)
-		return
-	}
-
-	var taskResponses []models.TaskResponse
-
-	for _, task := range tasks {
-		resp := models.TaskResponse{
-			Task: task,
+	if user.CustomClaims["role"] == "admin" || user.CustomClaims["role"] == "moderator" {
+		tasks, err = controller.taskService.GetTasks(projectName)
+		if err != nil {
+			ctx.AbortWithStatus(http.StatusInternalServerError)
+			return
 		}
-
-		if action, ok := actions[task.Id]; ok {
-			if action.Type == models.ActionDone {
-				resp.IsDone = true
-			} else if action.Type == models.ActionBookmark {
-				resp.IsBookmarked = true
-			}
+	} else {
+		tasks, err = controller.taskService.GetTasksWithState(projectName, user.UID)
+		if err != nil {
+			ctx.AbortWithStatus(http.StatusInternalServerError)
+			return
 		}
-
-		taskResponses = append(taskResponses, resp)
 	}
 
-	ctx.JSON(http.StatusOK, &taskResponses)
+	ctx.JSON(http.StatusOK, tasks)
 }
 
 func (controller *TaskController) Action(ctx *gin.Context) {

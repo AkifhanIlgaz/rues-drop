@@ -23,12 +23,14 @@ const (
 )
 
 type Task struct {
-	Id          primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	ProjectName string             `json:"projectName" bson:"-"`
-	Description string             `json:"description"`
-	URL         string             `json:"url"`
-	Status      Status             `json:"status"`
-	CreatedAt   time.Time          `json:"createdAt"`
+	Id           primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	ProjectName  string             `json:"projectName,omitempty" bson:"-,omitempty"`
+	Description  string             `json:"description"`
+	URL          string             `json:"url"`
+	Status       Status             `json:"status"`
+	IsDone       bool               `json:"isDone" bson:"-"`
+	IsBookmarked bool               `json:"isBookmarked" bson:"-"`
+	CreatedAt    time.Time          `json:"createdAt"`
 }
 
 type TaskToAdd struct {
