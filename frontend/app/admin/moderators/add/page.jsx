@@ -11,7 +11,6 @@ import { adminBreadcrumbs } from '@/config/links'
 import { Button } from '@nextui-org/button'
 import axios from 'axios'
 import { useTheme } from 'next-themes'
-import { useRouter } from 'next/navigation'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useForm } from 'react-hook-form'
 import { auth } from '../../../../lib/firebase'
@@ -20,7 +19,6 @@ export default function Page() {
 	const { theme } = useTheme()
 	const [user, loading, error] = useAuthState(auth)
 
-	const router = useRouter()
 	const items = [adminBreadcrumbs.createModerator]
 
 	const {

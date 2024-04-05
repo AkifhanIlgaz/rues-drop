@@ -1,16 +1,18 @@
 'use client'
 
 import { DiscordIcon, SiteIcon, TwitterIcon } from '@/components/icons'
+import { BookmarkIcon } from '@/components/icons/bookmark'
 import api from '@/config/api'
 import { link } from '@/config/links'
-import { Link, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, User } from '@nextui-org/react'
+import { Button, Link, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, User } from '@nextui-org/react'
 import clsx from 'clsx'
 import React from 'react'
 import useSWR from 'swr'
 
 const columns = [
 	{ name: 'Name', uid: 'name' },
-	{ name: 'Links', uid: 'links' }
+	{ name: 'Links', uid: 'links' },
+	{ name: '', uid: 'bookmark' }
 ]
 
 export default function ProjectsTable() {
@@ -24,10 +26,16 @@ export default function ProjectsTable() {
 				return <User className="text-md font-semibold" as={Link} color="foreground" href={`${link.projects}/${cellValue}`} avatarProps={{ radius: 'full', src: project.logo }} name={cellValue} />
 			case 'links':
 				return (
-					<div className="flex items-center gap-4">
+					<div className="flex items-center w-full gap-4">
 						<Link isExternal color="foreground" showAnchorIcon href={project.website} anchorIcon={<SiteIcon />}></Link>
 						<Link isExternal color="foreground" showAnchorIcon href={project.twitter} anchorIcon={<TwitterIcon />}></Link>
 						<Link isExternal color="foreground" showAnchorIcon href={project.discord} anchorIcon={<DiscordIcon />}></Link>
+					</div>
+				)
+			case 'bookmark':
+				return (
+					<div className="flex items-end justify-end">
+						<Button color="secondary" startContent={<BookmarkIcon className="w-4 h-4" />} isIconOnly></Button>
 					</div>
 				)
 			default:

@@ -1,3 +1,5 @@
+'use client'
+
 import api from '@/config/api'
 import { errorMessage } from '@/config/errors'
 import { Autocomplete, AutocompleteItem, Chip } from '@nextui-org/react'
@@ -29,7 +31,7 @@ export default function ProjectInput({ setValue, errors }) {
 	return (
 		<div className="flex flex-col gap-6">
 			<Autocomplete onSelectionChange={selectProject} variant="bordered" labelPlacement="outside" defaultItems={allProjects} label={<Label label={'Projects'} isRequired={true} />} placeholder={'Select the projects that user has access'} classNames={{ errorMessage: 'text-danger text-sm pt-1' }} errorMessage={selectedProjects.size === 0 && errorMessage.requiredProjects}>
-				{project => <AutocompleteItem key={project.projectName}>{project.projectName}</AutocompleteItem>}
+				{project => <AutocompleteItem key={project.name}>{project.name}</AutocompleteItem>}
 			</Autocomplete>
 			<div className="flex flex-wrap gap-1">
 				{Array.from(selectedProjects).map(project => (

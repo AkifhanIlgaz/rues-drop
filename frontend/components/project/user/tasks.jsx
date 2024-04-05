@@ -68,12 +68,18 @@ export default function Tasks({ projectName }) {
 			case 'actions':
 				return (
 					<div className="flex items-center justify-center gap-2 ">
-						<Chip size="sm" variant="shadow" startContent={<CheckIcon className="w-4 h-4 " />} color="warning" className="cursor-pointer text-white" onClick={() => action(task.id, 'Done')}>
-							Done
-						</Chip>
-						<Chip size="sm" variant="shadow" startContent={<BookmarkIcon className="w-4 h-4" />} color="primary" className="cursor-pointer" onClick={() => action(task.id, 'Bookmark')}>
-							Save
-						</Chip>
+						{/* TODO: Update */}
+						{task.isDone && (
+							<Chip size="sm" variant="shadow" startContent={<CheckIcon className="w-4 h-4 " />} color="warning" className="cursor-pointer text-white" onClick={() => action(task.id, 'Done')}>
+								Done
+							</Chip>
+						)}
+
+						{task.isBookmarked && (
+							<Chip size="sm" variant="shadow" startContent={<BookmarkIcon className="w-4 h-4" />} color="primary" className="cursor-pointer" onClick={() => action(task.id, 'Bookmark')}>
+								Save
+							</Chip>
+						)}
 					</div>
 				)
 			default:

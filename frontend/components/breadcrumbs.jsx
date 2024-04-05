@@ -9,7 +9,6 @@ export default function BreadCrumbs({ items }) {
 		>
 			{items.map((item, i) => {
 				const Icon = item.icon
-				console.log(item)
 				return (
 					<BreadcrumbItem key={i} href={item.href} startContent={Icon && <Icon className="w-5 mr-1" />}>
 						{item.name}
