@@ -4,9 +4,12 @@ import { DiscordIcon, SiteIcon, TwitterIcon } from '@/components/icons'
 import { BookmarkIcon } from '@/components/icons/bookmark'
 import api from '@/config/api'
 import { link } from '@/config/links'
+import { auth } from '@/lib/firebase'
 import { Button, Link, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, User } from '@nextui-org/react'
+import axios from 'axios'
 import clsx from 'clsx'
 import React from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import useSWR from 'swr'
 
 const columns = [
@@ -17,6 +20,19 @@ const columns = [
 
 export default function ProjectsTable() {
 	const { data: projects, isLoading } = useSWR(api.allProjects)
+	const [user] = useAuthState(auth)
+
+	const bookmarkProject = async projectName => {
+		try {
+			const idToken = await user.getIdToken(true)
+
+			const res = await axios.post(api.bookmark, {}, { headers: { Authorization: `Bearer ${idToken}` }, params: { project: projectName } })
+
+			console.log(res)
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
 	const renderCell = React.useCallback((project, columnKey) => {
 		const cellValue = project[columnKey]
@@ -35,7 +51,7 @@ export default function ProjectsTable() {
 			case 'bookmark':
 				return (
 					<div className="flex items-end justify-end">
-						<Button color="secondary" startContent={<BookmarkIcon className="w-4 h-4" />} isIconOnly></Button>
+						<Button color="secondary" startContent={<BookmarkIcon className="w-4 h-4" />} isIconOnly onClick={() => bookmarkProject(project['name'])}></Button>
 					</div>
 				)
 			default:
