@@ -132,3 +132,34 @@ func (controller *TaskController) Action(ctx *gin.Context) {
 		return
 	}
 }
+
+func (controller *TaskController) Done(ctx *gin.Context) {
+	user, err := getUserFromContext(ctx)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	action := models.TaskAction{
+		UserId:    user.UID,
+		Timestamp: time.Now(),
+	}
+
+	if err := ctx.BindJSON(&action); err != nil {
+		fmt.Println(err)
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+}
+
+func (controller *TaskController) Undo(ctx *gin.Context) {
+
+}
+
+func (controller *TaskController) Bookmark(ctx *gin.Context) {
+
+}
+
+func (controller *TaskController) RemoveBookmark(ctx *gin.Context) {
+
+}
