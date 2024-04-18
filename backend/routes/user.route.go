@@ -16,4 +16,11 @@ func NewUserRouteController(userController *controllers.UserController) *UserRou
 }
 
 func (routeController *UserRouteController) Setup(rg *gin.RouterGroup) {
+	router := rg.Group("/user")
+
+	router.POST("/create", routeController.userController.Create)
+
+	// TODO: Receive project name by query parameters
+	router.POST("/bookmark", routeController.userController.Bookmark)
+	router.DELETE("/bookmark/remove", routeController.userController.RemoveBookmark)
 }
