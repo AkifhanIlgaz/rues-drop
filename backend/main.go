@@ -41,15 +41,18 @@ func main() {
 	projectService := services.NewProjectService(ctx, mongoClient)
 	moderatorService := services.NewModeratorService(ctx, mongoClient)
 	taskService := services.NewTaskService(ctx, mongoClient)
+	userService := services.NewUserService(ctx, mongoClient)
 
 	projectController := controllers.NewProjectController(projectService)
 	moderatorController := controllers.NewModeratorController(authService, moderatorService)
 	taskController := controllers.NewTaskController(taskService)
+	userController := controllers.NewUserController(userService)
 	userMiddleware := controllers.NewUserMiddleware(authService, moderatorService)
 
 	projectRouteController := routes.NewProjectRouteController(projectController, userMiddleware)
 	moderatorRouteController := routes.NewModeratorRouteController(moderatorController, userMiddleware)
 	taskRouteController := routes.NewTaskRouteController(taskController, userMiddleware)
+	userRouteController := routes.NewUserRouteController(userController)
 
 	server := gin.Default()
 	setCors(server)
@@ -59,6 +62,7 @@ func main() {
 	projectRouteController.Setup(router)
 	moderatorRouteController.Setup(router)
 	taskRouteController.Setup(router)
+	userRouteController.Setup(router)
 
 	err = server.Run(":" + config.Port)
 	if err != nil {
