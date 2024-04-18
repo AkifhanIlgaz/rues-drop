@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"log"
 	"net/http"
 
@@ -37,9 +38,35 @@ func (controller *UserController) Create(ctx *gin.Context) {
 }
 
 func (controller *UserController) Bookmark(ctx *gin.Context) {
+	project := ctx.Query("project")
+	if len(project) == 0 {
+		ctx.AbortWithError(http.StatusBadRequest, errors.New("empty project"))
+		return
+	}
 
+	// TODO: get uid from context
+	uid := ctx.Query("uid")
+
+	err := controller.userService.Bookmark(uid, project)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
 }
 
 func (controller *UserController) RemoveBookmark(ctx *gin.Context) {
+	project := ctx.Query("project")
+	if len(project) == 0 {
+		ctx.AbortWithError(http.StatusBadRequest, errors.New("empty project"))
+		return
+	}
 
+	// TODO: get uid from context
+	uid := ctx.Query("uid")
+
+	err := controller.userService.RemoveBookmark(uid, project)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
 }
