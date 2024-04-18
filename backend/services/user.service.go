@@ -34,7 +34,7 @@ func (service *UserService) Create(user models.User) error {
 
 func (service *UserService) Bookmark(uid string, project string) error {
 	filter := bson.M{"uid": uid}
-	update := bson.M{"$push": bson.M{"bookmarks": project}}
+	update := bson.M{"$addToSet": bson.M{"bookmarks": project}}
 
 	users := service.client.Database("auth").Collection(collectionUsers)
 

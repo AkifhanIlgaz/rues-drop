@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -44,10 +45,16 @@ func (controller *UserController) Bookmark(ctx *gin.Context) {
 		return
 	}
 
-	// TODO: get uid from context
-	uid := ctx.Query("uid")
+	user, err := getUserFromContext(ctx)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
 
-	err := controller.userService.Bookmark(uid, project)
+	fmt.Println("uid", user.UID)
+	fmt.Println("project", project)
+
+	err = controller.userService.Bookmark(user.UID, project)
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
