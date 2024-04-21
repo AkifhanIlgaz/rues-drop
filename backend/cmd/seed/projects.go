@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -40,13 +39,13 @@ var (
 func createProjects() {
 	for _, project := range []models.Project{dymension, lava, hyperlane} {
 
-		err := client.Database(project.Name).Drop(context.TODO())
-		if err != nil {
-			fmt.Println(err)
-			log.Fatal("cannot drop: ", project.Name)
-		}
+		// err := client.Database(project.Name).Drop(context.TODO())
+		// if err != nil {
+		// 	fmt.Println(err)
+		// 	log.Fatal("cannot drop: ", project.Name)
+		// }
 
-		_, err = client.Database(project.Name).Collection("info").InsertOne(context.TODO(), project)
+		_, err := client.Database(project.Name).Collection("info").InsertOne(context.TODO(), project)
 		if err != nil {
 			log.Fatal("cannot insert info for:", project.Name)
 		}

@@ -11,7 +11,8 @@ import (
 )
 
 func Mongo(ctx context.Context, config *cfg.Config) (*mongo.Client, error) {
-	mongoConn := options.Client().ApplyURI(config.MongoUri)
+	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
+	mongoConn := options.Client().ApplyURI(config.MongoUri).SetServerAPIOptions(serverAPI)
 
 	client, err := mongo.Connect(ctx, mongoConn)
 	if err != nil {

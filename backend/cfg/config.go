@@ -9,7 +9,7 @@ import (
 type Config struct {
 	GoogleApplicationCredentials string `mapstructure:"GOOGLE_APPLICATION_CREDENTIALS"`
 
-	MongoUri    string `mapstructure:"MONGODB_LOCAL_URI"`
+	MongoUri    string `mapstructure:"MONGODB_SERVER_URI"`
 	MongoDbName string `mapstructure:"MONGO_DATABASE_NAME"`
 
 	Port string `mapstructure:"PORT"`
