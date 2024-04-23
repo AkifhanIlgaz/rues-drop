@@ -6,15 +6,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type ActionType string
-
-const (
-	ActionDone           ActionType = "Done"
-	ActionUndo           ActionType = "Undo"
-	ActionBookmark       ActionType = "Bookmark"
-	ActionRemoveBookmark ActionType = "Remove"
-)
-
 type Status string
 
 const (
@@ -51,7 +42,6 @@ type TaskAction struct {
 	TaskId      primitive.ObjectID `json:"taskId" bson:"taskId" binding:"required"`
 	UserId      string             `json:"userId" bson:"-" binding:"required"`
 	ProjectName string             `json:"projectName" bson:"-" binding:"required"`
-	Type        ActionType         `json:"type" bson:"type" binding:"required"`
 	Timestamp   time.Time          `json:"timestamp" bson:"timestamp"`
 	Info        string             `json:"info" bson:"info"`
 }

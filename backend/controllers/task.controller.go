@@ -108,31 +108,6 @@ func (controller *TaskController) All(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, tasks)
 }
 
-func (controller *TaskController) Action(ctx *gin.Context) {
-	user, err := getUserFromContext(ctx)
-	if err != nil {
-		ctx.AbortWithStatus(http.StatusUnauthorized)
-		return
-	}
-
-	action := models.TaskAction{
-		UserId:    user.UID,
-		Timestamp: time.Now(),
-	}
-
-	if err := ctx.BindJSON(&action); err != nil {
-		fmt.Println(err)
-		ctx.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
-
-	err = controller.taskService.Action(action)
-	if err != nil {
-		ctx.AbortWithError(http.StatusInternalServerError, err)
-		return
-	}
-}
-
 func (controller *TaskController) Done(ctx *gin.Context) {
 	user, err := getUserFromContext(ctx)
 	if err != nil {
@@ -150,16 +125,37 @@ func (controller *TaskController) Done(ctx *gin.Context) {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
+
+	err = controller.taskService.Done(action)
+	if err != nil {
+		fmt.Println(err)
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
 }
 
 func (controller *TaskController) Undo(ctx *gin.Context) {
+	user, err := getUserFromContext(ctx)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
 
-}
+	action := models.TaskAction{
+		UserId:    user.UID,
+		Timestamp: time.Now(),
+	}
 
-func (controller *TaskController) Bookmark(ctx *gin.Context) {
+	if err := ctx.BindJSON(&action); err != nil {
+		fmt.Println(err)
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
 
-}
-
-func (controller *TaskController) RemoveBookmark(ctx *gin.Context) {
+	err = controller.taskService.Undo(action)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
 
 }

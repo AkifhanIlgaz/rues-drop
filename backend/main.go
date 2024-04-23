@@ -72,7 +72,7 @@ func main() {
 
 func setCors(server *gin.Engine) {
 	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowOrigins = []string{"http://localhost:8000", "http://localhost:3000"}
+	corsConfig.AllowOrigins = []string{"http://localhost:3000", "http://localhost:3000"}
 	corsConfig.AllowHeaders = []string{"*"}
 	corsConfig.AllowCredentials = true
 

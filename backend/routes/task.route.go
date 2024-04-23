@@ -23,7 +23,8 @@ func (routeController *TaskRouteController) Setup(rg *gin.RouterGroup) {
 	public := router.Group("/")
 	{
 		public.GET("/:projectName", routeController.taskController.All)
-		public.POST("/action", routeController.taskController.Action)
+		public.POST("/done", routeController.taskController.Done)
+		public.DELETE("/undo", routeController.taskController.Undo)
 	}
 
 	private := router.Group("/", routeController.userMiddleware.HasAccess())

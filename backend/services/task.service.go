@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
-	"errors"
 	"fmt"
 	"log"
 
@@ -139,49 +138,26 @@ func (service *TaskService) GetTasksWithState(projectName string, uid string) ([
 	}
 
 	// TODO: Convert to map ?
-	actions, err := service.GetActions(projectName, uid)
+	_, err = service.GetActions(projectName, uid)
 	if err != nil {
 		return nil, fmt.Errorf("get tasks with state: %w", err)
 	}
 
-	for i, task := range tasks {
-		for _, a := range filterActionByTask(task.Id, actions) {
-			switch a.Type {
-			case models.ActionDone:
-				tasks[i].IsDone = true
-			case models.ActionBookmark:
-				tasks[i].IsBookmarked = true
-			}
-		}
-	}
+	// for i, task := range tasks {
+	// 	for _, a := range filterActionByTask(task.Id, actions) {
+	// 		switch a.Type {
+	// 		case models.ActionDone:
+	// 			tasks[i].IsDone = true
+	// 		case models.ActionBookmark:
+	// 			tasks[i].IsBookmarked = true
+	// 		}
+	// 	}
+	// }
 
 	return tasks, nil
 }
 
-func (service *TaskService) Action(action models.TaskAction) error {
-	var err error
-
-	switch action.Type {
-	case models.ActionDone:
-		err = service.done(action)
-	case models.ActionBookmark:
-		err = service.bookmark(action)
-	case models.ActionRemoveBookmark:
-		err = service.removeBookmark(action)
-	case models.ActionUndo:
-		err = service.undo(action)
-	default:
-		err = errors.New("unknown action type")
-	}
-
-	if err != nil {
-		err = fmt.Errorf("action: %w", err)
-	}
-
-	return err
-}
-
-func (service *TaskService) done(action models.TaskAction) error {
+func (service *TaskService) Done(action models.TaskAction) error {
 	id := uidToObjId(action.UserId, action.ProjectName)
 	update := bson.M{"$push": bson.M{"actions": action}}
 
@@ -205,10 +181,13 @@ func (service *TaskService) done(action models.TaskAction) error {
 	return nil
 }
 
-func (service *TaskService) undo(action models.TaskAction) error {
+func (service *TaskService) Undo(action models.TaskAction) error {
 	id := uidToObjId(action.UserId, action.ProjectName)
+
 	update := bson.M{"$pull": bson.M{
-		"taskId": action.TaskId,
+		"actions": bson.M{
+			"taskId": action.TaskId,
+		},
 	}}
 
 	actions := service.client.Database(action.ProjectName).Collection(collectionActions)
@@ -219,38 +198,6 @@ func (service *TaskService) undo(action models.TaskAction) error {
 
 	if res.ModifiedCount == 0 {
 		return fmt.Errorf("cannot found action: %v", action.Id)
-	}
-
-	return nil
-}
-
-func (service *TaskService) bookmark(action models.TaskAction) error {
-	filter := bson.M{"uid": action.UserId}
-	update := bson.M{"$push": bson.M{"bookmarks": action.ProjectName}}
-
-	users := service.client.Database("auth").Collection(collectionUsers)
-	res, err := users.UpdateOne(service.ctx, filter, update)
-	if err != nil {
-		return fmt.Errorf("cannot update bookmarked tasks for the user: %v", action.UserId)
-	}
-	if res.MatchedCount == 0 {
-		return fmt.Errorf("cannot found user: %v", action.UserId)
-	}
-
-	return nil
-}
-
-func (service *TaskService) removeBookmark(action models.TaskAction) error {
-	filter := bson.M{"uid": action.UserId}
-	update := bson.M{"$pull": bson.M{"bookmarks": action.ProjectName}}
-
-	users := service.client.Database("auth").Collection(collectionUsers)
-	res, err := users.UpdateOne(service.ctx, filter, update)
-	if err != nil {
-		return fmt.Errorf("cannot update bookmarked tasks for the user: %v", action.UserId)
-	}
-	if res.MatchedCount == 0 {
-		return fmt.Errorf("cannot found user: %v", action.UserId)
 	}
 
 	return nil
