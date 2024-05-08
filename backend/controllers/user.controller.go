@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -11,12 +12,14 @@ import (
 )
 
 type UserController struct {
-	userService *services.UserService
+	userService    *services.UserService
+	projectService *services.ProjectService
 }
 
-func NewUserController(userService *services.UserService) *UserController {
+func NewUserController(userService *services.UserService, projectService *services.ProjectService) *UserController {
 	return &UserController{
-		userService: userService,
+		userService:    userService,
+		projectService: projectService,
 	}
 }
 
@@ -35,6 +38,31 @@ func (controller *UserController) Create(ctx *gin.Context) {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
+}
+
+func (controller *UserController) Bookmarks(ctx *gin.Context) {
+	user, err := getUserFromContext(ctx)
+	if err != nil {
+		fmt.Println(err)
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	bookmarks, err := controller.userService.Bookmarks(user.UID)
+	if err != nil {
+		fmt.Println(err)
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	projects, err := controller.projectService.GetProjects(bookmarks...)
+	if err != nil {
+		fmt.Println(err)
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &projects)
 }
 
 func (controller *UserController) Bookmark(ctx *gin.Context) {

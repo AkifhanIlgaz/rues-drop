@@ -32,6 +32,20 @@ func (service *UserService) Create(user models.User) error {
 	return nil
 }
 
+func (service *UserService) Bookmarks(uid string) ([]string, error) {
+	users := service.client.Database("auth").Collection(collectionUsers)
+	filter := bson.M{"uid": uid}
+
+	var user models.User
+
+	err := users.FindOne(service.ctx, filter).Decode(&user)
+	if err != nil {
+		return []string{}, fmt.Errorf("get bookmarks of user: %w", err)
+	}
+
+	return user.Bookmarks, nil
+}
+
 func (service *UserService) Bookmark(uid string, project string) error {
 	filter := bson.M{"uid": uid}
 	update := bson.M{"$addToSet": bson.M{"bookmarks": project}}

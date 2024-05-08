@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"log"
+	"slices"
 
 	"github.com/AkifhanIlgaz/word-memory/models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -130,29 +131,25 @@ func (service *TaskService) allTasks(projectName string) ([]models.Task, error) 
 	return tasks, nil
 }
 
-// TODO: Use aggregation pipeline
+// TODO: Optimize
 func (service *TaskService) GetTasksWithState(projectName string, uid string) ([]models.Task, error) {
-	tasks, err := service.GetTasks(projectName)
+	tasks, err := service.allTasks(projectName)
 	if err != nil {
 		return nil, fmt.Errorf("get tasks with state: %w", err)
 	}
 
-	// TODO: Convert to map ?
-	_, err = service.GetActions(projectName, uid)
+	actions, err := service.GetActions(projectName, uid)
 	if err != nil {
 		return nil, fmt.Errorf("get tasks with state: %w", err)
 	}
 
-	// for i, task := range tasks {
-	// 	for _, a := range filterActionByTask(task.Id, actions) {
-	// 		switch a.Type {
-	// 		case models.ActionDone:
-	// 			tasks[i].IsDone = true
-	// 		case models.ActionBookmark:
-	// 			tasks[i].IsBookmarked = true
-	// 		}
-	// 	}
-	// }
+	for i, task := range tasks {
+		tasks[i].IsDone =
+			slices.ContainsFunc(actions, func(a models.TaskAction) bool {
+				return a.TaskId == task.Id
+			})
+
+	}
 
 	return tasks, nil
 }
@@ -230,16 +227,4 @@ func uidToObjId(uid string, project string) primitive.ObjectID {
 	}
 
 	return id
-}
-
-func filterActionByTask(taskId primitive.ObjectID, actions []models.TaskAction) []models.TaskAction {
-	var filteredActions []models.TaskAction
-
-	for _, action := range actions {
-		if action.TaskId == taskId {
-			filteredActions = append(filteredActions, action)
-		}
-	}
-
-	return filteredActions
 }

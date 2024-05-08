@@ -13,13 +13,6 @@ import (
 
 var dymensionActions = []models.TaskAction{
 	{
-		TaskId: validObjectId("660330aa29c550b32bc3e7fc"),
-		Info:   "Deployed Rollapp",
-	},
-	{
-		TaskId: validObjectId("660330aa29c550b32bc3e7fc"),
-	},
-	{
 		TaskId: validObjectId("660330aa29c550b32bc3e7fd"),
 		Info:   "Staked 1000 DYM on 8 wallets",
 	},
@@ -27,22 +20,12 @@ var dymensionActions = []models.TaskAction{
 
 var lavaActions = []models.TaskAction{
 	{
-		TaskId: validObjectId("660330aa29c550b32bc3e7fe"),
-		Info:   "Sender Wallet Script",
-	},
-	{
 		TaskId: validObjectId("660330aa29c550b32bc3e7ff"),
 		Info:   "Squid router used",
 	},
 }
 
 var hyperlaneActions = []models.TaskAction{
-	{
-		TaskId: validObjectId("660330aa29c550b32bc3e800"),
-	},
-	{
-		TaskId: validObjectId("660330aa29c550b32bc3e801"),
-	},
 	{
 		TaskId: validObjectId("660330aa29c550b32bc3e800"),
 		Info:   "10 TIA Bridged",

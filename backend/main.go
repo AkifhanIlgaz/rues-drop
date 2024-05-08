@@ -46,7 +46,7 @@ func main() {
 	projectController := controllers.NewProjectController(projectService)
 	moderatorController := controllers.NewModeratorController(authService, moderatorService)
 	taskController := controllers.NewTaskController(taskService)
-	userController := controllers.NewUserController(userService)
+	userController := controllers.NewUserController(userService, projectService)
 	userMiddleware := controllers.NewUserMiddleware(authService, moderatorService)
 
 	projectRouteController := routes.NewProjectRouteController(projectController, userMiddleware)
