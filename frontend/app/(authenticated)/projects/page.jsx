@@ -2,10 +2,13 @@
 
 import BreadCrumbs from '@/components/breadcrumbs'
 import ProjectsTable from '@/components/tables/projectsTable'
+import api from '@/config/api'
 import { breadcrumbs } from '@/config/links'
+import useSWR from 'swr'
 
 export default function ProjectPage() {
 	const items = [breadcrumbs.projects]
+	const { data: projects, isLoading } = useSWR(api.allProjects)
 
 	return (
 		<div>
@@ -13,7 +16,7 @@ export default function ProjectPage() {
 				<BreadCrumbs items={items}></BreadCrumbs>
 			</div>
 
-			<ProjectsTable />
+			<ProjectsTable projects={projects} isLoading={isLoading} />
 		</div>
 	)
 }

@@ -18,8 +18,8 @@ const columns = [
 	{ name: '', uid: 'bookmark' }
 ]
 
-export default function ProjectsTable() {
-	const { data: projects, isLoading } = useSWR(api.allProjects)
+export default function ProjectsTable({projects, isLoading}) {
+	
 	const [user] = useAuthState(auth)
 
 	const bookmarkProject = async projectName => {

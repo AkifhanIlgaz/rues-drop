@@ -13,6 +13,7 @@ const api = {
 	tasks: baseUrl + '/tasks',
 	finishTask: baseUrl + '/tasks/finish',
 	action: baseUrl + '/tasks/action',
+	bookmarks: baseUrl + '/user/bookmarks',
 	bookmark: baseUrl + '/user/bookmark',
 	removeBookmark: baseUrl + '/user/bookmark/remove'
 }
