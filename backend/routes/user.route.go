@@ -20,8 +20,7 @@ func (routeController *UserRouteController) Setup(rg *gin.RouterGroup) {
 
 	router.POST("/create", routeController.userController.Create)
 
-	// TODO: Receive project name by query parameters
-	router.GET("/bookmarks", routeController.userController.Bookmarks)
-	router.POST("/bookmark", routeController.userController.Bookmark)
-	router.DELETE("/bookmark/remove", routeController.userController.RemoveBookmark)
+	// router.GET("/bookmarks", routeController.userController.Bookmarks)
+	// router.POST("/bookmark", routeController.userController.Bookmark)
+	// router.DELETE("/bookmark/remove", routeController.userController.RemoveBookmark)
 }

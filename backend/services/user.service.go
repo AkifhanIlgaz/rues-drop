@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/AkifhanIlgaz/word-memory/models"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -32,50 +31,50 @@ func (service *UserService) Create(user models.User) error {
 	return nil
 }
 
-func (service *UserService) Bookmarks(uid string) ([]string, error) {
-	users := service.client.Database("auth").Collection(collectionUsers)
-	filter := bson.M{"uid": uid}
+// func (service *UserService) Bookmarks(uid string) ([]string, error) {
+// 	users := service.client.Database("auth").Collection(collectionUsers)
+// 	filter := bson.M{"uid": uid}
 
-	var user models.User
+// 	var user models.User
 
-	err := users.FindOne(service.ctx, filter).Decode(&user)
-	if err != nil {
-		return []string{}, fmt.Errorf("get bookmarks of user: %w", err)
-	}
+// 	err := users.FindOne(service.ctx, filter).Decode(&user)
+// 	if err != nil {
+// 		return []string{}, fmt.Errorf("get bookmarks of user: %w", err)
+// 	}
 
-	return user.Bookmarks, nil
-}
+// 	return user.Bookmarks, nil
+// }
 
-func (service *UserService) Bookmark(uid string, project string) error {
-	filter := bson.M{"uid": uid}
-	update := bson.M{"$addToSet": bson.M{"bookmarks": project}}
+// func (service *UserService) Bookmark(uid string, project string) error {
+// 	filter := bson.M{"uid": uid}
+// 	update := bson.M{"$addToSet": bson.M{"bookmarks": project}}
 
-	users := service.client.Database("auth").Collection(collectionUsers)
+// 	users := service.client.Database("auth").Collection(collectionUsers)
 
-	result, err := users.UpdateOne(context.Background(), filter, update)
-	if err != nil {
-		return fmt.Errorf("bookmark project: %w", err)
-	}
-	if result.MatchedCount == 0 {
-		return fmt.Errorf("cannot found user: %v", uid)
-	}
+// 	result, err := users.UpdateOne(context.Background(), filter, update)
+// 	if err != nil {
+// 		return fmt.Errorf("bookmark project: %w", err)
+// 	}
+// 	if result.MatchedCount == 0 {
+// 		return fmt.Errorf("cannot found user: %v", uid)
+// 	}
 
-	return nil
-}
+// 	return nil
+// }
 
-func (service *UserService) RemoveBookmark(uid string, project string) error {
-	filter := bson.M{"uid": uid}
-	update := bson.M{"$pull": bson.M{"bookmarks": project}}
+// func (service *UserService) RemoveBookmark(uid string, project string) error {
+// 	filter := bson.M{"uid": uid}
+// 	update := bson.M{"$pull": bson.M{"bookmarks": project}}
 
-	users := service.client.Database("auth").Collection(collectionUsers)
+// 	users := service.client.Database("auth").Collection(collectionUsers)
 
-	result, err := users.UpdateOne(context.Background(), filter, update)
-	if err != nil {
-		return fmt.Errorf("bookmark project: %w", err)
-	}
-	if result.MatchedCount == 0 {
-		return fmt.Errorf("cannot found user: %v", uid)
-	}
+// 	result, err := users.UpdateOne(context.Background(), filter, update)
+// 	if err != nil {
+// 		return fmt.Errorf("bookmark project: %w", err)
+// 	}
+// 	if result.MatchedCount == 0 {
+// 		return fmt.Errorf("cannot found user: %v", uid)
+// 	}
 
-	return nil
-}
+// 	return nil
+// }
