@@ -1,27 +1,23 @@
 'use client'
 
 import { DiscordIcon, SiteIcon, TwitterIcon } from '@/components/icons'
-import { BookmarkIcon } from '@/components/icons/bookmark'
 import api from '@/config/api'
 import { link } from '@/config/links'
 import { auth } from '@/lib/firebase'
-import { Button, Link, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, User } from '@nextui-org/react'
+import { Link, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, User } from '@nextui-org/react'
 import axios from 'axios'
 import clsx from 'clsx'
 import React from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import useSWR from 'swr'
 
 const columns = [
 	{ name: 'Name', uid: 'name' },
-	{ name: 'Links', uid: 'links' },
-	{ name: '', uid: 'bookmark' }
+	{ name: 'Links', uid: 'links' }
 ]
 
-export default function ProjectsTable({projects, isLoading}) {
-	
+export default function ProjectsTable({ projects, isLoading }) {
 	const [user] = useAuthState(auth)
-
+	console.log(projects)
 	const bookmarkProject = async projectName => {
 		try {
 			const idToken = await user.getIdToken(true)
@@ -46,12 +42,6 @@ export default function ProjectsTable({projects, isLoading}) {
 						<Link isExternal color="foreground" showAnchorIcon href={project.website} anchorIcon={<SiteIcon />}></Link>
 						<Link isExternal color="foreground" showAnchorIcon href={project.twitter} anchorIcon={<TwitterIcon />}></Link>
 						<Link isExternal color="foreground" showAnchorIcon href={project.discord} anchorIcon={<DiscordIcon />}></Link>
-					</div>
-				)
-			case 'bookmark':
-				return (
-					<div className="flex items-end justify-end">
-						<Button color="secondary" startContent={<BookmarkIcon className="w-4 h-4" />} isIconOnly onClick={() => bookmarkProject(project['name'])}></Button>
 					</div>
 				)
 			default:

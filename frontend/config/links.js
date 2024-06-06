@@ -1,4 +1,4 @@
-import { BookmarkIcon, BriefcaseIcon, HomeIcon, UserPlusIcon } from '@heroicons/react/24/outline'
+import { BriefcaseIcon, HomeIcon, UserPlusIcon } from '@heroicons/react/24/outline'
 
 export const link = {
 	root: '/',
@@ -7,7 +7,6 @@ export const link = {
 	forgotPassword: '/forgot-password',
 	home: '/home',
 	projects: '/projects',
-	bookmarks: '/bookmarks',
 	admin: {
 		projects: '/admin/projects',
 		addProject: '/admin/projects/add',
@@ -19,8 +18,7 @@ export const link = {
 
 export const sidebarLinks = {
 	home: { name: 'Home', href: link.home, icon: HomeIcon },
-	projects: { name: 'Projects', href: link.projects, icon: BriefcaseIcon },
-	bookmarks: { name: 'Bookmarks', href: link.bookmarks, icon: BookmarkIcon }
+	projects: { name: 'Projects', href: link.projects, icon: BriefcaseIcon }
 }
 
 export const adminSidebarLinks = {

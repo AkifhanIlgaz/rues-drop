@@ -12,10 +12,7 @@ const api = {
 	addTask: baseUrl + '/tasks/add',
 	tasks: baseUrl + '/tasks',
 	finishTask: baseUrl + '/tasks/finish',
-	action: baseUrl + '/tasks/action',
-	bookmarks: baseUrl + '/user/bookmarks',
-	bookmark: baseUrl + '/user/bookmark',
-	removeBookmark: baseUrl + '/user/bookmark/remove'
+	action: baseUrl + '/tasks/action'
 }
 
 export default api
